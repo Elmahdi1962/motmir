@@ -3,31 +3,28 @@
 
 from models.base_model import BaseModel, Base
 import uuid
-
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table, Boolean
+from sqlalchemy import Column, String, Integer, Float
 from sqlalchemy.orm import relationship
 
 
-order_item = Table('order_item', Base.metadata,
-                        Column('product_id', String(60),
-                                ForeignKey('products.id', onupdate='CASCADE',
-                                        ondelete='CASCADE'),
-                                primary_key=True),
-                        Column('order_id', String(60),
-                                ForeignKey('orders.id', onupdate='CASCADE',
-                                        ondelete='CASCADE'),
-                                primary_key=True))
-
-
 class Order(BaseModel, Base):
-    """Representation of Place """
+    """Representation of orders """
 
     __tablename__ = 'orders'
-    order_number = Column(String(15), nullable=False)
-    quantity = Column(Integer, nullable=False)
+    order_number = Column(String(60), unique=True, nullable=False)
+    total_quantity = Column(Integer, nullable=False)
     total_amount = Column(Float, nullable=False)
-    payed = Column(Boolean, nullable=False, default=False)
+    payement_method = Column(String(30), nullable=False, server_default='on delivery')
+    payed = Column(Integer(2), nullable=False, server_default=0)
+    orders_details = relationship('OrderDetails',
+                                  backref="order",
+                                  cascade="all, delete, delete-orphan")
+    user_details = relationship('UserDetails',
+                                back_populates='order',
+                                cascade="delete, delete-orphan",
+                                uselist=False)
 
     def __init__(self, *args, **kwargs):
         """initializes Place"""
         super().__init__(*args, **kwargs)
+        self.order_number = str(uuid.uuid4().int)

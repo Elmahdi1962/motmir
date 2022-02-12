@@ -2,9 +2,7 @@
 """ holds class Order"""
 
 from models.base_model import BaseModel, Base
-import uuid
-
-from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table, Boolean
+from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 
@@ -14,8 +12,9 @@ class Product(BaseModel, Base):
     __tablename__ = 'products'
     name = Column(String(30), nullable=False)
     price = Column(Float, nullable=False)
-    organic = Column(Boolean, nullable=False, default=False)
-    img = Column(String, nullable=False, default=False)
+    organic = Column(Integer(2), nullable=False, server_default=0)
+    description = Column(String(1000), nullable=True)
+    img = Column(String(60), nullable=False, server_default='image')
 
     def __init__(self, *args, **kwargs):
         """initializes Place"""

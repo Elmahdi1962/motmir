@@ -14,8 +14,8 @@ class Order(BaseModel, Base):
     order_number = Column(String(60), unique=True, nullable=False)
     total_quantity = Column(Integer, nullable=False)
     total_amount = Column(Float, nullable=False)
-    payement_method = Column(String(30), nullable=False, server_default='on delivery')
-    payed = Column(Integer(2), nullable=False, server_default=0)
+    payment_method = Column(String(30), nullable=False, server_default='on delivery')
+    payed = Column(Integer, nullable=False, server_default='0')
     orders_details = relationship('OrderDetails',
                                   backref="order",
                                   cascade="all, delete, delete-orphan")

@@ -16,7 +16,9 @@ def get_products():
         all_products = storage.all(Product).values()
         list_products = []
         for product in all_products:
-            list_products.append(product.to_dict())
+            dct = product.to_dict()
+            dct['orders_details'] = [o.id for o in product.orders_details]
+            list_products.append(dct)
         return jsonify(list_products)
     else:
         return jsonify({'status': 'posting products not implemented yet'})

@@ -2,7 +2,7 @@
 """ holds class UserDetails"""
 
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 
@@ -13,9 +13,12 @@ class UserDetails(BaseModel, Base):
     full_name = Column(String(60), nullable=False)
     country = Column(String(30), nullable=False)
     city = Column(String(30), nullable=False)
+    code_postal = Column(Integer, nullable=False)
+    province = Column(String(30), nullable=False)
     full_address = Column(String(100), nullable=False)
     phone_number = Column(String(30), nullable=False)
     order = relationship('Order', back_populates='user_details')
+    order_id = Column(String(60), ForeignKey('orders.id'), nullable=False)
 
     def __init__(self, *args, **kwargs):
         """initializes Place"""

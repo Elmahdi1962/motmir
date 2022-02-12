@@ -9,6 +9,7 @@ from os import getenv
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 import uuid
+from sys import stderr
 
 time = "%Y-%m-%dT%H:%M:%S.%f"
 
@@ -24,9 +25,11 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Initialization of the base model"""
+        super().__init__()
         if kwargs:
             for key, value in kwargs.items():
                 if key != "__class__":
+                    print(f'key= {key}  value= {value}', file=stderr)
                     setattr(self, key, value)
             if kwargs.get("created_at", None) and type(self.created_at) is str:
                 self.created_at = datetime.strptime(kwargs["created_at"], time)

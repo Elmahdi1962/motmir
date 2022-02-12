@@ -7,12 +7,15 @@ import models
 from models.base_model import BaseModel, Base
 from models.order import Order
 from models.product import Product
+from models.user_details import UserDetails
+from models.order_details import OrderDetails
 from os import getenv
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-classes = {"Order": Order, "Product": Product} 
+classes = {"Order": Order, "Product": Product, "UserDetails": UserDetails,
+           "OrderDetails": OrderDetails}
 
 
 class DBStorage:
@@ -26,7 +29,7 @@ class DBStorage:
         MYSQL_PWD = getenv('MYSQL_PWD')
         MYSQL_HOST = getenv('MYSQL_HOST')
         MYSQL_DB = getenv('MYSQL_DB')
-        MYSQL_ENV = getenv('ENV')
+        MYSQL_ENV = getenv('MYSQL_ENV')
         self.__engine = create_engine('mysql+mysqldb://{}:{}@{}/{}'.
                                       format(MYSQL_USER,
                                              MYSQL_PWD,

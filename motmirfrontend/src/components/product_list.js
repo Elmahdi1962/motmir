@@ -3,7 +3,7 @@ import { baseUrl } from '../index.js'
 import { useEffect, useState } from 'react';
 import ProductItem from './product_item.js';
 
-const ProductList = (handleSideBarBtnClick) => {
+const ProductList = ({ cart, setCart}) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const ProductList = (handleSideBarBtnClick) => {
 
       <div className="productListItemsContainer">
         {products.map((value, index) =>
-          <ProductItem product={value} key={index}/>
+          <ProductItem product={value} cart={cart} setCart={setCart} key={index}/>
         )}
       </div>
 

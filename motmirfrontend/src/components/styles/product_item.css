@@ -1,0 +1,20 @@
+.productItem {
+    font-size: 15px;
+    font-weight: 100;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    height: auto;
+    width: auto;
+}
+
+.productItem:hover {
+    background-color: rgb(156, 156, 155);
+    cursor: pointer;
+}
+
+.itemInfo > h2 {
+    font-size: 20px;
+}

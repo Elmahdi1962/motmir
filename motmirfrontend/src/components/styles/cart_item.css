@@ -1,0 +1,22 @@
+.cartItem, .tableHeader {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    place-items: center;
+    border-top: 1px solid green;
+    border-bottom: 1px solid green;
+    padding: 0 20px;
+}
+
+.cartItem > *, .tableHeader > *{
+    width: 100%;
+}
+
+.cartItem > input {
+    width: 30px;
+    margin: auto;
+}
+
+.cartItem > img {
+    width: auto;
+    margin: auto;
+}

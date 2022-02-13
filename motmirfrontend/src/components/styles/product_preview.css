@@ -1,0 +1,104 @@
+.productPreview {
+    position: absolute;
+    top: calc(50vh - 250px);
+    right: calc(50vw - 250px);
+    background-color: white;
+    border-radius: 10px;
+    max-width: 550px;
+    height: 550px;
+    box-shadow: rgba(50, 50, 93, 0.5) 0px 50px 100px -20px, rgba(0, 0, 0, 0.5) 0px 30px 60px -30px, rgba(10, 37, 64, 0.5) 0px -2px 6px 0px inset;
+    overflow: hidden;
+    overflow-y: auto;
+    
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #2b2929;
+    }
+
+.infoHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+}
+
+.infoBody{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 5px 10px;
+}
+
+.productPreviewOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(250, 250, 250, 0.7);
+}
+
+.productPreviewOverlay:hover {
+    cursor: default;
+}
+
+.exitPreviewbtn {
+    position: absolute;
+    font-size: 30px;
+    color:white;
+    background-color: rgb(77, 67, 67);
+    top: 10px;
+    right: 15px;
+    border-radius: 100%;
+    user-select: none;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+}
+
+.exitPreviewbtn:hover {
+    background-color: red;
+    cursor: pointer;
+}
+
+.productPreview > form {
+    box-sizing: border-box;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 13px;
+    padding: 0 10px;
+}
+
+.productPreview > form > input[type=number] {
+    width: 30px;
+    height: 19px;
+    padding: 0;
+    margin: 0;
+    border-width: 1px;
+    padding-left: 3px;
+}
+
+.productPreview > form > input[type=submit] {
+    border: none;
+    border-radius: 0;
+    background-color: rgb(82, 178, 252);
+    height: 21px;
+}
+
+.productPreview > form > input[type=submit]:hover {
+    background-color: rgb(54, 165, 250);
+    cursor: pointer;
+}

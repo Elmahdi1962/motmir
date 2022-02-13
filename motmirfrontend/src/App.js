@@ -20,7 +20,7 @@ function App() {
   return (
     <div className="App">
       <SideBar handleClick={handleClick}/>
-      {pageToShow === "product list" ? <ProductList /> :
+      {pageToShow === "product list" ? <ProductList cart={cart} setCart={setCart}/> :
         pageToShow === "my cart" ? <MyCart cart={cart} setCart={setCart}/>: <>nothing</>}
     </div>
   );

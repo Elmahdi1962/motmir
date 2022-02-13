@@ -1,23 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import SideBar from './components/side_bar';
+import ProductList from './components/product_list';
+import { useState } from 'react'
 
 function App() {
+  const [pageToShow, setPageToShow] = useState('product list');
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    if (e.target.name === 'product_list_btn' || e.target.parentNode.name === 'product_list_btn') {
+      setPageToShow('product list');
+    } else if (e.target.name === 'my_cart_btn' || e.target.parentNode.name === 'my_cart_btn') {
+      setPageToShow('my cart')
+    }
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <SideBar handleClick={handleClick}/>
+      {pageToShow === "product list" ? <ProductList /> :
+        pageToShow === "my cart" ? <>mycart</>: <>nothing</>}
     </div>
   );
 }

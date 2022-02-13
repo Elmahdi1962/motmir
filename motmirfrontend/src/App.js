@@ -1,10 +1,12 @@
 import './App.css';
 import SideBar from './components/side_bar';
 import ProductList from './components/product_list';
+import MyCart from './components/my_cart';
 import { useState } from 'react'
 
 function App() {
   const [pageToShow, setPageToShow] = useState('product list');
+  const [cart, setCart] = useState([]);
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -19,7 +21,7 @@ function App() {
     <div className="App">
       <SideBar handleClick={handleClick}/>
       {pageToShow === "product list" ? <ProductList /> :
-        pageToShow === "my cart" ? <>mycart</>: <>nothing</>}
+        pageToShow === "my cart" ? <MyCart cart={cart} setCart={setCart}/>: <>nothing</>}
     </div>
   );
 }

@@ -27,10 +27,14 @@ def home():
                               province='oriental',
                               full_address='bv mohamed V zenaga',
                               phone_number='+212682826906')
-    product = Product(name='aziza',
-                      price='15',
-                      organic=0,
-                      description='aziza is a unique date that exists only in figuig')
+
+    for name in ['aziza', 'bofakous', '3asian', 'majhoul', 'aziza manzou', 'lbalah', 'lahmira']:
+        product = Product(name=name,
+                        price='15',
+                        organic=0,
+                        description=f'{name} is a date originated from figuig')
+        product.save()
+
     orderdetails = OrderDetails(product=product,
                                 quantity=5,
                                 unit_price=product.price)
@@ -42,7 +46,6 @@ def home():
                   orders_details=[orderdetails, orderdetails2],
                   user_details=userdetails)
     userdetails.save()
-    product.save()
     orderdetails.save()
     order.save()
     return 'created objects'

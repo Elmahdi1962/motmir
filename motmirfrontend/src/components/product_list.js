@@ -25,16 +25,16 @@ const ProductList = (handleSideBarBtnClick) => {
   }, []);
 
   return (
-    <div className="productList">
+    <section className="productList">
       <h2>Available Products</h2>
 
       <div className="productListItemsContainer">
         {products.map((value, index) =>
-          <ProductItem product={value} index={index}/>
+          <ProductItem product={value} key={index}/>
         )}
       </div>
 
-    </div>
+    </section>
   );
 }
 

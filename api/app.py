@@ -20,14 +20,6 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route('/')
 def home():
-    userdetails = UserDetails(full_name='elmahdi mamoun',
-                              country='morocco',
-                              city='figuig',
-                              code_postal=61000,
-                              province='oriental',
-                              full_address='bv mohamed V zenaga',
-                              phone_number='+212682826906')
-
     for name in ['aziza', 'bofakous', '3asian', 'majhoul', 'aziza manzou', 'lbalah', 'lahmira']:
         product = Product(name=name,
                         price='15',
@@ -35,20 +27,7 @@ def home():
                         description=f'{name} is a date originated from figuig')
         product.save()
 
-    orderdetails = OrderDetails(product=product,
-                                quantity=5,
-                                unit_price=product.price)
-    orderdetails2 = OrderDetails(product=product,
-                                quantity=1,
-                                unit_price=product.price)
-    order = Order(total_quantity=6,
-                  total_amount=90,
-                  orders_details=[orderdetails, orderdetails2],
-                  user_details=userdetails)
-    userdetails.save()
-    orderdetails.save()
-    order.save()
-    return 'created objects'
+    return 'created products Successfully'
 
 @app.teardown_appcontext
 def close_db(error):

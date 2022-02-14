@@ -54,7 +54,7 @@ def add_orders():
 
         t_price = 0
         t_quantity = 0
-        for product in data['orderedProducts']:
+        for product in data['ordered_products']:
             t_price += product.total_price
             t_quantity += product.quantity
             orderdetails = OrderDetails(order_id=order.id,

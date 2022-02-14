@@ -12,9 +12,9 @@ const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice})
         fullOrder[elem.name] = elem.value;
       }
     };
-    fullOrder['orderedProducts'] = [...cart];
-    fullOrder['totalQuantity'] = totalQuantity;
-    fullOrder['totalPrice'] = totalPrice;
+    fullOrder['ordered_products'] = [...cart];
+    fullOrder['total_quantity'] = totalQuantity;
+    fullOrder['total_price'] = totalPrice;
     sendOrder(fullOrder)
       .then(blob => {alert('Placed Order Successfully'); setCart([]);})
       .catch(e => {console.log(e);alert('Failed to Place Order')});
@@ -40,14 +40,14 @@ const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice})
         <form onSubmit={handleOrderSubmit}>
             <h3>Shipping address</h3>
 
-            <label htmlFor="fname"><i className="fa fa-user"></i> Full Name</label>
-            <input type="text" id="fname" name="fullname" placeholder="John M. Doe" required="required"/>
+            <label htmlFor="full_name"><i className="fa fa-user"></i> Full Name</label>
+            <input type="text" id="full_name" name="full_name" placeholder="John M. Doe" required="required"/>
 
             <label htmlFor="email"><i className="fa fa-envelope"></i> Email</label>
             <input type="email" id="email" name="email" placeholder="john@example.com" required="required"/>
 
-            <label htmlFor="phonenumber"><i className="fa fa-phone"></i> Phone Number</label>
-            <input type="text" id="phonenumber" name="phonenumber" placeholder="+212611223344" required="required"/>
+            <label htmlFor="phone_number"><i className="fa fa-phone"></i> Phone Number</label>
+            <input type="text" id="phone_number" name="phone_number" placeholder="+212611223344" required="required"/>
 
 
             <label htmlFor="country"><i className="fa fa-flag"></i> Country</label>
@@ -59,14 +59,14 @@ const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice})
             <label htmlFor="city"><i className="fa fa-institution"></i> City</label>
             <input type="text" id="city" name="city" placeholder="New York" required="required"/>
 
-            <label htmlFor="adr"><i className="fa fa-address-card-o"></i> Address</label>
-            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street" required="required"/>
+            <label htmlFor="full_address"><i className="fa fa-address-card-o"></i> Address</label>
+            <input type="text" id="full_address" name="full_address" placeholder="542 W. 15th Street" required="required"/>
 
-            <label htmlFor="zipcode">Zip Code (Code Postal)</label>
-            <input type="number" id="zipcode" name="zipcode" placeholder="10001" required="required"/>
+            <label htmlFor="zip_code">Zip Code (Code Postal)</label>
+            <input type="number" id="zip_code" name="zip_code" placeholder="10001" required="required"/>
 
-            <label htmlFor="payment">Choose a payment method:</label>
-            <select id="payment" name="payment" required="required">
+            <label htmlFor="payment_method">Choose a payment method:</label>
+            <select id="payment_method" name="payment_method" required="required">
               <option value="on delivery">Payment on delivery</option>
             </select>
 

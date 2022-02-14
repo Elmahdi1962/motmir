@@ -8,7 +8,7 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
     e.preventDefault();
     const tmpproduct = product;
     tmpproduct.quantity = parseInt(e.target.elements.quantity.value);
-    const tmpcart = cart;
+    const tmpcart = [...cart];
     for (const [index, p] of tmpcart.entries()) {
       if (p.id === product.id) {
         tmpproduct.quantity += Object.prototype.hasOwnProperty.call(tmpcart[index], 'quantity') ? tmpcart[index].quantity : 0;
@@ -17,14 +17,15 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
       }
     }
     tmpcart.push(tmpproduct);
+    e.target.addtocart.value = 'Added Successfully';
+    e.target.addtocart.style.backgroundColor = 'rgb(40, 172, 43)';
     setCart(tmpcart);
-    console.log(cart);
   }
 
   return (
-    <div className="productPreviewOverlay">
-      <div className="productPreview">
-        <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {setShowPrev(false);e.stopPropagation()}}/>
+    <div id="productPreviewOverlay" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}>
+      <div id="productPreview" onClick={(e) => e.stopPropagation()}>
+        <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}/>
         <img src="https://www.toomore.ma/wp-content/uploads/2020/04/Aziza.jpg" alt={imgAlt} className="productPreviewImg" width="400" height="400"/>
         <div className="infoHeader">
           <h2>{product.name}</h2>
@@ -35,8 +36,8 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
           <p><b>Description:</b> {product.description}</p>
         </div>
         <form onSubmit={handleAddToCart}>
-          <input type="number" defaultValue="1" name="quantity" min="1" max="20" required="required"/>
-          <input type="submit" value="Add to Cart"/>
+          <input type="number" defaultValue="1" name="quantity" min="1" max="20" required="required" onChange={() => {document.getElementById("addtocart").setAttribute("value", "Add more");document.getElementById("addtocart").style.backgroundColor = 'rgb(56, 168, 253)';}}/>
+          <input type="submit" value="Add to Cart" id="addtocart"/>
         </form>
       </div>
     </div>

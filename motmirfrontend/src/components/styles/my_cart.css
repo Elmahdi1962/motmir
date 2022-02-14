@@ -10,3 +10,32 @@
     width: 100%;
     max-height: 700px;
 }
+
+.tableFooter{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    margin-top: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid gray;
+}
+
+.tableFooter > button {
+    border: none;
+    height: 30px;
+    background-color: rgb(49, 209, 70);
+    border-radius: 5px;
+    color: white;
+}
+
+.tableFooter > button:hover{
+    background-color: rgb(23, 172, 43);
+}
+
+.tableFooter > button:active {
+    background-color: rgb(5, 128, 22);
+    transform: scale(0.95);
+}

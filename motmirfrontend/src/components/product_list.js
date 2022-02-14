@@ -7,22 +7,21 @@ const ProductList = ({ cart, setCart}) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-
-    fetch(baseUrl + 'api/products')
-      .then(async response => {
-        const data = await response.json();
-        if (!response.ok) {
-          // print error
-          const error = response.statusText;
-          return Promise.reject(error);
-        }
-        setProducts(data);
-      })
-      .catch(error => {
-        console.log('there was an error when fetching products list : ', error);
-      });
-
+    fetchProducts().catch(error => {
+      console.log('there was an error when fetching products list : ', error);
+    });
   }, []);
+
+  const fetchProducts= async () => {
+    let response = await fetch(baseUrl + '/api/products');
+    if (!response.ok) {
+      // print error
+      const error = response.statusText;
+      return Promise.reject(error);
+    }
+    const data = await response.json();
+    setProducts(data);
+  }
 
   return (
     <section className="productList">

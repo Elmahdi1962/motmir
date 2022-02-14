@@ -1,4 +1,4 @@
-.productPreview {
+#productPreview {
     position: absolute;
     top: calc(50vh - 250px);
     right: calc(50vw - 250px);
@@ -10,6 +10,10 @@
     overflow: hidden;
     overflow-y: auto;
     
+}
+
+#productPreview:hover {
+    cursor: default;
 }
 
 ::-webkit-scrollbar {
@@ -36,7 +40,7 @@
     padding: 5px 10px;
 }
 
-.productPreviewOverlay {
+#productPreviewOverlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -46,8 +50,8 @@
     background-color: rgba(250, 250, 250, 0.7);
 }
 
-.productPreviewOverlay:hover {
-    cursor: default;
+#productPreviewOverlay:hover {
+    cursor: pointer;
 }
 
 .exitPreviewbtn {
@@ -70,7 +74,7 @@
     cursor: pointer;
 }
 
-.productPreview > form {
+#productPreview > form {
     box-sizing: border-box;
     width: 100%;
     display: flex;
@@ -82,23 +86,31 @@
     padding: 0 10px;
 }
 
-.productPreview > form > input[type=number] {
+#productPreview > form > input[type=number] {
     width: 30px;
     height: 19px;
     padding: 0;
     margin: 0;
     border-width: 1px;
     padding-left: 3px;
+    border-radius: 5px;
 }
 
-.productPreview > form > input[type=submit] {
+#productPreview > form > input[type=submit] {
     border: none;
     border-radius: 0;
-    background-color: rgb(82, 178, 252);
+    background-color: rgb(56, 168, 253);
+    color: white;
+    border-radius: 5px;
     height: 21px;
 }
 
-.productPreview > form > input[type=submit]:hover {
-    background-color: rgb(54, 165, 250);
+#productPreview > form > input[type=submit]:hover {
+    background-color: rgb(33, 143, 228);
     cursor: pointer;
+}
+
+#productPreview > form > input[type=submit]:active {
+    background-color: rgb(23, 126, 204);
+    transform: scale(0.95);
 }

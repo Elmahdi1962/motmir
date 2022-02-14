@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
-export const baseUrl = 'http://localhost:5000/';
+export const baseUrl = 'http://localhost:5000';
 
 ReactDOM.render(
   <React.StrictMode>

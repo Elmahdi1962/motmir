@@ -14,7 +14,7 @@ class OrderDetails(BaseModel, Base):
     order_id = Column(String(60), ForeignKey('orders.id'), nullable=False)
     product_id = Column(String(60), ForeignKey('products.id'), nullable=False)
     quantity = Column(Integer, nullable=False)
-    unit_price = Column(Float, nullable=False)
+    total_price = Column(Float, nullable=False)
 
     def __init__(self, *args, **kwargs):
         """initializes orderDetails"""

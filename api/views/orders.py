@@ -76,28 +76,3 @@ def add_orders():
                                       'error': 'exception raised when trying to place order'}), 400)
         
     return make_response(jsonify({'orderStatus': 'Successfully Placed Order'}), 201)
-
-
-@app_views.route('/orders_details', methods=['GET'], strict_slashes=False)
-def get_orders2():
-    """
-    Retrieves the list of all State objects
-    """
-
-    all_orders = storage.all(OrderDetails).values()
-    list_orders = []
-    for order in all_orders:
-        list_orders.append(order.to_dict())
-    return jsonify(list_orders)
-
-@app_views.route('/users', methods=['GET'], strict_slashes=False)
-def get_orders1():
-    """
-    Retrieves the list of all State objects
-    """
-
-    all_orders = storage.all(UserDetails).values()
-    list_orders = []
-    for order in all_orders:
-        list_orders.append(order.to_dict())
-    return jsonify(list_orders)

@@ -37,7 +37,7 @@ def add_orders():
 
     try:
         order = Order(total_quantity=data['total_quantity'],
-                      total_amount=data['total_amount'],
+                      total_price=data['total_price'],
                       payment_method=data['payment_method'])
         models.append(order)
 
@@ -52,19 +52,19 @@ def add_orders():
                                   order_id=order.id)
         models.append(userdetails)
 
-        t_amount = 0
+        t_price = 0
         t_quantity = 0
         for product in data['orderedProducts']:
-            t_amount += product.total_price
+            t_price += product.total_price
             t_quantity += product.quantity
             orderdetails = OrderDetails(order_id=order.id,
                                         product_id=product.id,
                                         quantity=product.quantity,
                                         total_price=product.total_price)
             models.append(orderdetails)
-        if (t_amount != data['total_amount']):
+        if (t_price != data['total_amount']):
             make_response(jsonify({'orderStatus': 'Failed to Place Order in server level',
-                                   'error': 'total_amount got from client not same as counted in server'}), 400)
+                                   'error': 'total_price got from client not same as counted in server'}), 400)
         if (t_quantity != data['total_quantity']):
             make_response(jsonify({'orderStatus': 'Failed to Place Order in server level',
                                    'error': 'total_quantity got from client not same as counted in server'}), 400)

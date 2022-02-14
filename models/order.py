@@ -13,14 +13,14 @@ class Order(BaseModel, Base):
     __tablename__ = 'orders'
     order_number = Column(String(60), unique=True, nullable=False)
     total_quantity = Column(Integer, nullable=False)
-    total_amount = Column(Float, nullable=False)
+    total_price = Column(Float, nullable=False)
     payment_method = Column(String(30), nullable=False, server_default='on delivery')
     payed = Column(Integer, nullable=False, server_default='0')
     orders_details = relationship('OrderDetails',
                                   backref="order",
                                   cascade="all, delete, delete-orphan")
     user_details = relationship('UserDetails',
-                                back_populates='order',
+                                backref='order',
                                 cascade="delete, delete-orphan",
                                 uselist=False)
 

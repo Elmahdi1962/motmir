@@ -18,7 +18,6 @@ class UserDetails(BaseModel, Base):
     state = Column(String(30), nullable=False)
     full_address = Column(String(100), nullable=False)
     phone_number = Column(String(30), nullable=False)
-    order = relationship('Order', back_populates='user_details')
     order_id = Column(String(60), ForeignKey('orders.id'), nullable=False)
 
     def __init__(self, *args, **kwargs):

@@ -7,7 +7,11 @@ from models.order_details import OrderDetails
 from models.user_details import UserDetails
 from api.views import app_views
 from flask import abort, jsonify, make_response, request
+from sys import stderr
+import sys
+from sqlalchemy.exc import IntegrityError
 
+classes = {'Order': Order, 'OrderDetails': OrderDetails, 'UserDetails': UserDetails}
 
 @app_views.route('/orders', methods=['GET'], strict_slashes=False)
 def get_orders():
@@ -24,7 +28,7 @@ def get_orders():
     return jsonify(list_orders)
 
 
-@app_views.route('/orders', methods=['Post'], strict_slashes=False)
+@app_views.route('/orders', methods=['POST'], strict_slashes=False)
 def add_orders():
     """
     create a new order and store it in database
@@ -55,24 +59,40 @@ def add_orders():
         t_price = 0
         t_quantity = 0
         for product in data['ordered_products']:
-            t_price += product.total_price
-            t_quantity += product.quantity
+            t_price += product['total_price']
+            t_quantity += product['quantity']
             orderdetails = OrderDetails(order_id=order.id,
-                                        product_id=product.id,
-                                        quantity=product.quantity,
-                                        total_price=product.total_price)
+                                        product_id=product['id'],
+                                        quantity=product['quantity'],
+                                        total_price=product['total_price'])
             models.append(orderdetails)
-        if (t_price != data['total_amount']):
+        if (t_price != data['total_price']):
             make_response(jsonify({'orderStatus': 'Failed to Place Order in server level',
                                    'error': 'total_price got from client not same as counted in server'}), 400)
         if (t_quantity != data['total_quantity']):
             make_response(jsonify({'orderStatus': 'Failed to Place Order in server level',
                                    'error': 'total_quantity got from client not same as counted in server'}), 400)
-        
+
+        print(models)
         for model in models:
             model.save()
-    except Exception:
+    except IntegrityError as err:
+        storage._DBStorage__session.rollback()
+        for model in models:
+            q = storage._DBStorage__session.query(classes[model.__class__.__name__]).filter(classes[model.__class__.__name__].id == model.id).first()
+            if q:
+                print('deleted : ', q)
+                storage.delete(q)
+        storage.save()
+
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print('the exception error from orders.py orser POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
         return make_response(jsonify({'orderStatus': 'Failed to Place Order in server level',
-                                      'error': 'exception raised when trying to place order'}), 400)
+                                      'error': 'exception raised when trying to place order sqlalchemy.exc..IntegrityError'}), 400)
+    except Exception as err:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print('the exception from orders.py orser POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
+        return make_response(jsonify({'orderStatus': 'Failed to Place Order in server level',
+                                      'error': 'exception raised when trying to place order '}), 400)
         
     return make_response(jsonify({'orderStatus': 'Successfully Placed Order'}), 201)

@@ -16,7 +16,7 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
         break;
       }
     }
-    tmpproduct.totalPrice = (tmpproduct.quantity * tmpproduct.price);
+    tmpproduct.total_price = (tmpproduct.quantity * tmpproduct.price);
     tmpcart.push(tmpproduct);
     e.target.addtocart.value = 'Added Successfully';
     e.target.addtocart.style.backgroundColor = 'rgb(40, 172, 43)';

@@ -11,10 +11,11 @@ class UserDetails(BaseModel, Base):
     
     __tablename__ = 'user_details'
     full_name = Column(String(60), nullable=False)
+    email = Column(String(60), nullable=False)
     country = Column(String(30), nullable=False)
     city = Column(String(30), nullable=False)
-    code_postal = Column(Integer, nullable=False)
-    province = Column(String(30), nullable=False)
+    zip_code = Column(Integer, nullable=False)
+    state = Column(String(30), nullable=False)
     full_address = Column(String(100), nullable=False)
     phone_number = Column(String(30), nullable=False)
     order = relationship('Order', back_populates='user_details')

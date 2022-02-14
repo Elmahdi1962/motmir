@@ -1,6 +1,5 @@
 import './styles/order_form.css'
 import { baseUrl } from '../index.js'
-import { useState } from 'react'
 
 const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice}) => {
   const handleOrderSubmit = (e) => {
@@ -25,8 +24,8 @@ const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice})
     let response = await fetch(baseUrl + '/api/orders',
                 {
                   method: 'POST',
-                  body: data,
-                  headers: {'Content-type': 'application/json; charset=UTF-8'}
+                  body: JSON.stringify(data),
+                  headers: {'Content-Type': 'application/json; charset=UTF-8'}
                 })
     if (!response.ok){
       throw new Error(`HTTP error! status: ${response.status}`);

@@ -1,20 +1,30 @@
 #!/usr/bin/python3
 """ Flask Application """
-from models import storage
+
+from dotenv import load_dotenv
+load_dotenv()
+
 from api.views import app_views
 from os import environ
 from flask import Flask, render_template, make_response, jsonify
 from flask_cors import CORS
-from models import order_details
-from models.order import Order
-from models.order_details import OrderDetails
 from models.product import Product
+import pathlib, os
+from api.config import *
+from models import storage
 
-from models.user_details import UserDetails
 
 
 app = Flask(__name__)
+
+if app.config['ENV'] == 'production':
+    app.config.from_object(ProductionConfig)
+else:
+    app.config.from_object(DevelopmentConfig)
+
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
+app.config['IMAGE_STORAGE_PATH'] = os.path.join(pathlib.Path(__file__).parent.resolve(), '/images')
+app.config['ALLOWED_IMAGE_EXT'] = ['png', 'jpg', 'jpeg']
 app.register_blueprint(app_views)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 

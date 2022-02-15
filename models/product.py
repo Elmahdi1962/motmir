@@ -15,7 +15,7 @@ class Product(BaseModel, Base):
     price = Column(Float, nullable=False)
     organic = Column(Integer, nullable=False, server_default='0')
     description = Column(String(1000), nullable=True)
-    img = Column(String(60), nullable=False, server_default='image')
+    img_url = Column(String(60), nullable=False, server_default='image')
     orders_details = relationship('OrderDetails', backref='product', cascade='all, delete, delete-orphan')
 
     def __init__(self, *args, **kwargs):

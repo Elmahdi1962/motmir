@@ -1,24 +1,132 @@
 #!/usr/bin/python3
-""" objects that handle all default RestFul API actions for States """
+""" objects that handle all default RestFul API actions for products """
 
 from models import storage
 from models.product import Product
 from api.views import app_views
 from flask import abort, jsonify, make_response, request
+from werkzeug.utils import secure_filename
+from sys import stderr
+import sys, os
+from sqlalchemy.exc import IntegrityError
 
 
-@app_views.route('/products', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/products', methods=['GET'], strict_slashes=False)
 def get_products():
     """
-    Retrieves the list of all State objects
+    Retrieves the list of all product objects
     """
-    if request.method == 'GET':
-        all_products = storage.all(Product).values()
-        list_products = []
-        for product in all_products:
-            dct = product.to_dict()
-            dct['orders_details'] = [o.id for o in product.orders_details]
-            list_products.append(dct)
-        return jsonify(list_products)
+    all_products = storage.all(Product).values()
+    list_products = []
+    for product in all_products:
+        dct = product.to_dict()
+        list_products.append(dct)
+    return jsonify(list_products)
+
+
+@app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
+def get_product_with_id(id=None):
+    """
+    Retrieves the product with the id
+    """
+    # check if id is valid
+    if id is None or id == '' or len(id) <= 0 or type(id) is not str:
+        return make_response(jsonify({'error': 'the passed id is not of valid type'}), 400)
+
+    # run a query on Product class and compare id with the wanted one
+    product = Product.query().filter(Product.id == id).first()
+
+    # if found
+    if product:
+        return jsonify(product.to_dict())
+    
+    # if not found
     else:
-        return jsonify({'status': 'posting products not implemented yet'})
+        return make_response(jsonify({'error': 'product not found'}), 400)
+
+
+@app_views.route('/products/<id>', methods=['PUT'], strict_slashes=False)
+def update_product_with_id(id=None):
+    """
+    Update the product with the id
+    """
+    #get request body
+    body = request.get_json()
+
+    # if body is not json
+    if body is None:
+        return make_response(jsonify({'error': 'Data is Not JSON'}), 400)
+
+    # check if id is valid
+    if id is None or id == '' or len(id) <= 0 or type(id) is not str:
+        return make_response(jsonify({'error': 'the passed id is not of valid type'}), 400)
+
+    # run a query on Order class and compare id with the wanted one
+    product = Product.query().filter(Product.id == id).first()
+
+    # if found
+    if product:
+        # set new values
+        for key, value in body.items():
+            if key not in ['__class__', 'created_at', 'updated_at', 'id']:
+                    setattr(product, key, value)
+        storage.save()
+        # return 200 response
+        return make_response(jsonify({'status': 'product updated successfully'}), 200)
+
+    # if not found
+    else:
+        return make_response(jsonify({'error': 'product not found'}), 400)
+
+
+def allowed_image(image):
+    '''checks if an image is allowed'''
+    if '.' not in image.filename:
+        return False
+
+    if image.filename.rsplit('.', 1)[1] not in app_views.config['ALLOWED_IMAGE_EXT']:
+        return False
+
+    return True
+
+
+@app_views.route('/products', methods=['POST'], strict_slashes=False)
+def add_product():
+    """
+    create a new product and store it in database
+    """
+    if not request.get_json():
+        abort(400, description='Not a JSON')
+
+    data = request.get_json()
+    image = request.files['image']
+    # check filename is not empty
+    if image.filename == '':
+        make_response(jsonify({'error': 'image file name should not be empty'}), 400)
+    # check if extention is allowed
+    if not allowed_image(image):
+        make_response(jsonify({'error': 'image extention not allowed'}), 400)
+
+    filename = secure_filename(image.filename)
+
+    try:
+        # save image
+        img_path = os.path.join(app_views.config['IMAGE_STORAGE_PATH'], filename)
+        image.save(img_path)
+        # create new product
+        newproduct = Product(name=data['name'],
+                             price=data['price'],
+                             organic=data['organic'],
+                             description=data['description'],
+                             img_url=filename)
+        # save it to db
+        newproduct.save()
+    # if something went wrong this will catch it so it dosen't break the server
+    except Exception as err:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        print('the exception from products.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
+        return make_response(jsonify({'status': 'Failed to Crate Product in server level',
+                                      'error': 'exception raised when trying to create a product '}), 400)
+        
+    return make_response(jsonify({'status': 'Successfully Created Product'}), 201)
+

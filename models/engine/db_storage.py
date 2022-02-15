@@ -36,7 +36,15 @@ class DBStorage:
                                              MYSQL_HOST,
                                              MYSQL_DB))
         if MYSQL_ENV == "test":
-            Base.metadata.drop_all(self.__engine)
+            if self.__engine.dialect.has_table(self.__engine.connect(), OrderDetails):
+                OrderDetails.__table__.drop(self.__engine)
+            if self.__engine.dialect.has_table(self.__engine.connect(), Product):
+                Product.__table__.drop(self.__engine)
+            if self.__engine.dialect.has_table(self.__engine.connect(), UserDetails):
+                UserDetails.__table__.drop(self.__engine)
+            if self.__engine.dialect.has_table(self.__engine.connect(), Order):
+                Order.__table__.drop(self.__engine)
+            #Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
         """query on the current database session"""

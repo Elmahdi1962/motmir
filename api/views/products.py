@@ -140,7 +140,6 @@ def delete_product(id):
     Retrieves the list of all product objects
     """
     product = storage.get(Product, id)
-    print(product.id)
     if product:
         storage.delete(product)
         storage.save()

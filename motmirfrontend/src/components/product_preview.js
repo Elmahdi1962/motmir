@@ -15,28 +15,23 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
 
   const handleAddToCart = (e) => {
     e.preventDefault();
-    const tmpproduct = product;
-    tmpproduct.quantity = parseInt(e.target.elements.quantity.value);
-    const tmpcart = [...cart];
-    for (const [index, p] of tmpcart.entries()) {
-      if (p.id === product.id) {
-        tmpproduct.quantity += Object.prototype.hasOwnProperty.call(tmpcart[index], 'quantity') ? tmpcart[index].quantity : 0;
-        tmpcart.splice(index, 1);
-        break;
-      }
+    const newCart = {...cart};
+
+    if(!(product.id in cart)){
+      newCart[product.id] = {...product, quantity: 0};
     }
-    tmpproduct.total_price = (tmpproduct.quantity * tmpproduct.price);
-    tmpcart.push(tmpproduct);
+    newCart[product.id].quantity += parseInt(e.target.elements.quantity.value);
+
+    setCart(newCart);
     setAddToCart("Added Successfully");
     e.target.addtocart.style.backgroundColor = 'rgb(40, 172, 43)';
-    setCart(tmpcart);
   }
 
   return (
     <div id="productPreviewOverlay" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}>
       <div id="productPreview" onClick={(e) => e.stopPropagation()}>
         <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}/>
-        <img src={baseUrl +'/api/images/'+ product.img_url} alt={imgAlt} className="productPreviewImg" width="400" height="400"/>
+        <img src={baseUrl +'/api/images/'+ product.img_url} alt={imgAlt} className="productPreviewImg" width="400"/>
         <div className="infoHeader">
           <h2>{product.name}</h2>
           <p>{product.price} USD/KG</p>

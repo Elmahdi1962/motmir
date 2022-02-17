@@ -6,13 +6,27 @@
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     padding-bottom: 5px;
     margin-bottom: 10px;
+    min-height: 250px;
     height: auto;
     width: auto;
 }
 
-.productItem:hover {
-    background-color: rgb(216, 216, 215);
+.productItem:hover{
+    background-color: rgba(216, 216, 215, 0.46);
     cursor: pointer;
+    box-shadow: inset 1px 2px 5px #777;
+}
+
+.productItem > img {
+    border-radius: 5px;
+}
+
+.productItem:hover > img:hover{
+    border:2px solid rgba(250, 247, 247, 0);
+    -moz-box-shadow: inset 10px 10px 50px rgb(36, 35, 35);
+    -webkit-box-shadow: inset 10px 10px 50px rgb(36, 35, 35);
+    box-shadow: inset 10px 10px 50px rgb(36, 35, 35);
+    border-radius: 5px;
 }
 
 .itemInfo > h2 {

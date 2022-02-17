@@ -8,11 +8,10 @@ const MyCart = ({ cart, setCart}) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [showOrderForm, setShowOrderForm] = useState(false);
 
-
   useEffect(() => {
     let tp = 0;
     let tq = 0;
-    for (const product of cart) {
+    for(const product of Object.values(cart)) {
       tp += (product.price * product.quantity);
       tq += product.quantity;
     }
@@ -31,7 +30,7 @@ const MyCart = ({ cart, setCart}) => {
           <p><b>Total</b></p>
           <p><b>Delete</b></p>
         </div>
-        {cart.map((product, index) => <CartItem product={product} index={index} cart={cart} setCart={setCart} key={index}/>)}
+        {Object.entries(cart).map(([productId, product]) => <CartItem product={product} cart={cart} setCart={setCart} key={productId/10}/>)}
         <div className="tableFooter">
           <p><b>Total Quantity:</b> {totalQuantity} Kg</p>
           <p><b>Total Price</b> {totalPrice} USD</p>

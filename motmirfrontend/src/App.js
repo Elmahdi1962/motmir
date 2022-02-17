@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 function App() {
   const [pageToShow, setPageToShow] = useState('product list');
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState({});
 
   const handleClick = (e) => {
     e.stopPropagation();

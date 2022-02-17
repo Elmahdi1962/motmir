@@ -5,7 +5,8 @@
     background-color: white;
     border-radius: 10px;
     width: 400px;
-    height: 550px;
+    max-height: 550px;
+    padding-bottom: 10px;
     box-shadow: rgba(50, 50, 93, 0.5) 0px 50px 100px -20px, rgba(0, 0, 0, 0.5) 0px 30px 60px -30px, rgba(10, 37, 64, 0.5) 0px -2px 6px 0px inset;
     overflow: hidden;
     overflow-y: auto;
@@ -38,6 +39,7 @@
     justify-content: center;
     align-items: flex-start;
     padding: 5px 10px;
+    word-break: normal;
 }
 
 #productPreviewOverlay {
@@ -58,7 +60,7 @@
     position: absolute;
     font-size: 30px;
     color:white;
-    background-color: rgb(77, 67, 67);
+    background-color: rgb(156, 145, 145);
     top: 10px;
     right: 15px;
     border-radius: 100%;
@@ -71,6 +73,7 @@
 
 .exitPreviewbtn:hover {
     background-color: red;
+    font-size: 31px;
     cursor: pointer;
 }
 

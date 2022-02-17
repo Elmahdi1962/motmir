@@ -1,5 +1,5 @@
 #!/usr/bin/python
-""" holds class Order"""
+""" holds class Product"""
 
 from models.base_model import BaseModel, Base
 from models.order_details import OrderDetails

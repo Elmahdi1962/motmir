@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 """ objects that handle all default RestFul API actions for products """
 
+from math import prod
 from models import storage
 from models.product import Product
 from api.views import app_views
-from flask import abort, jsonify, make_response, request
+from flask import abort, jsonify, make_response, redirect, request, current_app, url_for, flash
 from werkzeug.utils import secure_filename
 from sys import stderr
 import sys, os
-from sqlalchemy.exc import IntegrityError
 
 
 @app_views.route('/products', methods=['GET'], strict_slashes=False)
@@ -84,7 +84,7 @@ def allowed_image(image):
     if '.' not in image.filename:
         return False
 
-    if image.filename.rsplit('.', 1)[1] not in app_views.config['ALLOWED_IMAGE_EXT']:
+    if image.filename.rsplit('.', 1)[1] not in current_app.config['ALLOWED_IMAGE_EXT']:
         return False
 
     return True
@@ -95,10 +95,10 @@ def add_product():
     """
     create a new product and store it in database
     """
-    if not request.get_json():
+    data = dict(request.form)
+    if not data or type(data) is not dict:
         abort(400, description='Not a JSON')
 
-    data = request.get_json()
     image = request.files['image']
     # check filename is not empty
     if image.filename == '':
@@ -108,15 +108,19 @@ def add_product():
         make_response(jsonify({'error': 'image extention not allowed'}), 400)
 
     filename = secure_filename(image.filename)
+    organic = 0
+    for k in data.keys():
+        if k == 'organic':
+            organic = 1
 
     try:
         # save image
-        img_path = os.path.join(app_views.config['IMAGE_STORAGE_PATH'], filename)
+        img_path = os.path.join(current_app.config['IMAGE_STORAGE_PATH'], filename)
         image.save(img_path)
         # create new product
         newproduct = Product(name=data['name'],
                              price=data['price'],
-                             organic=data['organic'],
+                             organic=organic,
                              description=data['description'],
                              img_url=filename)
         # save it to db
@@ -127,6 +131,19 @@ def add_product():
         print('the exception from products.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
         return make_response(jsonify({'status': 'Failed to Crate Product in server level',
                                       'error': 'exception raised when trying to create a product '}), 400)
-        
-    return make_response(jsonify({'status': 'Successfully Created Product'}), 201)
+    flash('Created Product Successfully', 'success')
+    return redirect(url_for('app_views.admin_get_products'))
 
+@app_views.route('/products/delete/<id>', methods=['POST'], strict_slashes=False)
+def delete_product(id):
+    """
+    Retrieves the list of all product objects
+    """
+    product = storage.get(Product, id)
+    print(product.id)
+    if product:
+        storage.delete(product)
+        storage.save()
+        return make_response('deleted successfuly!', 200)
+    else:
+        return abort(400, description='Product deletion failed wrong id')

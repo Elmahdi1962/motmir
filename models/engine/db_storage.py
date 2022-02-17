@@ -9,13 +9,14 @@ from models.order import Order
 from models.product import Product
 from models.user_details import UserDetails
 from models.order_details import OrderDetails
+from models.user import User
 from os import getenv
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 classes = {"Order": Order, "Product": Product, "UserDetails": UserDetails,
-           "OrderDetails": OrderDetails}
+           "OrderDetails": OrderDetails, "User": User}
 
 
 class DBStorage:
@@ -36,15 +37,20 @@ class DBStorage:
                                              MYSQL_HOST,
                                              MYSQL_DB))
         if MYSQL_ENV == "test":
+            for tbl in reversed(Base.metadata.sorted_tables):
+                self.__engine.execute(tbl.delete())
+            '''
             if self.__engine.dialect.has_table(self.__engine.connect(), OrderDetails):
-                OrderDetails.__table__.drop(self.__engine)
+                Base.metadata.tables['orders_details'].__table__.drop(self.__engine)
             if self.__engine.dialect.has_table(self.__engine.connect(), Product):
-                Product.__table__.drop(self.__engine)
+                Base.metadata.tables['products'].__table__.drop(self.__engine)
             if self.__engine.dialect.has_table(self.__engine.connect(), UserDetails):
-                UserDetails.__table__.drop(self.__engine)
+                Base.metadata.tables['users_details'].__table__.drop(self.__engine)
             if self.__engine.dialect.has_table(self.__engine.connect(), Order):
-                Order.__table__.drop(self.__engine)
-            #Base.metadata.drop_all(self.__engine)
+                Base.metadata.tables['orders'].__table__.drop(self.__engine)
+            if self.__engine.dialect.has_table(self.__engine.connect(), User):
+                Base.metadata.tables['users'].__table__.drop(self.__engine)
+            #Base.metadata.drop_all(self.__engine)'''
 
     def all(self, cls=None):
         """query on the current database session"""
@@ -107,6 +113,6 @@ class DBStorage:
             for clas in all_class:
                 count += len(models.storage.all(clas).values())
         else:
-            count = len(models.storage.all(cls).values())
+            count = len(models.storage.all(classes[cls]).values())
 
         return count

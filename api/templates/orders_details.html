@@ -1,3 +1,8 @@
-{% extends 'admin_panel.html'%}
+{% extends "admin_panel_layout.html" %}
 {% block content %}
-{% endblock %}
+    {% for order_detail in orders_details %}
+        <article class="media content-section">
+          test order details
+        </article>
+    {% endfor %}
+{% endblock content %}

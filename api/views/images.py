@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """ objects that handle all default RestFul API actions for images """
 
+from shutil import ExecError
 from api.views import app_views
-from flask import abort, send_from_directory
+from flask import abort, send_from_directory, current_app
 
 
 
@@ -10,12 +11,14 @@ from flask import abort, send_from_directory
 @app_views.route('/images/<imagename>', methods=['GET'], strict_slashes=False)
 def get_image(imagename=''):
     '''gets image with the name and sends it'''
+    print('it here')
     if imagename == '' or imagename is None:
         abort(400, 'no filename specified')
 
     try:
-        send_from_directory(app_views.config['IMAGE_STORAGE_PATH'],
-                            filename=imagename,
+        return send_from_directory(current_app.config['IMAGE_STORAGE_PATH'],
+                            imagename,
                             as_attachment=False)
-    except:
-        abort(404, 'image not found')
+    except Exception as err:
+        print(err)
+        abort(404, description='image not found')

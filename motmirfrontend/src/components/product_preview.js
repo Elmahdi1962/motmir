@@ -1,9 +1,17 @@
 import './styles/product_preview.css'
 import { AiFillCloseCircle } from 'react-icons/ai'
 import { baseUrl } from '../index.js'
+import { useState, useEffect } from 'react'
 
 const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
   const imgAlt = 'text';
+  const [addToCart, setAddToCart] = useState('Add to Cart')
+
+  useEffect(() => {
+    if(addToCart === 'Add More') {
+      document.getElementById("addtocart").style.backgroundColor = 'rgb(56, 168, 253)'
+    }
+  }, [addToCart])
 
   const handleAddToCart = (e) => {
     e.preventDefault();
@@ -19,7 +27,7 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
     }
     tmpproduct.total_price = (tmpproduct.quantity * tmpproduct.price);
     tmpcart.push(tmpproduct);
-    e.target.addtocart.value = 'Added Successfully';
+    setAddToCart("Added Successfully");
     e.target.addtocart.style.backgroundColor = 'rgb(40, 172, 43)';
     setCart(tmpcart);
   }
@@ -38,8 +46,8 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
           <p><b>Description:</b> {product.description}</p>
         </div>
         <form onSubmit={handleAddToCart}>
-          <input type="number" defaultValue="1" name="quantity" min="1" max="20" required="required" onChange={() => {document.getElementById("addtocart").setAttribute("value", "Add more");document.getElementById("addtocart").style.backgroundColor = 'rgb(56, 168, 253)';}}/>
-          <input type="submit" value="Add to Cart" id="addtocart"/>
+          <input type="number" defaultValue="1" name="quantity" min="1" max="20" required="required" onChange={() => {addToCart === 'Added Successfully' ? setAddToCart('Add More') : setAddToCart('Add to Cart')}}/>
+          <input type="submit" value={addToCart} id="addtocart"/>
         </form>
       </div>
     </div>

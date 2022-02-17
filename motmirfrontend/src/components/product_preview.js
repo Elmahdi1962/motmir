@@ -1,5 +1,6 @@
 import './styles/product_preview.css'
 import { AiFillCloseCircle } from 'react-icons/ai'
+import { baseUrl } from '../index.js'
 
 const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
   const imgAlt = 'text';
@@ -27,7 +28,7 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
     <div id="productPreviewOverlay" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}>
       <div id="productPreview" onClick={(e) => e.stopPropagation()}>
         <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}/>
-        <img src="https://www.toomore.ma/wp-content/uploads/2020/04/Aziza.jpg" alt={imgAlt} className="productPreviewImg" width="400" height="400"/>
+        <img src={baseUrl +'/api/images/'+ product.img_url} alt={imgAlt} className="productPreviewImg" width="400" height="400"/>
         <div className="infoHeader">
           <h2>{product.name}</h2>
           <p>{product.price} USD/KG</p>

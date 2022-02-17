@@ -1,6 +1,7 @@
 import './styles/product_item.css'
 import ProductPreview from './product_preview';
 import { useState} from 'react';
+import { baseUrl } from '../index.js'
 
 const ProductItem = ({product, cart, setCart}) => {
   const imgAlt = `image of ${product.name} dates`;
@@ -8,7 +9,7 @@ const ProductItem = ({product, cart, setCart}) => {
 
   return (
     <div className="productItem" onClick={() => setShowPrev(true)}>
-      <img src="https://www.toomore.ma/wp-content/uploads/2020/04/Aziza.jpg" alt={imgAlt} className="productItemImg" width="200" height="200"/>
+      <img src={baseUrl +'/api/images/'+ product.img_url} alt={imgAlt} className="productItemImg" width="200" height="200"/>
       <div className="itemInfo">
         <h2 className="productName">{product.name}</h2>
         <p className="productPrice">{product.price} USD/KG</p>

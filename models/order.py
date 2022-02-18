@@ -3,7 +3,7 @@
 
 from models.base_model import BaseModel, Base
 import uuid
-from sqlalchemy import Column, String, Integer, Float
+from sqlalchemy import Column, String, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship
 
 
@@ -19,10 +19,7 @@ class Order(BaseModel, Base):
     orders_details = relationship('OrderDetails',
                                   backref="order",
                                   cascade="all, delete, delete-orphan")
-    user_details = relationship('UserDetails',
-                                backref='order',
-                                cascade="delete, delete-orphan",
-                                uselist=False)
+    user_id = Column(String(60), ForeignKey('users.id'), nullable=True)
 
     def __init__(self, *args, **kwargs):
         """initializes Place"""

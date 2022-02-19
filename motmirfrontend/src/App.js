@@ -4,33 +4,61 @@ import ProductList from './components/product_list';
 import MyCart from './components/my_cart';
 import Login from './components/login';
 import Register from './components/register';
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Account from './components/account';
+import PublicRoute from './components/public_route';
+import PrivateRoute from './components/private_route';
+import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { getToken, removeUserSession, setUserSession } from './components/common';
+import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import { baseUrl } from './index.js';
 
 function App() {
-  const [pageToShow, setPageToShow] = useState('product list');
   const [cart, setCart] = useState({});
+  const [authLoading, setAuthLoading] = useState(true);
 
-  const handleClick = (e) => {
-    e.stopPropagation();
-    if (e.target.name === 'product_list_btn' || e.target.parentNode.name === 'product_list_btn') {
-      setPageToShow('product list');
-    } else if (e.target.name === 'my_cart_btn' || e.target.parentNode.name === 'my_cart_btn') {
-      setPageToShow('my cart')
+  useEffect(() => {
+    const token = getToken();
+
+    if(!token) return;
+    console.log("exp ==>", jwt_decode(token).exp, "|| Date Now ==>", Date.now());
+    if(jwt_decode(token).exp < Date.now()) {
+      removeUserSession();
+      setAuthLoading(false);
     }
+
+  });
+
+  if (authLoading && getToken()) {
+    return <div>Checking Authentication...</div>
   }
 
   return (
     <div className="App">
       <BrowserRouter>
 
-        <SideBar handleClick={handleClick}/>
+        <SideBar />
 
         <Routes>
-          <Route exact path="/products" render={(props) => <ProductList {...props}  cart={cart} setCart={setCart}/>} />
-          <Route exact path="/mycart" render={(props) => <MyCart {...props}  cart={cart} setCart={setCart}/>}  />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
+          <Route exact={true} path="/products" element={<ProductList cart={cart} setCart={setCart}/>} />
+          <Route exact={true} path="/mycart" element={<MyCart cart={cart} setCart={setCart}/>} />
+          <Route exact={true} path="/register" element={
+                                                    <PublicRoute>
+                                                      <Register />
+                                                    </PublicRoute>}
+          />
+          <Route exact={true} path="/login" element={
+                                                    <PublicRoute>
+                                                      <Login />
+                                                    </PublicRoute>}
+          />
+          <Route exact={true} path="/account" element={
+                                                    <PrivateRoute>
+                                                      <Account />
+                                                    </PrivateRoute>}
+          />
+          <Route exact={true} path="/" element={<Navigate replace to="/login" />}/>
         </Routes>
 
       </BrowserRouter>

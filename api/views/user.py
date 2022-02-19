@@ -26,7 +26,7 @@ def token_required(func):
         
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = storage.get('User', data['user_id'])
+            current_user = storage.get('User', data['user']['id'])
             if not current_user:
                 return jsonify({'message': 'Token is invalid'}), 401
         except:
@@ -40,6 +40,9 @@ def token_required(func):
 def register():
     data = request.get_json()
     
+    if not data:
+        return jsonify({'message': 'Data is Not Json!'}, 400)
+    
     hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
     
     new_user = User(username=data['username'], password=hashed_password, email=data['email'])
@@ -52,18 +55,17 @@ def login():
     auth = request.authorization
 
     if not auth or not auth.username or not auth.password:
-        return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+        return jsonify({'message': 'Could not verify', 'WWW-Authenticate': 'Basic realm="Login required!"'}), 401
 
     user = storage._DBStorage__session.query(User).filter(User.username == auth.username).first()
 
     if not user:
-        return make_response('User not found', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+        # user not found
+        return jsonify({'message': 'Wrong Password or Username', 'WWW-Authenticate': 'Basic realm="Login required!"'}), 401
 
     if bcrypt.check_password_hash(user.password, auth.password):
-        token = jwt.encode({'user_id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=1)}, app.config['SECRET_KEY'])
+        token = jwt.encode({'user': user.to_dict(), 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=1)}, app.config['SECRET_KEY'])
 
         return jsonify({'token' : token})
-
-    return make_response('Wrong password', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-    
-    
+    # wrong password
+    return jsonify({'message': 'Wrong Password or Username', 'WWW-Authenticate': 'Basic realm="Login required!"'}), 401

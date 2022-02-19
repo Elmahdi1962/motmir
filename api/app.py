@@ -4,7 +4,6 @@
 from dotenv import load_dotenv
 load_dotenv()
 
-from api.views import app_views
 from os import environ
 from flask import Flask, render_template, make_response, jsonify
 from flask_cors import CORS
@@ -16,8 +15,12 @@ from flask_login import LoginManager
 from models import storage
 from models.user import User
 
+
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
+
+from api.views import app_views
+from api.views import auth_views
 
 if app.config['ENV'] == 'production':
     app.config.from_object(ProductionConfig)
@@ -29,7 +32,8 @@ app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.config['IMAGE_STORAGE_PATH'] = os.path.join(pathlib.Path(__file__).parent.resolve(), 'static/images')
 app.config['ALLOWED_IMAGE_EXT'] = ['png', 'jpg', 'jpeg']
 app.register_blueprint(app_views)
-cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+app.register_blueprint(auth_views)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 # login manager
 login_manager = LoginManager(app)

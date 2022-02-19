@@ -14,6 +14,7 @@ class Order(BaseModel, Base):
     order_number = Column(String(60), unique=True, nullable=False)
     total_quantity = Column(Integer, nullable=False)
     total_price = Column(Float, nullable=False)
+    shipping_cost = Column(Float, nullable=False)
     payment_method = Column(String(30), nullable=False, server_default='on delivery')
     payed = Column(Integer, nullable=False, server_default='0')
     orders_details = relationship('OrderDetails',

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ methods that handle all default RestFul API actions for Order """
-
+from api.app import app
 from models import storage
 from models.order import Order
 from models.order_details import OrderDetails
@@ -10,6 +10,32 @@ from flask import abort, jsonify, make_response, request
 from sys import stderr
 import sys
 from sqlalchemy.exc import IntegrityError
+import jwt
+from functools import wraps
+
+def token_required(func):
+    @wraps(func)
+    def decorated(*args, **kwargs):
+        token = None
+        
+        if 'x-access-token' in request.headers:
+            token = request.headers['x-access-token']
+            
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+        
+        try:
+            data = jwt.decode(token, app.config['SECRET_KEY'])
+            current_user = storage.get('User', data['user_id'])
+            if not current_user:
+                return jsonify({'message': 'Token is invalid'}), 401
+        except:
+            return jsonify({'message': 'Token is invalid'}), 401
+        
+        return func(current_user, *args, **kwargs)
+    
+    return decorated
+
 
 classes = {'Order': Order, 'OrderDetails': OrderDetails, 'UserDetails': UserDetails}
 
@@ -84,7 +110,8 @@ def update_order_with_id(id=None):
 
 
 @app_views.route('/orders', methods=['POST'], strict_slashes=False)
-def add_order():
+@token_required
+def add_order(current_user):
     """
     create a new order and store it in database
     """
@@ -97,10 +124,12 @@ def add_order():
     try:
         order = Order(total_quantity=data['total_quantity'],
                       total_price=data['total_price'],
-                      payment_method=data['payment_method'])
+                      payment_method=data['payment_method'],
+                      shipping_cost=data['shipping_cost'],
+                      user_id=data['user_id'])
         models.append(order)
 
-        userdetails = UserDetails(full_name=data['full_name'],
+        '''userdetails = UserDetails(full_name=data['full_name'],
                                   email=data['email'],
                                   country=data['country'],
                                   city=data['city'],
@@ -109,7 +138,7 @@ def add_order():
                                   full_address=data['full_address'],
                                   phone_number=data['phone_number'],
                                   order_id=order.id)
-        models.append(userdetails)
+        models.append(userdetails)'''
 
         t_price = 0
         t_quantity = 0

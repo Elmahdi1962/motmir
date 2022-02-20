@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ methods that handle all default RestFul API actions for Order """
-from api.app import app
-from models import storage
+from api.app import storage
 from models.order import Order
 from models.order_details import OrderDetails
 from models.user_details import UserDetails
@@ -10,51 +9,40 @@ from flask import abort, jsonify, make_response, request
 from sys import stderr
 import sys
 from sqlalchemy.exc import IntegrityError
-import jwt
-from functools import wraps
-
-def token_required(func):
-    @wraps(func)
-    def decorated(*args, **kwargs):
-        token = None
-        
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-            
-        if not token:
-            return jsonify({'message': 'Token is missing!'}), 401
-        
-        try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = storage.get('User', data['user_id'])
-            if not current_user:
-                return jsonify({'message': 'Token is invalid'}), 401
-        except:
-            return jsonify({'message': 'Token is invalid'}), 401
-        
-        return func(current_user, *args, **kwargs)
-    
-    return decorated
+from api.utils.auth_utils import token_required
 
 
 classes = {'Order': Order, 'OrderDetails': OrderDetails, 'UserDetails': UserDetails}
 
 @app_views.route('/orders', methods=['GET'], strict_slashes=False)
-def get_orders():
+@token_required
+def get_orders(current_user):
     """
     Retrieves the list of all available orders
     """
+    # check if user is admin
+    if current_user.is_admin:
+        # return all orders
+        all_orders = storage.all(Order).values()
+        list_orders = []
+        for order in all_orders:
+            dct = order.to_dict()
+            list_orders.append(dct)
+        return jsonify(list_orders)
+    
+    # if not admin
+    else:
+        # return only user's orders
+        orders = storage.get_user_orders(current_user.username)
+        if orders is None:
+            abort(404, description='User not found')
 
-    all_orders = storage.all(Order).values()
-    list_orders = []
-    for order in all_orders:
-        dct = order.to_dict()
-        list_orders.append(dct)
-    return jsonify(list_orders)
+        return jsonify({'orders': orders})
 
 
 @app_views.route('/orders/<id>', methods=['GET'], strict_slashes=False)
-def get_order_with_id(id=None):
+@token_required
+def get_order_with_id(current_user, id=None):
     """
     Retrieves the order with the id
     """
@@ -62,23 +50,46 @@ def get_order_with_id(id=None):
     if id is None or id == '' or len(id) <= 0 or type(id) is not str:
         return make_response(jsonify({'error': 'the passed id is not of valid type'}), 400)
 
-    # run a query on Order class and compare id with the wanted one
-    order = Order.query().filter(Order.id == id).first()
+    # check if user is admin
+    if current_user.is_admin:
+        # run a query on Order class and compare id with the wanted one
+        order = Order.query().filter(Order.id == id).first()
 
-    # if found
-    if order:
-        return jsonify(order.to_dict())
-    
-    # if not found
+        # if found
+        if order:
+            return jsonify(order.to_dict())
+        
+        # if not found
+        else:
+            return make_response(jsonify({'error': 'order not found'}), 400)
+
     else:
-        return make_response(jsonify({'error': 'order not found'}), 400)
+        orders = storage.get_user_orders(current_user.username)
+        # if user not found
+        if orders is None:
+            abort(404, description='User not Found')
 
+        wanted_order = None
+        for order in orders:
+            if order.id == id:
+                wanted_order = order
+                break 
+        # if wanted order found
+        if wanted_order is not None:
+            return jsonify({'order': wanted_order})
+        # if wanted order not found
+        return abort(404, description='order not found.')
 
 @app_views.route('/orders/<id>', methods=['PUT'], strict_slashes=False)
-def update_order_with_id(id=None):
+@token_required
+def update_order_with_id(current_user, id=None):
     """
     Update the order with the id
     """
+    # check if user is admin
+    if not current_user.is_admin:
+        abort(401, description='Not Allowed.')
+
     #get request body
     body = request.get_json()
 
@@ -119,6 +130,8 @@ def add_order(current_user):
         abort(400, description='Not a JSON')
 
     data = request.get_json()
+    
+
     models = []
 
     try:
@@ -126,7 +139,7 @@ def add_order(current_user):
                       total_price=data['total_price'],
                       payment_method=data['payment_method'],
                       shipping_cost=data['shipping_cost'],
-                      user_id=data['user_id'])
+                      user_id=current_user.id)
         models.append(order)
 
         '''userdetails = UserDetails(full_name=data['full_name'],
@@ -146,7 +159,7 @@ def add_order(current_user):
             t_price += product['total_price']
             t_quantity += product['quantity']
             orderdetails = OrderDetails(order_id=order.id,
-                                        product_id=product['id'],
+                                        product_id=product['name'],
                                         quantity=product['quantity'],
                                         total_price=product['total_price'])
             models.append(orderdetails)
@@ -157,9 +170,9 @@ def add_order(current_user):
             make_response(jsonify({'status': 'Failed to Place Order in server level',
                                    'error': 'total_quantity got from client not same as counted in server'}), 400)
 
-        print(models)
         for model in models:
             model.save()
+
     except IntegrityError as err:
         storage._DBStorage__session.rollback()
         for model in models:

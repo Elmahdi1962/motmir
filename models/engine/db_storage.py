@@ -37,8 +37,11 @@ class DBStorage:
                                              MYSQL_HOST,
                                              MYSQL_DB))
         if MYSQL_ENV == "test":
-            for tbl in reversed(Base.metadata.sorted_tables):
-                self.__engine.execute(tbl.delete())
+            try:
+                for tbl in reversed(Base.metadata.sorted_tables):
+                    self.__engine.execute(tbl.delete())
+            except:
+                print('Error happened in db_storage.py when deleting tables')
             '''
             if self.__engine.dialect.has_table(self.__engine.connect(), OrderDetails):
                 Base.metadata.tables['orders_details'].__table__.drop(self.__engine)
@@ -95,12 +98,43 @@ class DBStorage:
         if cls not in classes.keys():
             return None
 
-        all_cls = self.storage.all(classes[cls])
+        all_cls = self.all(classes[cls])
         for value in all_cls.values():
             if (value.id == id):
                 return value
 
         return None
+    
+    def get_user(self, username):
+        """
+        Returns the User object based on username, or
+        None if not found
+        """
+        if username is None or type(username) is not str or username == '':
+            return None
+
+        user = self.__session.query(User).filter(User.username == username).first()
+
+        if user:
+            return user
+
+        return None
+    
+    def get_user_orders(self, username):
+        """
+        Returns all orders of a user based on username, or
+        None if user not found or empty list if user has no orders
+        """
+        user = self.get_user(username)
+        if not user:
+            return None
+        orders = user.orders
+        orders_list = []
+        for order in orders:
+            orders_list.append(order.to_dict())
+
+        return orders_list
+
 
     def count(self, cls=None):
         """
@@ -111,8 +145,8 @@ class DBStorage:
         if not cls:
             count = 0
             for clas in all_class:
-                count += len(models.storage.all(clas).values())
+                count += len(self.all(clas).values())
         else:
-            count = len(models.storage.all(classes[cls]).values())
+            count = len(self.all(classes[cls]).values())
 
         return count

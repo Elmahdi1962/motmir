@@ -10,8 +10,8 @@ class User(BaseModel, Base, UserMixin):
     """Representation of User """
 
     __tablename__ = 'users'
-    username = Column(String(30), nullable=False)
-    email = Column(String(60), nullable=False)
+    username = Column(String(30), nullable=False, unique=True)
+    email = Column(String(60), nullable=False, unique=True)
     password = Column(String(60), nullable=False)
     is_admin = Column(Integer, nullable=True, server_default='0')
     user_details = relationship('UserDetails',
@@ -19,8 +19,8 @@ class User(BaseModel, Base, UserMixin):
                                 cascade="delete, delete-orphan",
                                 uselist=False)
     orders = relationship('Order',
-                                backref='user',
-                                cascade="delete, delete-orphan")
+                          backref='user',
+                          cascade="delete, delete-orphan")
 
     def __init__(self, *args, **kwargs):
         """initializes Product"""

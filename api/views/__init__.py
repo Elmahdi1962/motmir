@@ -13,4 +13,4 @@ from api.views.images import *
 from api.views.admin import *
 
 # auth_views
-from api.views.user import *
+from api.views.authentication import *

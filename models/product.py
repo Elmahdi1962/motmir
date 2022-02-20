@@ -11,11 +11,11 @@ class Product(BaseModel, Base):
     """Representation of Product """
 
     __tablename__ = 'products'
-    name = Column(String(30), nullable=False)
+    name = Column(String(30), nullable=False, unique=True)
     price = Column(Float, nullable=False)
     organic = Column(Integer, nullable=False, server_default='0')
     description = Column(String(1000), nullable=True)
-    img_url = Column(String(60), nullable=False, server_default='image')
+    img_name = Column(String(60), nullable=True, server_default='default.png')
     orders_details = relationship('OrderDetails', backref='product', cascade='all, delete, delete-orphan')
 
     def __init__(self, *args, **kwargs):

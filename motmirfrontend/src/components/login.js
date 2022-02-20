@@ -4,7 +4,6 @@ import { baseUrl } from '../index.js';
 import { setUserSession } from './common';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import jwt_decode from 'jwt-decode';
 
 var Buffer = require('buffer/').Buffer;
 
@@ -18,12 +17,12 @@ function Login(username, password) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const token = Buffer.from(`${e.target.elements.username.value}:${e.target.elements.password.value}`, 'utf8').toString('base64')
+    const authToken = Buffer.from(`${e.target.elements.username.value}:${e.target.elements.password.value}`, 'utf8').toString('base64')
     axios.get(baseUrl + '/user/login',{
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${token}`
+        'Authorization': `Basic ${authToken}`
       }
     }).then(response => {
       setUserSession(response.data.token);

@@ -9,26 +9,35 @@ import PublicRoute from './components/public_route';
 import PrivateRoute from './components/private_route';
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { getToken, removeUserSession, setUserSession } from './components/common';
-import axios from 'axios';
+import { getToken, removeUserSession } from './components/common';
 import jwt_decode from 'jwt-decode';
-import { baseUrl } from './index.js';
+import Logout from './components/logout';
+
 
 function App() {
   const [cart, setCart] = useState({});
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
-    const token = getToken();
-
-    if(!token) return;
-    console.log("exp ==>", jwt_decode(token).exp, "|| Date Now ==>", Date.now());
-    if(jwt_decode(token).exp < Date.now()) {
-      removeUserSession();
-      setAuthLoading(false);
+    const handleStorageEvent = () => {
+      // When local storage changes
+      window.location.reload();
     }
 
-  });
+    window.addEventListener('storage', handleStorageEvent);
+
+    const token = getToken();
+
+    if(!token) {return () => {window.removeEventListener('storage', handleStorageEvent);}}
+
+    if(jwt_decode(token).exp < Date.now()/1000) {
+      removeUserSession();
+    }
+    setAuthLoading(false);
+
+
+    return () => {window.removeEventListener('storage', handleStorageEvent);}
+  }, []);
 
   if (authLoading && getToken()) {
     return <div>Checking Authentication...</div>
@@ -38,24 +47,41 @@ function App() {
     <div className="App">
       <BrowserRouter>
 
-        <SideBar />
-
         <Routes>
-          <Route exact={true} path="/products" element={<ProductList cart={cart} setCart={setCart}/>} />
-          <Route exact={true} path="/mycart" element={<MyCart cart={cart} setCart={setCart}/>} />
+          <Route exact={true} path="/products" element={
+                                                    <>
+                                                      <SideBar />
+                                                      <ProductList cart={cart} setCart={setCart}/>
+                                                    </>}
+          />
+          <Route exact={true} path="/mycart" element={
+                                                    <>
+                                                      <SideBar />
+                                                      <MyCart cart={cart} setCart={setCart}/>
+                                                    </>}
+          />
           <Route exact={true} path="/register" element={
                                                     <PublicRoute>
+                                                      <SideBar />
                                                       <Register />
                                                     </PublicRoute>}
           />
           <Route exact={true} path="/login" element={
                                                     <PublicRoute>
+                                                      <SideBar />
                                                       <Login />
                                                     </PublicRoute>}
           />
           <Route exact={true} path="/account" element={
                                                     <PrivateRoute>
+                                                      <SideBar />
                                                       <Account />
+                                                    </PrivateRoute>}
+          />
+
+          <Route exact={true} path="/logout" element={
+                                                    <PrivateRoute>
+                                                      <Logout />
                                                     </PrivateRoute>}
           />
           <Route exact={true} path="/" element={<Navigate replace to="/login" />}/>

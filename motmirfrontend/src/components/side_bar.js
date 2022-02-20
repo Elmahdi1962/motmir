@@ -1,9 +1,14 @@
 import './styles/side_bar.css';
-import { AiOutlineShop } from 'react-icons/ai';
+import { AiOutlineShop, AiOutlineUserAdd } from 'react-icons/ai';
 import { BsCartPlus } from 'react-icons/bs';
+import { RiLoginBoxLine, RiLogoutBoxLine } from 'react-icons/ri';
+import { MdAccountBox } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
+import { getToken } from './common';
 
-const SideBar = ({handleClick}) => {
+
+const SideBar = () => {
+  let token = getToken();
 
   return (
     <div className="sideBar">
@@ -25,25 +30,36 @@ const SideBar = ({handleClick}) => {
       </div>
 
       <div className="sideBarBtns">
-        <NavLink exact={"true"} to="/login" className="navlink">
-          <span>Login</span>
-          <BsCartPlus className="sideBarIcons"/>
-        </NavLink>
-      </div>
-
-      <div className="sideBarBtns">
-        <NavLink exact={"true"} to="/register" className="navlink">
-          <span>Register</span>
-          <BsCartPlus className="sideBarIcons"/>
-        </NavLink>
-      </div>
-
-      <div className="sideBarBtns">
         <NavLink exact={"true"} to="/account" className="navlink">
           <span>Account</span>
-          <BsCartPlus className="sideBarIcons"/>
+          <MdAccountBox className="sideBarIcons"/>
         </NavLink>
       </div>
+
+      {token ? 
+      <div className="sideBarBtns">
+        <NavLink exact={"true"} to="/logout" className="navlink">
+          <span>Logout</span>
+          <RiLogoutBoxLine className="sideBarIcons"/>
+        </NavLink>
+      </div>
+      :
+      <>
+        <div className="sideBarBtns">
+          <NavLink exact={"true"} to="/login" className="navlink">
+            <span>Login</span>
+            <RiLoginBoxLine className="sideBarIcons"/>
+          </NavLink>
+        </div>
+
+        <div className="sideBarBtns">
+          <NavLink exact={"true"} to="/register" className="navlink">
+            <span>Register</span>
+            <AiOutlineUserAdd className="sideBarIcons"/>
+          </NavLink>
+        </div>
+      </>
+      }
 
     </div>
   );

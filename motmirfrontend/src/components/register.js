@@ -34,8 +34,8 @@ function Register() {
       navigate('/login');
     }).catch(error => {
       setLoading(false);
-      if(error.response.status === 400 || error.response.status === 401) {
-        setError(error.data.message);
+      if(error.response.data) {
+        setError(error.response.data.message);
       } else {
         setError('Failed to Register. Please try again later.');
       }

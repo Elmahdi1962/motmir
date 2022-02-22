@@ -49,10 +49,10 @@ def admin_get_users_details():
     return render_template('users_details.html', users_details=[0,0,0], count=storage.count)
 
 
-@app_views.route('/admin/register', methods=['GET', 'POST'])
-def admin_register():
-    if current_user.is_authenticated:
-        return redirect(url_for('app_views.admin_panel'))
+@app_views.route('/admin/users', methods=['GET', 'POST'])
+@login_required
+def admin_get_users():
+
     form = RegistrationForm()
     if form.validate_on_submit():
         if storage._DBStorage__session.query(User).filter(User.username==form.username.data).first():
@@ -67,7 +67,7 @@ def admin_register():
         user.save()
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('app_views.admin_login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('users.html', title='Users', form=form, count=storage.count)
 
 
 @app_views.route('/admin/login', methods=['GET', 'POST'])
@@ -90,7 +90,7 @@ def admin_login():
 @app_views.route('/admin/logout')
 def admin_logout():
     logout_user()
-    redirect(url_for('app_views.admin_panel'))
+    return redirect(url_for('app_views.admin_panel'))
     
 @app_views.route('/admin/account')
 @login_required

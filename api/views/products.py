@@ -8,6 +8,7 @@ from api.views import app_views
 from flask import abort, jsonify, make_response, redirect, request, current_app, url_for, flash
 from werkzeug.utils import secure_filename
 from api.utils.auth_utils import token_required
+from flask_login import current_user, login_required
 from sys import stderr
 import sys, os
 
@@ -29,7 +30,7 @@ def get_products():
     return jsonify(list_products)
 
 @app_views.route('/products/full', methods=['GET'], strict_slashes=False)
-@token_required
+@login_required
 def get_products_full(current_user):
     """
     Retrieves the list of all product objects with full details for admins only
@@ -47,7 +48,7 @@ def get_products_full(current_user):
 
 
 @app_views.route('/products/<id>', methods=['GET'], strict_slashes=False)
-@token_required
+@login_required
 def get_product_with_id(current_user, id=None):
     """
     Retrieves the product with the id
@@ -73,7 +74,7 @@ def get_product_with_id(current_user, id=None):
 
 
 @app_views.route('/products/<id>', methods=['PUT'], strict_slashes=False)
-@token_required
+@login_required
 def update_product_with_id(current_user, id=None):
     """
     Update the product with the id
@@ -123,7 +124,7 @@ def allowed_image(image):
 
 
 @app_views.route('/products', methods=['POST'], strict_slashes=False)
-@token_required
+@login_required
 def add_product(current_user):
     """
     create a new product and store it in database
@@ -172,7 +173,7 @@ def add_product(current_user):
     return redirect(url_for('app_views.admin_get_products'))
 
 @app_views.route('/products/delete/<id>', methods=['POST'], strict_slashes=False)
-@token_required
+@login_required
 def delete_product(current_user, id):
     """
     Retrieves the list of all product objects

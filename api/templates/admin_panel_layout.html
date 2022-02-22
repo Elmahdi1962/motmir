@@ -28,6 +28,7 @@
               <a class="nav-item nav-link" href="{{ url_for('app_views.admin_panel') }}">Home</a>
               <a class="nav-item nav-link" href="{{ url_for('app_views.admin_get_products') }}">Products</a>
               <a class="nav-item nav-link" href="{{ url_for('app_views.admin_get_orders') }}">Orders</a>
+              <a class="nav-item nav-link" href="{{ url_for('app_views.admin_get_users') }}">Users</a>
               <a class="nav-item nav-link" href="{{ url_for('app_views.admin_get_orders_details') }}">Orders Details</a>
               <a class="nav-item nav-link" href="{{ url_for('app_views.admin_get_users_details') }}">Users Details</a>
             </div>
@@ -38,7 +39,7 @@
                     <a class="nav-item nav-link" href="{{ url_for('app_views.admin_logout') }}">Logout</a>
                 {% else%}
                     <a class="nav-item nav-link" href="{{ url_for('app_views.admin_login') }}">Login</a>
-                    <a class="nav-item nav-link" href="{{ url_for('app_views.admin_register') }}">Register</a>
+                    
                 {% endif %}
             </div>
           </div>

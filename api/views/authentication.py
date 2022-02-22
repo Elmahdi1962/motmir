@@ -19,8 +19,18 @@ def register():
         return jsonify({'message': 'Data is Not Json!'}, 400)
     
     try:
-        hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+        # check if ther is already a user with same username
+        user = storage.get_user(data['username'])
+        if user:
+            return make_response(jsonify({'status': 409, 'message': 'Username already exist!'}), 409)
         
+        # check if ther is already a user with same email
+        user = storage.get_user_by_email(data['email'])
+        if user:
+            return make_response(jsonify({'status': 409, 'message': 'Email already exist!'}), 409)
+
+        hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
+
         new_user = User(username=data['username'], password=hashed_password, email=data['email'])
         new_user.save()
         
@@ -29,8 +39,8 @@ def register():
         try:
             storage.delete(new_user)
         except:
-            abort(500, description='Something went wrong. try again later')
-        abort(500, description='Something went wrong. try again later')
+            return make_response(jsonify({'status': 500, 'message': 'Something went wrong. try again later!'}), 500)
+        return make_response(jsonify({'status': 500, 'message': 'Something went wrong. try again later'}), 500)
 
 @auth_views.route('/login', methods=['GET'], strict_slashes=False)
 def login():

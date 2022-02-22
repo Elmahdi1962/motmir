@@ -120,6 +120,21 @@ class DBStorage:
 
         return None
     
+    def get_user_by_email(self, email):
+        """
+        Returns the User object based on email, or
+        None if not found
+        """
+        if email is None or type(email) is not str or email == '':
+            return None
+
+        user = self.__session.query(User).filter(User.email == email).first()
+
+        if user:
+            return user
+
+        return None
+    
     def get_user_orders(self, username):
         """
         Returns all orders of a user based on username, or

@@ -4,7 +4,7 @@ import { baseUrl } from '../index.js';
 import { setUserSession } from './common';
 import { useNavigate } from 'react-router';
 import { RiLockPasswordFill } from 'react-icons/ri';
-import { MdEmail } from 'react-icons/md';
+import { FaUserAlt } from 'react-icons/fa';
 import axios from 'axios';
 
 var Buffer = require('buffer/').Buffer;
@@ -49,8 +49,8 @@ function Login(username, password) {
         <div className="form_field">
           <label htmlFor="username">Username</label>
           <div className="input_block">
-            <MdEmail className="login_icon"/>
-            <input type="text" name="username" placeholder="Your email" required/>
+            <FaUserAlt className="login_icon"/>
+            <input type="text" name="username" placeholder="Your username" required/>
           </div>
         </div>
 

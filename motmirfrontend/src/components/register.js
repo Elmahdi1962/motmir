@@ -43,24 +43,45 @@ function Register() {
   }
 
   return (
-    <div>
+    <div className="register_container">
 
     <h2>Register</h2>
-    <form onSubmit={handleRegister}>
-      <label htmlFor="username">Username</label>
-      <input type="text" name="username" maxLength="29" minLength="4" required/>
-
-      <label htmlFor="email">Email</label>
-      <input type="email" name="email" maxLength="59" required/>
-
-      <label htmlFor="password">Password</label>
-      <input type="password" name="password" maxLength="29" minLength="8" required/>
-
-      <label htmlFor="confirm_password">Confirm Password</label>
-      <input type="password" name="confirm_password" maxLength="29" minLength="8" required/>
-
+    <form onSubmit={handleRegister} className="register_form">
+      
+      <div className="form_field">
+        <label htmlFor="username">Username</label>
+        <div className="input_block">
+          <input placeholder="username" type="text" name="username" maxLength="29" minLength="4" required/>
+        </div>
+      </div>
+      
+      <div className="form_field">
+        <label htmlFor="email">Email</label>
+        <div className="input_block">
+          <input placeholder="email" type="email" name="email" maxLength="59" required/>
+        </div>
+      </div>
+      
+      <div className="form_field">
+        <label htmlFor="password">Password</label>
+        <div className="input_block">
+          <input placeholder="password" type="password" name="password" maxLength="29" minLength="8" required/>
+        </div>
+      </div>
+      
+      <div className="form_field">
+        <label htmlFor="confirm_password">Confirm Password</label>
+        <div className="input_block">
+          <input placeholder="confirm password" type="password" name="confirm_password" maxLength="29" minLength="8" required/>
+        </div>
+      </div>
       {error && <small className="error">{error}</small>}
-      <input type="submit" value={loading ? "Loading" : "Register"} disabled={loading} />
+      <input className="register_submit" type="submit" value={loading ? "Loading" : "Register"} disabled={loading} />
+
+      <div className="or_block">
+          <p>or</p>
+          <a href='/login'>Login</a>
+        </div>
     </form>
 
   </div>

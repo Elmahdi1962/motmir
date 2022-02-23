@@ -7,9 +7,9 @@ from flask_bcrypt import Bcrypt
 
 bcrypt = Bcrypt()
 
-hashed_password = bcrypt.generate_password_hash('Mamoun@1962').decode('utf-8')
+hashed_password = bcrypt.generate_password_hash('admin123456').decode('utf-8')
 
-admin_user = User(username="elmahdi",
+admin_user = User(username="admin",
                   email="mamounelmahdi1962@gmail.com",
                   password=hashed_password,
                   is_admin=1)

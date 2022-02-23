@@ -42,7 +42,7 @@
         <article class="media content-section d-felx flex-column cont_info">
             <div class="media-body d-flex flex-row justify-content-between align-items-center w-100 cont_info" style="position: relative;">
                 <div class="mr-2">
-                    <img class="prod_img" src="{{ url_for('static', filename='images/'+product.img_url) }}" width="100" height="100"/>
+                    <img class="prod_img" src="{{ url_for('static', filename='images/'+product.img_name) }}" width="100" height="100"/>
                 </div>
                 <div class="container cont_info">
                     <div class="row">
@@ -90,16 +90,19 @@
 {% endblock content %}
 
 {% block scripts %}
-$(".deleteBtn").each(() => {
-    $(this).bind('click', async (e) => {
+
+let btns = document.querySelectorAll(".deleteBtn");
+[].map.call(btns, (elem) => {
+    elem.addEventListener("click", async () => {
         await $.ajax({
             url: `http://127.0.0.1:5000/api/products/delete/${event.target.getAttribute("product_id")}`,
             type: 'POST',
             success: function (data, status) {
-                location.reload();
                 Promise.resolve()
+               
             }
         });
     });
-});
+})
+
 {% endblock scripts %}

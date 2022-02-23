@@ -5,8 +5,9 @@ from api.views import app_views
 from api.app import bcrypt, storage
 from models.user import User
 from models.product import Product
-from flask import abort, render_template, url_for, flash, redirect, request
-from api.forms import RegistrationForm, LoginForm
+from models.order import Order
+from flask import render_template, url_for, flash, redirect, request
+from api.forms import LoginForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -29,8 +30,8 @@ def admin_get_products():
 @login_required
 def admin_get_orders():
     '''renders admin panel template'''
-
-    return render_template('orders.html', orders=[0,0,0], count=storage.count)
+    orders = storage.all(Order)
+    return render_template('orders.html', orders=orders.values(), count=storage.count)
 
 
 @app_views.route('/admin/orders_details', methods=['GET'])
@@ -49,25 +50,10 @@ def admin_get_users_details():
     return render_template('users_details.html', users_details=[0,0,0], count=storage.count)
 
 
-@app_views.route('/admin/users', methods=['GET', 'POST'])
+@app_views.route('/admin/users', methods=['GET'])
 @login_required
 def admin_get_users():
-
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        if storage._DBStorage__session.query(User).filter(User.username==form.username.data).first():
-            flash(f'Username Already Exist!', 'danger')
-            return redirect(url_for('app_views.admin_register'))
-        if storage._DBStorage__session.query(User).filter(User.username==form.email.data).first():
-            flash(f'Email Already Exist!', 'danger')
-            return redirect(url_for('app_views.admin_register'))
-
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        user.save()
-        flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('app_views.admin_login'))
-    return render_template('users.html', title='Users', form=form, count=storage.count)
+    return render_template('users.html', title='Users', count=storage.count)
 
 
 @app_views.route('/admin/login', methods=['GET', 'POST'])

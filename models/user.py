@@ -25,3 +25,7 @@ class User(BaseModel, Base, UserMixin):
     def __init__(self, *args, **kwargs):
         """initializes Product"""
         super().__init__(*args, **kwargs)
+        
+    def get_id(self):
+        """Return the id address to satisfy Flask-Login's requirements."""
+        return self.id

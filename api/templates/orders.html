@@ -1,8 +1,108 @@
 {% extends "admin_panel_layout.html" %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/products.css') }}">
+{% endblock styles %}
+
 {% block content %}
+
+    <div class="mb-4 card">
+        <form class="w-100 card-body" action="{{ url_for('app_views.add_product') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-row mb-2">
+                <div class="custom-file ml-2">
+                    <label for="image">Choose file</label>
+                    <input type="file"  name="image">
+                </div>
+            
+                <div class="col">
+                    <input type="text" name="name" class="form-control" placeholder="Name">
+                </div>
+                <div class="col">
+                    <input type="text" name="price" class="form-control" placeholder="Price">
+                </div>
+                <div class="col-2">
+                    <label for="organic">Organic</label>
+                    <input type="checkbox" name="organic" class="inline checkbox" value="false">
+                </div>
+            </div>
+            <div  class="form-row w-100">
+                <div class="col">
+                    <textarea class="form-control" name="description" maxlength="1000" placeholder="Description"></textarea>
+                </div>
+            </div>
+            <div  class="form-row w-100 mt-3 ml-0">
+                <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+          </form>
+    </div>
+
+
+
     {% for order in orders %}
-        <article class="media content-section">
-          test order
+        <article class="media content-section d-felx flex-column cont_info">
+            <div class="media-body d-flex flex-row justify-content-between align-items-center w-100 cont_info" style="position: relative;">
+                <div class="mr-2">
+                    <img class="prod_img" src="{{ url_for('static', filename='images/'+product.img_name) }}" width="100" height="100"/>
+                </div>
+                <div class="container cont_info">
+                    <div class="row">
+                        <div class="col-sm p-0">
+                            <p class="info_p"><b>Order Number : </b>{{ order.order_number }}</p>
+                        </div>
+                        <div class="col-sm p-0">
+                            <p class="info_p"><b>Total Price : </b>{{ order.total_price }}</p>
+                        </div>
+                        <div class="col-sm p-0">
+                            <p class="info_p"><b>Total Quantity : </b>{{ order.total_quantity }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm p-0 text-wrap">
+                            <p class="info_p"><b>Shipping Cost : </b>{{ order.shipping_cost }}</p>
+                        </div>
+                        <div class="col-sm p-0 text-wrap">
+                            <p class="info_p"><b>Payment Method : </b>{{ order.payment_method }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm p-0">
+                            <p class="form-control"><b>Payed : </b>{{ 'Yes' if order.payed  else 'No' }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm p-0">
+                            <p class="form-control"><b>Created at : </b>{{ order.created_at }}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm p-0">
+                            <p class="form-control"><b>Updated at : </b>{{ order.updated_at }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown show ml-2 dropdownbtn">
+                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="#">Edit</a>
+                        <button class="dropdown-item deleteBtn" order_id="{{ order.id }}">Delete</button>
+                    </div>
+                </div>
+            </div>
         </article>
     {% endfor %}
 {% endblock content %}
+
+{% block scripts %}
+$(".deleteBtn").each(() => {
+    $(this).bind('click', async (e) => {
+        await $.ajax({
+            url: `http://127.0.0.1:5000/api/products/delete/${event.target.getAttribute("product_id")}`,
+            type: 'POST',
+            success: function (data, status) {
+                location.reload();
+                Promise.resolve()
+            }
+        });
+    });
+});
+{% endblock scripts %}

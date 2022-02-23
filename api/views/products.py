@@ -179,10 +179,11 @@ def delete_product(current_user, id):
     Retrieves the list of all product objects
     """
     # check if user is admin or not
+    print('got')
     if not current_user.is_admin:
         abort(401, description='Not allowed')
 
-    product = storage.get(Product, id)
+    product = storage.get('Product', id)
     if product:
         storage.delete(product)
         storage.save()

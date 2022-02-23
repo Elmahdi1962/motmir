@@ -11,7 +11,6 @@ from models.product import Product
 import pathlib, os
 from api.config import *
 from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
 from models import storage
 from models.user import User
 
@@ -34,15 +33,6 @@ app.config['ALLOWED_IMAGE_EXT'] = ['png', 'jpg', 'jpeg']
 app.register_blueprint(app_views)
 app.register_blueprint(auth_views)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-
-# login manager
-login_manager = LoginManager(app)
-login_manager.login_view = 'app_views.admin_login'
-login_manager.login_message_category = 'info'
-
-@login_manager.user_loader
-def load_user(user_id):
-    return storage.get('User', user_id)
 
 
 @app.route('/')

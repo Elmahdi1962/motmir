@@ -174,12 +174,11 @@ def add_product(current_user):
 
 @app_views.route('/products/delete/<id>', methods=['POST'], strict_slashes=False)
 @login_required
-def delete_product(current_user, id):
+def delete_product(id):
     """
-    Retrieves the list of all product objects
+    Deletes a product by id
     """
     # check if user is admin or not
-    print('got')
     if not current_user.is_admin:
         abort(401, description='Not allowed')
 

@@ -1,0 +1,65 @@
+.header{
+    width: 100vw;
+    height: 50px;
+    background-color: rgb(113, 117, 158);
+    box-sizing: border-box;
+}
+
+.maincontainer {
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    padding: 30px 30px;
+    box-sizing: border-box;
+}
+
+.navbar {
+    box-sizing: border-box;
+    padding: 0 10px;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 400;
+    text-decoration: none;
+    color: white;
+}
+
+.navbarlinkscontainer {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.navbarlink {
+    height: 100%;
+    
+}
+
+.navlink {
+    display: block;
+    text-decoration: none;
+    color: white;
+    line-height: 50px;
+    height: 100%;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+.navbarlink:hover {
+    background-color: rgb(94, 98, 140);
+}
+
+.active {
+    background-color: rgb(94, 98, 140);
+}

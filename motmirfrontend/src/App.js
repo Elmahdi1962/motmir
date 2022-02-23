@@ -12,6 +12,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { getToken, removeUserSession } from './components/common';
 import jwt_decode from 'jwt-decode';
 import Logout from './components/logout';
+import AdminPanel from './components/admin_panel';
 
 
 function App() {
@@ -82,6 +83,12 @@ function App() {
           <Route exact={true} path="/logout" element={
                                                     <PrivateRoute>
                                                       <Logout />
+                                                    </PrivateRoute>}
+          />
+
+          <Route exact={true} path="/admin/*" element={
+                                                    <PrivateRoute>
+                                                      <AdminPanel />
                                                     </PrivateRoute>}
           />
           <Route exact={true} path="/" element={<Navigate replace to="/login" />}/>

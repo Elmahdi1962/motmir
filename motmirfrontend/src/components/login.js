@@ -19,7 +19,7 @@ function Login(username, password) {
     e.preventDefault();
     setError(null);
     setLoading(true);
-    const authToken = Buffer.from(`${e.target.elements.username.value}:${e.target.elements.password.value}`, 'utf8').toString('base64')
+    const authToken = Buffer.from(`${e.target.elements.username.value}:${e.target.elements.password.value}`, 'utf8').toString('base64');
     axios.get(baseUrl + '/user/login',{
       headers: {
         'Accept': 'application/json',

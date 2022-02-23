@@ -62,10 +62,10 @@ def login():
                 if key in ['username', 'email']:
                     new_dict[key] = value
 
-            token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=1)}, app.config['SECRET_KEY'])
+            token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'], algorithm='HS256')
 
             return jsonify({'token' : token})
         # wrong password
         return jsonify({'message': 'Wrong Password or Username', 'WWW-Authenticate': 'Basic realm="Login required!"'}), 401
-    except:
+    except Exception as e:
         abort(500, description='Something went wrong. try again later')

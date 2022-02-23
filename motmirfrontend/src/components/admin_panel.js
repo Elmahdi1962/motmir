@@ -21,31 +21,31 @@ function AdminPanel() {
 
             <div className="navbarlinkscontainer">
               <div className="navbarlink">
-                <NavLink exact={"true"} to="/admin/products" className="navlink">
+                <NavLink exact={"true"} to="/admin/products" className="pnavlink">
                   <span>Products</span>
                 </NavLink>
               </div>
 
               <div className="navbarlink">
-                <NavLink exact={"true"} to="/admin/orders" className="navlink">
+                <NavLink exact={"true"} to="/admin/orders" className="pnavlink">
                   <span>Orders</span>
                 </NavLink>
               </div>
 
               <div className="navbarlink">
-                <NavLink exact={"true"} to="/admin/users" className="navlink">
+                <NavLink exact={"true"} to="/admin/users" className="pnavlink">
                   <span>Users</span>
                 </NavLink>
               </div>
 
               <div className="navbarlink">
-                <NavLink exact={"true"} to="/admin/users_details" className="navlink">
+                <NavLink exact={"true"} to="/admin/users_details" className="pnavlink">
                   <span>Users Details</span>
                 </NavLink>
               </div>
 
               <div className="navbarlink">
-                <NavLink exact={"true"} to="/admin/orders_details" className="navlink">
+                <NavLink exact={"true"} to="/admin/orders_details" className="pnavlink">
                   <span>Orders Details</span>
                 </NavLink>
               </div>

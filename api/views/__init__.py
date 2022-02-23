@@ -11,6 +11,7 @@ from api.views.orders import *
 from api.views.orders_details import *
 from api.views.users_details import *
 from api.views.images import *
+from api.views.users import *
 
 # auth_views
 from api.views.authentication import *

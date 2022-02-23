@@ -1,4 +1,4 @@
-.productscontainer {
+.userscontainer {
     width: 100%;
     height: 100%;
     display: flex;
@@ -7,7 +7,7 @@
     box-sizing: border-box;
 }
 
-.productform {
+.userform {
     background-color: rgb(225, 239, 252);
     border-radius: 5px;
     display: flex;
@@ -20,22 +20,14 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
-.productform > input {
+.userform > input {
     height: 30px;
     border: 1px solid gray;
     border-radius: 5px;
     line-height: 30px;
 }
 
-.productform > textarea {
-    max-width: 100%;
-}
-
-.productform > input[type="file"] {
-    border: none;
-}
-
-.productform > input[type="submit"] {
+.userform > input[type="submit"] {
     line-height: 25px;
     border: none;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -43,16 +35,16 @@
     color: white;
 }
 
-.productform > input[type="submit"]:hover {
+.userform > input[type="submit"]:hover {
     background-color: rgb(39, 153, 190);
     cursor: pointer;
 }
 
-.productform > input[type="submit"]:focus {
+.userform > input[type="submit"]:focus {
     transform: scale(0.92);
 }
 
-.productitemscontainer {
+.useritemscontainer {
     margin-top: 10px;
     width: 100%;
     height: 100%;
@@ -63,7 +55,7 @@
     justify-content: space-evenly;
 }
 
-.productitm {
+.useritm {
     padding: 10px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     margin: 5px 0;

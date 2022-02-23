@@ -55,8 +55,15 @@ class DBStorage:
                 Base.metadata.tables['users'].__table__.drop(self.__engine)
             #Base.metadata.drop_all(self.__engine)'''
 
-    def all(self, cls=None):
-        """query on the current database session"""
+    def all(self, cls=''):
+        """query on the current database session and get all instances of the passed class
+        args:
+            cls (string): name of the class
+        return:
+            returns a dict which keys are like 'classname.instance_id'
+            and the instance as value
+        """
+        cls = classes.get(cls, None)
         new_dict = {}
         for clss in classes:
             if cls is None or cls is classes[clss] or cls is clss:

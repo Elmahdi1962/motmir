@@ -16,11 +16,12 @@ def token_required(func):
             return jsonify({'message': 'Token is missing!'}), 401
         
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'])
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             current_user = storage.get_user(data['user']['username'])
             if not current_user:
-                return jsonify({'message': 'Token is invalid'}), 401
-        except:
+                return jsonify({'message': 'Token is invalid UNF'}), 401
+        except Exception as e:
+            print(e)
             return jsonify({'message': 'Token is invalid'}), 401
         
         return func(current_user, *args, **kwargs)

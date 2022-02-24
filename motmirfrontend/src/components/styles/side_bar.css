@@ -1,5 +1,5 @@
 #sideBar {
-    background-color: aliceblue;
+    background-color: white;
     height: 100vh;
     width: 220px;
     display: flex;
@@ -9,6 +9,7 @@
     padding: 4px;
     box-sizing: border-box;
     position: relative;
+    transition: all ease 0.5s;
 }
 
 .logo {
@@ -53,11 +54,10 @@
     overflow: hidden;
 }
 
-.navlink {
-    text-decoration: none;
-}
 
 .sideBarBtns > .navlink {
+    opacity: 1;
+    text-decoration: none;
     font-weight: 500;
     color: #374151;
     margin: 0;
@@ -90,7 +90,7 @@
 #menu_toggle {
     position: absolute;
     top: 5px;
-    right: 15px;
+    right: 13px;
     border: none;
     background: none;
     font-size: 25px;

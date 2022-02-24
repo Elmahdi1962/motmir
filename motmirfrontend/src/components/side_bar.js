@@ -5,16 +5,40 @@ import { RiLoginBoxLine, RiLogoutBoxLine } from 'react-icons/ri';
 import { MdAccountBox } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import { getToken } from './common';
+import { useState } from 'react'
 
 
 const SideBar = () => {
+  const [toggle, setToggle] = useState(true);
   let token = getToken();
 
+  const handleSideBarToggle = (e) => {
+    if(toggle) {
+      document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-bars"></i>';
+      document.getElementById("logo_text").style.display = "none";
+      document.getElementById("sideBar").style.width = '70px';
+      const all = document.getElementsByTagName("span");
+      Array.prototype.forEach.call(all, (elm) => {elm.style.display = "none";})
+      setToggle(false);
+    } else {
+      document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-xmark"></i>';
+      document.getElementById("logo_text").style.display = "block";
+      document.getElementById("sideBar").style.width = '220px';
+      const all = document.getElementsByTagName("span");
+      Array.prototype.forEach.call(all, (elm) => {elm.style.display = "block";})
+      setToggle(true);
+    }
+  }
+
   return (
-    <div className="sideBar">
+    <div id="sideBar">
+      <button id="menu_toggle" onClick={(e) => handleSideBarToggle()} ><i className="fa-solid fa-xmark"></i></button>
 
       <div className="nav_buttons">
-        <h1 className="logo">Motmir</h1>
+        <div className="logo">
+          <i className="fa-solid fa-seedling"></i>
+          <h1 id="logo_text" >Motmir</h1>
+        </div>
 
         <div className="sideBarBtns">
           <NavLink exact={"true"} to="/products" className="navlink">

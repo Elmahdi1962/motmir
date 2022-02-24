@@ -1,18 +1,39 @@
-.sideBar {
-    background-color: aqua;
+#sideBar {
+    background-color: aliceblue;
     height: 100vh;
+    width: 220px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-right: 2px solid green;
+    border-radius: 5px;
+    padding: 4px;
+    box-sizing: border-box;
+    position: relative;
 }
 
 .logo {
-    color: rgb(26, 145, 26);
-    padding: 0 20px 0 20px;
-    border-bottom: 1px solid grey;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    color: #374151;
+    padding: 0;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #D1D5DB;
     cursor: pointer;
     transition: color ease 1s;
+    padding: 10px;
+    box-sizing: border-box;
+    gap: 5px;
+}
+
+.logo > i{
+    font-size: 28px;
+    padding: 0;
+    padding-right: 3px;
+    margin: 0;
 }
 
 .logo:hover {
@@ -21,9 +42,11 @@
 
 .sideBarBtns {
     margin: 0;
-    height: 30px;
+    height: 40px;
     width: 100%;
     border: none;
+    border-radius: 3px;
+    overflow: hidden;
 }
 
 .navlink {
@@ -31,26 +54,24 @@
 }
 
 .sideBarBtns > .navlink {
+    font-weight: 500;
+    color: #374151;
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
+    box-sizing: border-box;
     border: none;
-    width: 100%;
-    height: 100%;
-}
-
-.sideBarBtns > .navlink {
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: rgb(176, 238, 176);
-    flex-direction: row;
+    background-color: inherit;
+    flex-direction: row-reverse;
     flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
 }
 
 .sideBarBtns > .navlink:hover{
-    background-color: rgb(134, 235, 134);
+    background-color: #D1D5DB;
 }
 
 .sideBarBtns > .navlink > span {
@@ -58,6 +79,23 @@
 }
 
 .sideBarIcons {
-    font-size: 20px;
+    font-size: 23px;
     margin-right: 10px;
+}
+
+#menu_toggle {
+    position: absolute;
+    top: 10px;
+    right: -30px;
+    border: none;
+    background: none;
+    font-size: 25px;
+    color: white;
+    text-shadow:2px 2px rgba(68, 67, 66, 0.75)
+}
+
+#menu_toggle:hover {
+    text-shadow:none;
+    transform: translate(2px ,2px);
+    cursor: pointer;
 }

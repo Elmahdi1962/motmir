@@ -16,15 +16,16 @@ def get_products():
     """
     Retrieves the list of all product objects
     """
-    all_products = storage.all(Product).values()
+    all_products = storage.all('Product').values()
     list_products = []
     for product in all_products:
+        new_dct = {}
         dct = product.to_dict()
         for key in dct.keys():
-            if key in ['created_at', 'updated_at', 'id']:
-                del dct[key]
+            if key not in ['created_at', 'updated_at']:
+                new_dct[key] = dct[key]
 
-        list_products.append(dct)
+        list_products.append(new_dct)
     return jsonify(list_products)
 
 @app_views.route('/products/full', methods=['GET'], strict_slashes=False)

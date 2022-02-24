@@ -9,7 +9,7 @@ const ProductItem = ({product, cart, setCart}) => {
 
   return (
     <div className="productItem" onClick={() => setShowPrev(true)}>
-      <img src={baseUrl +'/api/images/'+ product.img_url} alt={imgAlt} className="productItemImg" width="200"/>
+      <img src={baseUrl +'/api/images/'+ product.img_name} alt={imgAlt} className="productItemImg" width="200"/>
       <div className="itemInfo">
         <h2 className="productName">{product.name}</h2>
         <p className="productPrice">{product.price} USD/KG</p>

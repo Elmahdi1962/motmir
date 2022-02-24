@@ -21,6 +21,7 @@ const MyCart = ({ cart, setCart}) => {
 
   return (
     <section className="myCartSection">
+      <h2>My Cart</h2>
       <div className="cartItemsContainer">
         <div className="tableHeader">
           <p><b>Image</b></p>
@@ -30,7 +31,7 @@ const MyCart = ({ cart, setCart}) => {
           <p><b>Total</b></p>
           <p><b>Delete</b></p>
         </div>
-        {Object.entries(cart).map(([productId, product]) => <CartItem product={product} cart={cart} setCart={setCart} key={productId/10}/>)}
+        {Object.entries(cart).map(([productId, product]) => <CartItem product={product} cart={cart} setCart={setCart} key={productId}/>)}
         <div className="tableFooter">
           <p><b>Total Quantity:</b> {totalQuantity} Kg</p>
           <p><b>Total Price</b> {totalPrice} USD</p>

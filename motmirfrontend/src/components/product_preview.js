@@ -22,6 +22,12 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
     }
     newCart[product.id].quantity += parseInt(e.target.elements.quantity.value);
 
+    /* save cart in local storage in case client refreshes the page */
+    if(localStorage.getItem("cart")) {
+      localStorage.removeItem("cart");
+    }
+    localStorage.setItem("cart", JSON.stringify(newCart));
+
     setCart(newCart);
     setAddToCart("Added Successfully");
     e.target.addtocart.style.backgroundColor = 'rgb(40, 172, 43)';
@@ -31,7 +37,7 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
     <div id="productPreviewOverlay" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}>
       <div id="productPreview" onClick={(e) => e.stopPropagation()}>
         <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}/>
-        <img src={baseUrl +'/api/images/'+ product.img_url} alt={imgAlt} className="productPreviewImg" width="400"/>
+        <img src={baseUrl +'/api/images/'+ product.img_name} alt={imgAlt} className="productPreviewImg" width="400"/>
         <div className="infoHeader">
           <h2>{product.name}</h2>
           <p>{product.price} USD/KG</p>

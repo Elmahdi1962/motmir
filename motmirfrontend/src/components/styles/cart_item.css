@@ -24,3 +24,7 @@
     width: auto;
     margin: auto;
 }
+
+.cart_delete:hover {
+    cursor: pointer;
+}

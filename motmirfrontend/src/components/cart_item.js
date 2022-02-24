@@ -9,27 +9,52 @@ const CartItem = ({ product, cart, setCart }) => {
 
   const handleQuantityChange = (newValue) => {
     if (newValue > 0 && !isNaN(newValue) && newValue <= 20) {
-      const newCart = {...cart};
-      newCart[product.id].quantity = parseInt(newValue);
-      setCart(newCart);
-      setTotalPrice(newCart[product.id].price * newCart[product.id].quantity);
+      const new_cart = {...cart};
+      new_cart[product.id].quantity = parseInt(newValue);
+
+      // if cart item exists in local storage delete it
+      const local_cart = localStorage.getItem("cart");
+      if(local_cart) {
+        localStorage.removeItem("cart");
+      }
+
+      // set the cart item in local storage with new values
+      localStorage.setItem("cart", JSON.stringify(new_cart))
+      // update cart state
+      setCart(new_cart);
+      //update total price state
+      setTotalPrice(new_cart[product.id].price * new_cart[product.id].quantity);
     }
   }
 
   const handleDelete = () => {
-    let newCart = {...cart};
-    newCart = Object.values(newCart).filter((prod) => prod.id !== product.id);
-    setCart(newCart);
+    let tmp_cart = {...cart};
+    let new_cart = {};
+    Object.entries(tmp_cart).forEach(([key, prod]) => {
+      if(prod.id !== product.id) {
+       new_cart[key] = prod;
+      }
+    });
+
+    // delete the deleted product from local storage and state
+    const local_cart = localStorage.getItem("cart");
+    if(local_cart) {
+      localStorage.removeItem("cart");
+      localStorage.setItem("cart", JSON.stringify(new_cart))
+      setCart(new_cart);
+    } else {
+      setCart(new_cart);
+    }
   }
 
   return (
-    <div className="cartItem">
-      <img src={baseUrl +'/api/images/'+ product.img_url} alt={imgAlt} className="productItemImg" width="30" height="30"/>
+    <div className="cartItem" >
+      <img src={baseUrl +'/api/images/'+ product.img_name} alt={imgAlt} className="productItemImg" width="30" height="30"/>
       <p>{product.name}</p>
       <p>{product.price} USD/KG</p>
       <input type="number" id="quantity" name="quantity" min="1" max="20" value={product.quantity} onChange={(e) => handleQuantityChange(e.target.value)} required="required"/>
       <p>{totalPrice} USD</p>
-      <MdDeleteForever onClick={handleDelete}/>
+      <MdDeleteForever onClick={handleDelete} className="cart_delete"/>
     </div>
   )
 }

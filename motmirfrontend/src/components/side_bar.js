@@ -16,16 +16,20 @@ const SideBar = () => {
     if(toggle) {
       document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-bars"></i>';
       document.getElementById("logo_text").style.display = "none";
-      document.getElementById("sideBar").style.width = '70px';
-      const all = document.getElementsByTagName("span");
+      document.getElementById("sideBar").style.width = '60px';
+      let all = document.getElementsByTagName("span");
       Array.prototype.forEach.call(all, (elm) => {elm.style.display = "none";})
+      all = document.getElementsByClassName("sideBarIcons");
+      Array.prototype.forEach.call(all, (elm) => {elm.style.margin = "auto";})
       setToggle(false);
     } else {
       document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-xmark"></i>';
       document.getElementById("logo_text").style.display = "block";
       document.getElementById("sideBar").style.width = '220px';
-      const all = document.getElementsByTagName("span");
+      let all = document.getElementsByTagName("span");
       Array.prototype.forEach.call(all, (elm) => {elm.style.display = "block";})
+      all = document.getElementsByClassName("sideBarIcons");
+      Array.prototype.forEach.call(all, (elm) => {elm.style.margin = "0";})
       setToggle(true);
     }
   }

@@ -20,6 +20,23 @@ function App() {
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
+
+    // restore client cart if exists
+    let local_cart = localStorage.getItem("cart");
+    const tmp_cart = JSON.stringify({...cart})
+    if(local_cart && local_cart !== tmp_cart) {
+      console.log(local_cart);
+      local_cart = JSON.parse(local_cart);
+      setCart(local_cart);
+    }
+
+    // delete the cart item from local storage if it's empty
+    if(local_cart) {
+      if(local_cart === '{}' || local_cart === '[]' || local_cart === '' || local_cart.length <= 0) {
+        localStorage.removeItem("cart");
+      }
+    }
+    
     const handleStorageEvent = () => {
       // When local storage changes
       window.location.reload();
@@ -27,9 +44,12 @@ function App() {
 
     window.addEventListener('storage', handleStorageEvent);
 
+
     const token = getToken();
 
-    if(!token) {return () => {window.removeEventListener('storage', handleStorageEvent);}}
+    if(!token) {
+      return () => {window.removeEventListener('storage', handleStorageEvent);}
+    }
 
     if(jwt_decode(token).exp < Date.now()/1000) {
       removeUserSession();
@@ -38,7 +58,7 @@ function App() {
 
 
     return () => {window.removeEventListener('storage', handleStorageEvent);}
-  }, []);
+  }, [cart]);
 
   if (authLoading && getToken()) {
     return <div>Checking Authentication...</div>

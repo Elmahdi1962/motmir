@@ -2,11 +2,24 @@ import "./styles/account.css";
 import AccountOrders from "./account_components/AccountOrders";
 import PrivateRoute from './private_route';
 import { Routes, Route, NavLink } from 'react-router-dom';
-import { getUser } from './common';
+import { useEffect } from 'react';
+import { getToken, getUser, removeUserSession } from './common';
+import jwt_decode from 'jwt-decode';
 
 
 function Account(props) {
   const user = getUser();
+
+  useEffect(() => {
+    const token = getToken();
+
+    if(!token) {
+      return;
+    }
+    if(jwt_decode(token).exp < Date.now()/1000) {
+      removeUserSession();
+    }
+  }, []);
 
   return (
     <section className="account_container">

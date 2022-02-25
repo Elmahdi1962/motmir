@@ -20,7 +20,7 @@ function App() {
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
-    console.log('called');
+
     // restore client cart if exists
     let local_cart = localStorage.getItem("cart");
     const tmp_cart = JSON.stringify({...cart})
@@ -49,10 +49,9 @@ function App() {
     if(!token) {
       return () => {window.removeEventListener('storage', handleStorageEvent);}
     }
-    console.log('reached');
+
     if(jwt_decode(token).exp < Date.now()/1000) {
       removeUserSession();
-      console.log('checked');
     }
     setAuthLoading(false);
 

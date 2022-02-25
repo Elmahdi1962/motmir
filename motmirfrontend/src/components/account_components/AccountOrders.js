@@ -51,7 +51,7 @@ function AccountOrders() {
             <p><b>Status : </b> {order.status}</p>
           </div>
 
-          <div className="account_orders_details">
+          <div className="account_ordered_products">
             <h3>Ordered Products: </h3>
             <div className="ordered_products_container">
               {order.orders_details.map((product, index) =>

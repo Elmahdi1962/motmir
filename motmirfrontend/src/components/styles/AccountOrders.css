@@ -14,9 +14,10 @@
     align-items: center;
     background-color: white;
     border-radius: 5px;
-    margin: 10px 0;
+    margin: 20px 0;
     padding: 10px;
     box-sizing: border-box;
+    border: 1px solid rgba(128, 128, 128, 0.508);
 }
 
 .orders_text_blocks {
@@ -35,9 +36,14 @@
     margin: 3px;
     background-color: rgb(189, 225, 255);
     border-radius: 3px;
+    box-sizing: border-box;
 }
 
-.account_orders_details {
+.account_ordered_products {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items:stretch;
     width: 100%;
     box-sizing: border-box;
     margin-top: 3px;
@@ -57,5 +63,5 @@
     justify-content: space-between;
     background-color: white;
     border-radius: 3px;
-    margin: 3px 0
+    margin: 3px 0;
 }

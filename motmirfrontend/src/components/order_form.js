@@ -1,5 +1,6 @@
 import './styles/order_form.css'
 import { baseUrl } from '../index.js'
+import { getToken } from './common';
 
 const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice}) => {
   const handleOrderSubmit = (e) => {
@@ -11,21 +12,28 @@ const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice})
         fullOrder[elem.name] = elem.value;
       }
     };
-    fullOrder['ordered_products'] = [...cart];
+    fullOrder['ordered_products'] = Object.values({...cart});
+    console.log(fullOrder['ordered_products']);
     fullOrder['total_quantity'] = totalQuantity;
     fullOrder['total_price'] = totalPrice;
+    fullOrder['shipping_cost'] = 100
     sendOrder(fullOrder)
-      .then(blob => {alert('Placed Order Successfully'); setCart([]);})
+      .then(blob => {
+        alert('Placed Order Successfully');
+        setCart([]);
+        localStorage.removeItem("cart");
+      })
       .catch(e => {console.log(e);alert('Failed to Place Order')});
     setShowOrderForm(false);
   }
 
   const sendOrder = async (data) => {
+    const token = getToken();
     let response = await fetch(baseUrl + '/api/orders',
                 {
                   method: 'POST',
                   body: JSON.stringify(data),
-                  headers: {'Content-Type': 'application/json; charset=UTF-8'}
+                  headers: {'Content-Type': 'application/json; charset=UTF-8', 'x-access-token': token}
                 })
     if (!response.ok){
       throw new Error(`HTTP error! status: ${response.status}`);

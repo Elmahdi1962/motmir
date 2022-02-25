@@ -20,12 +20,11 @@ function App() {
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
-
+    console.log('called');
     // restore client cart if exists
     let local_cart = localStorage.getItem("cart");
     const tmp_cart = JSON.stringify({...cart})
     if(local_cart && local_cart !== tmp_cart) {
-      console.log(local_cart);
       local_cart = JSON.parse(local_cart);
       setCart(local_cart);
     }
@@ -50,9 +49,10 @@ function App() {
     if(!token) {
       return () => {window.removeEventListener('storage', handleStorageEvent);}
     }
-
+    console.log('reached');
     if(jwt_decode(token).exp < Date.now()/1000) {
       removeUserSession();
+      console.log('checked');
     }
     setAuthLoading(false);
 
@@ -93,7 +93,7 @@ function App() {
                                                       <Login />
                                                     </PublicRoute>}
           />
-          <Route exact={true} path="/account" element={
+          <Route exact={true} path="/account/*" element={
                                                     <PrivateRoute>
                                                       <SideBar />
                                                       <Account />

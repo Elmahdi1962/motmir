@@ -39,8 +39,9 @@ class DBStorage:
         if MYSQL_ENV == "test":
             try:
                 for tbl in reversed(Base.metadata.sorted_tables):
-                    self.__engine.execute(tbl.delete())
-            except:
+                    self.__engine.execute(tbl.drop(self.__engine))
+            except Exception as e:
+                print(e)
                 print('Error happened in db_storage.py when deleting tables')
             '''
             if self.__engine.dialect.has_table(self.__engine.connect(), OrderDetails):
@@ -52,8 +53,8 @@ class DBStorage:
             if self.__engine.dialect.has_table(self.__engine.connect(), Order):
                 Base.metadata.tables['orders'].__table__.drop(self.__engine)
             if self.__engine.dialect.has_table(self.__engine.connect(), User):
-                Base.metadata.tables['users'].__table__.drop(self.__engine)
-            #Base.metadata.drop_all(self.__engine)'''
+                Base.metadata.tables['users'].__table__.drop(self.__engine)'''
+            Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=''):
         """query on the current database session and get all instances of the passed class
@@ -153,7 +154,15 @@ class DBStorage:
         orders = user.orders
         orders_list = []
         for order in orders:
-            orders_list.append(order.to_dict())
+            order_dct = order.to_dict()
+            order_dct['orders_details'] = []
+            for orderd in order.orders_details:
+                orderd_dct = orderd.to_dict()
+                orderd_dct['name'] = orderd.product.name
+                orderd_dct['price'] = orderd.product.price
+                orderd_dct['img_name'] = orderd.product.img_name
+                order_dct['orders_details'].append(orderd_dct)
+            orders_list.append(order_dct)
 
         return orders_list
 

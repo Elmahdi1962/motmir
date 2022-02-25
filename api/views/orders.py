@@ -16,84 +16,6 @@ from api.utils.auth_utils import token_required
 classes = {'Order': Order, 'OrderDetails': OrderDetails, 'UserDetails': UserDetails}
 
 
-@app_views.route('/admin/orders', methods=['POST'], strict_slashes=False)
-@login_required
-def admin_add_order(current_user):
-    """
-    create a new order and store it in database for admin
-    """
-    if not current_user.is_admin:
-        abort(401, description='Not allowed')
-    if not request.get_json():
-        abort(400, description='Not a JSON')
-
-    data = request.get_json()
-    
-
-    models = []
-
-    try:
-        order = Order(total_quantity=data['total_quantity'],
-                      total_price=data['total_price'],
-                      payment_method=data['payment_method'],
-                      shipping_cost=data['shipping_cost'],
-                      user_id=current_user.id)
-        models.append(order)
-
-        '''userdetails = UserDetails(full_name=data['full_name'],
-                                  email=data['email'],
-                                  country=data['country'],
-                                  city=data['city'],
-                                  zip_code=data['zip_code'],
-                                  state=data['state'],
-                                  full_address=data['full_address'],
-                                  phone_number=data['phone_number'],
-                                  order_id=order.id)
-        models.append(userdetails)'''
-
-        t_price = 0
-        t_quantity = 0
-        for product in data['ordered_products']:
-            t_price += product['total_price']
-            t_quantity += product['quantity']
-            orderdetails = OrderDetails(order_id=order.id,
-                                        product_id=product['name'],
-                                        quantity=product['quantity'],
-                                        total_price=product['total_price'])
-            models.append(orderdetails)
-        if (t_price != data['total_price']):
-            make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                   'error': 'total_price got from client not same as counted in server'}), 400)
-        if (t_quantity != data['total_quantity']):
-            make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                   'error': 'total_quantity got from client not same as counted in server'}), 400)
-
-        for model in models:
-            model.save()
-
-    except IntegrityError as err:
-        storage._DBStorage__session.rollback()
-        for model in models:
-            q = storage._DBStorage__session.query(classes[model.__class__.__name__]).filter(classes[model.__class__.__name__].id == model.id).first()
-            if q:
-                print('deleted : ', model)
-                storage.delete(model)
-        storage.save()
-
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        print('the exception error from orders.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
-        return make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                      'error': 'exception raised when trying to place order sqlalchemy.exc..IntegrityError'}), 400)
-    except Exception as err:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        print('the exception from orders.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
-        return make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                      'error': 'exception raised when trying to place order '}), 400)
-        
-    return make_response(jsonify({'orderStatus': 'Successfully Placed Order'}), 201)
-
-
-
 @app_views.route('/orders', methods=['GET'], strict_slashes=False)
 @token_required
 def get_orders(current_user):
@@ -117,7 +39,7 @@ def get_orders(current_user):
         if orders is None:
             abort(404, description='User not found')
 
-        return jsonify({'orders': orders})
+        return jsonify(orders)
 
 
 @app_views.route('/orders/<id>', methods=['GET'], strict_slashes=False)
@@ -222,7 +144,7 @@ def add_order(current_user):
                       user_id=current_user.id)
         models.append(order)
 
-        '''userdetails = UserDetails(full_name=data['full_name'],
+        userdetails = UserDetails(full_name=data['full_name'],
                                   email=data['email'],
                                   country=data['country'],
                                   city=data['city'],
@@ -231,17 +153,20 @@ def add_order(current_user):
                                   full_address=data['full_address'],
                                   phone_number=data['phone_number'],
                                   order_id=order.id)
-        models.append(userdetails)'''
+        models.append(userdetails)
+        
+        current_user.user_details = userdetails
+        models.append(current_user)
 
         t_price = 0
         t_quantity = 0
         for product in data['ordered_products']:
-            t_price += product['total_price']
+            t_price += product['price'] * product['quantity']
             t_quantity += product['quantity']
             orderdetails = OrderDetails(order_id=order.id,
-                                        product_id=product['name'],
+                                        product_id=product['id'],
                                         quantity=product['quantity'],
-                                        total_price=product['total_price'])
+                                        total_price=product['price'] * product['quantity'])
             models.append(orderdetails)
         if (t_price != data['total_price']):
             make_response(jsonify({'status': 'Failed to Place Order in server level',

@@ -103,3 +103,7 @@
     transform: translate(2px ,2px);
     cursor: pointer;
 }
+
+.active {
+    background-color: #D1D5DB;
+}

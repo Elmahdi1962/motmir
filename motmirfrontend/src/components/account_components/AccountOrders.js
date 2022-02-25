@@ -34,7 +34,7 @@ function AccountOrders() {
 
   }, []);
   return (
-    <div className="account_orders_container" key="test">
+    <div className="account_orders_container">
 
       {error ? <h3>{error}</h3> : <></>}
 
@@ -55,7 +55,7 @@ function AccountOrders() {
             <h3>Ordered Products: </h3>
             <div className="ordered_products_container">
               {order.orders_details.map((product, index) =>
-                <div className="ordered_products_items">
+                <div className="ordered_products_items" key={product.name + toString(index)}>
                   <img src={baseUrl + "/api/images/" + product.img_name} alt={product.img_name}  width="70px" height="70px" />
                   <p><b>Name : </b> {product.name}</p>
                   <p><b>Price : </b> {product.price}</p>

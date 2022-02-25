@@ -1,9 +1,9 @@
 import { Navigate } from 'react-router-dom';
-import { getToken } from './common';
+import { secureGetToken } from './common';
 
 function PublicRoute({ children }) {
   return (
-    !getToken() ? children : <Navigate replace to="/account" />
+    !secureGetToken() ? children : <Navigate replace to="/account" />
   )
 }
 

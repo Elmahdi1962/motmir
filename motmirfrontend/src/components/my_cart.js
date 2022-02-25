@@ -2,6 +2,7 @@ import './styles/my_cart.css'
 import CartItem from './cart_item'
 import { useEffect, useState } from 'react';
 import OrderForm from './order_form';
+import { secureGetToken } from './common';
 
 const MyCart = ({ cart, setCart}) => {
   const [totalQuantity, setTotalQuantity] = useState(0);
@@ -38,7 +39,7 @@ const MyCart = ({ cart, setCart}) => {
           <button onClick={() => setShowOrderForm(true)}>Order Now</button>
         </div>
       </div>
-      {showOrderForm && totalQuantity ? <OrderForm setShowOrderForm={setShowOrderForm} cart={cart} setCart={setCart} totalQuantity={totalQuantity} totalPrice={totalPrice}/> : <></>}
+      {showOrderForm && totalQuantity && secureGetToken() ? <OrderForm setShowOrderForm={setShowOrderForm} cart={cart} setCart={setCart} totalQuantity={totalQuantity} totalPrice={totalPrice}/> : <></>}
     </section>
   )
 }

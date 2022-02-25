@@ -1,9 +1,9 @@
 import { Navigate } from 'react-router-dom';
-import { getToken } from './common';
+import { secureGetToken } from './common';
 
 function PrivateRoute({children}) {
   return (
-    getToken() ? children : <Navigate replace to="/login" />
+    secureGetToken() ? children : <Navigate replace to="/login" />
   )
 }
 

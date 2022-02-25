@@ -13,6 +13,8 @@ import { getToken, removeUserSession } from './components/common';
 import jwt_decode from 'jwt-decode';
 import Logout from './components/logout';
 import AdminPanel from './components/admin_panel';
+import NotFound from './components/not_found';
+import AdminPrivateRoute from './components/admin_private_route';
 
 
 function App() {
@@ -75,10 +77,10 @@ function App() {
                                                     </>}
           />
           <Route exact={true} path="/mycart" element={
-                                                    <>
+                                                    <PrivateRoute>
                                                       <SideBar />
                                                       <MyCart cart={cart} setCart={setCart}/>
-                                                    </>}
+                                                    </PrivateRoute>}
           />
           <Route exact={true} path="/register" element={
                                                     <PublicRoute>
@@ -106,11 +108,15 @@ function App() {
           />
 
           <Route exact={true} path="/admin/*" element={
-                                                    <PrivateRoute>
+                                                    <AdminPrivateRoute>
                                                       <AdminPanel />
-                                                    </PrivateRoute>}
+                                                    </AdminPrivateRoute>}
           />
-          <Route exact={true} path="/" element={<Navigate replace to="/login" />}/>
+
+          <Route exact={true} path="/" element={<Navigate replace to="/products" />}/>
+
+          <Route exact={true} path="/404" element={<NotFound />}/>
+
         </Routes>
 
       </BrowserRouter>

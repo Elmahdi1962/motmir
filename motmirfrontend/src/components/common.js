@@ -8,7 +8,18 @@ export const getUser = () => {
 }
 
 export const getToken = () => {
+  // returns token or null if not exist
   return localStorage.getItem("token") || null;
+}
+
+export const secureGetToken = () => {
+  // returns null when token is expired
+  const token = localStorage.getItem("token")
+  if(token && jwt_decode(token).exp < Date.now()/1000) {
+    removeUserSession();
+    return null;
+  }
+  return token || null;
 }
 
 export const setUserSession = (token) => {

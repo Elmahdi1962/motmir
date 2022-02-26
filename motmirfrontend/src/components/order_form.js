@@ -13,7 +13,6 @@ const OrderForm = ({setShowOrderForm, cart, setCart, totalQuantity, totalPrice})
       }
     };
     fullOrder['ordered_products'] = Object.values({...cart});
-    console.log(fullOrder['ordered_products']);
     fullOrder['total_quantity'] = totalQuantity;
     fullOrder['total_price'] = totalPrice;
     fullOrder['shipping_cost'] = 100

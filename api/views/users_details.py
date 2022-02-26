@@ -23,7 +23,7 @@ def get_users_details(current_user):
     else:
         user_details = current_user.user_details
         if user_details:
-            return jsonify(user_details.to_dict())
+            return jsonify({'status': 200, 'data': user_details.to_dict()}), 200
         else:
             return jsonify({'status': 404, 'message': 'User has no details saved'}), 404
         
@@ -34,7 +34,7 @@ def add_update_users_details(current_user):
     """
     add or update usersdetails to current user
     """
-    data = request.json()
+    data = request.get_json()
     if not data:
         return jsonify({'status': 400, 'message': 'No data received or not Json'}), 400
 
@@ -57,7 +57,7 @@ def add_update_users_details(current_user):
         storage.new(new_details)
         storage.save()
         
-        return jsonify({'status': 200, 'message': 'User details updated successfully.'}), 200
+        return jsonify({'status': 200, 'message': 'User details updated successfully.', 'data': new_details.to_dict()}), 200
     except:
         print('something wrong happened while trying to update user details in users_details.py try block line 41')
         return jsonify({'status': 500, 'message': 'Something wrong happened while trying to update your details'}), 500

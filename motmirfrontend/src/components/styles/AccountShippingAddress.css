@@ -6,7 +6,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: stretch;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 }
 
@@ -20,7 +20,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-
 }
 
 .account-sa-form-fields {
@@ -37,4 +36,35 @@
 .account-sa-form-fields > input {
     height: 30px;
     width: 50%;
+}
+
+.account-sa-form-fields > input[type=submit] {
+    width: 25%;
+    margin: 0 auto;
+}
+.account-sa-form-fields > input[type=submit]:hover {
+    cursor: pointer;
+}
+
+#account-user-details > p {
+    display: block;
+}
+
+#account-user-details {
+    width: 100%;
+    border-radius: 5px;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+@media only screen and (max-width: 940px) {
+    #account-user-details-container {
+        flex-direction: column;
+    }
 }

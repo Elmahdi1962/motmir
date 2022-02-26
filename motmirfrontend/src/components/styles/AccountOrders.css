@@ -1,5 +1,4 @@
 .account_orders_container {
-    overflow-y: scroll;
     width: 100%;
     margin-top: 20px;
     display: flex;
@@ -39,6 +38,10 @@
     background-color: rgb(189, 225, 255);
     border-radius: 3px;
     box-sizing: border-box;
+}
+
+.orders_text_blocks > p:first-child {
+    word-break: break-all;
 }
 
 .account_ordered_products {

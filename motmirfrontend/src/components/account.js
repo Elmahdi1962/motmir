@@ -5,6 +5,7 @@ import { Routes, Route, NavLink } from 'react-router-dom';
 import { useEffect } from 'react';
 import { getToken, getUser, removeUserSession } from './common';
 import jwt_decode from 'jwt-decode';
+import AccountShippingAddress from "./account_components/AccountShippingAddress";
 
 
 function Account(props) {
@@ -44,7 +45,7 @@ function Account(props) {
 
         <Route exact={true} path="/shipping_address" element={
                                                       <PrivateRoute>
-                                                        <Account />
+                                                        <AccountShippingAddress />
                                                       </PrivateRoute>}
         />
 

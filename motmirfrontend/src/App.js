@@ -117,6 +117,8 @@ function App() {
 
           <Route exact={true} path="/404" element={<NotFound />}/>
 
+          <Route exact={true} path="/*" element={<NotFound />}/>
+
         </Routes>
 
       </BrowserRouter>

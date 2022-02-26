@@ -40,7 +40,9 @@ function AccountShippingAddress() {
       }
     };
     setError(null);
+    setLoading(true);
     sendDetails(data);
+    setLoading(false);
   }
 
   const sendDetails = async (data) => {

@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { getToken, getUser, removeUserSession } from './common';
 import jwt_decode from 'jwt-decode';
 import AccountShippingAddress from "./account_components/AccountShippingAddress";
+import AccountSettings from "./account_components/AccountSettings";
 
 
 function Account(props) {
@@ -51,7 +52,7 @@ function Account(props) {
 
         <Route exact={true} path="/settings" element={
                                                       <PrivateRoute>
-                                                        <Account />
+                                                        <AccountSettings/>
                                                       </PrivateRoute>}
         />
       </Routes>

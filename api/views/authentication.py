@@ -4,15 +4,17 @@
 from datetime import datetime
 from api.app import storage
 from api.views import auth_views
+from api.utils.auth_utils import token_required
 from api.app import app, bcrypt
 from models.user import User
-from flask import jsonify, make_response, request, abort, render_template, url_for, flash, redirect
+from flask import jsonify, make_response, request, abort
 import jwt
 import datetime
 
 
 @auth_views.route('/register', methods=['POST'], strict_slashes=False)
 def register():
+    '''register method'''
     data = request.get_json()
     
     if not data:
@@ -44,6 +46,7 @@ def register():
 
 @auth_views.route('/login', methods=['GET'], strict_slashes=False)
 def login():
+    '''login method'''
     auth = request.authorization
 
     if not auth or not auth.username or not auth.password:
@@ -59,7 +62,7 @@ def login():
             user_dict = user.to_dict()
             new_dict = {}
             for key,value in user_dict.items():
-                if key in ['username', 'email']:
+                if key in ['username', 'email', 'is_admin']:
                     new_dict[key] = value
 
             token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'], algorithm='HS256')

@@ -18,21 +18,17 @@ def get_users_details(current_user):
         list_orders = []
         for order in all_orders:
             list_orders.append(order.to_dict())
-        return jsonify(list_orders)
+        return jsonify(list_orders), 200
     
     else:
-        user_details = current_user.user_details
-        if user_details:
-            return jsonify({'status': 200, 'data': user_details.to_dict()}), 200
-        else:
-            return jsonify({'status': 404, 'message': 'User has no details saved'}), 404
+        return jsonify({'status': 401, 'message': 'Not allowed'}), 401
         
 
 @app_views.route('/users_details', methods=['POST', 'PUT'], strict_slashes=False)
 @token_required
 def add_update_users_details(current_user):
     """
-    add or update usersdetails to current user
+    this route for admin to update some else details
     """
     data = request.get_json()
     if not data:

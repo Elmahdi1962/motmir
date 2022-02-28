@@ -20,7 +20,7 @@ class User(BaseModel, Base, UserMixin):
                                 uselist=False)
     orders = relationship('Order',
                           backref='user',
-                          cascade="delete, delete-orphan")
+                          cascade="all, delete, delete-orphan")
 
     def __init__(self, *args, **kwargs):
         """initializes Product"""

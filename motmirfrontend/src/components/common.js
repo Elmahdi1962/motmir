@@ -1,4 +1,6 @@
 import jwt_decode from 'jwt-decode';
+import axios from 'axios';
+import { baseUrl } from '..';
 
 export const getUser = () => {
   const token = localStorage.getItem("token");
@@ -28,4 +30,14 @@ export const setUserSession = (token) => {
 
 export const removeUserSession = () => {
   localStorage.removeItem("token");
+}
+
+export const getUserDetails = async () => {
+  // get user details returns promise
+  const token = secureGetToken();
+  const response = await axios.get(baseUrl + '/api/user/user_details',
+              {
+                headers: {'Content-Type': 'application/json; charset=UTF-8', 'x-access-token': token}
+              });
+  return response;
 }

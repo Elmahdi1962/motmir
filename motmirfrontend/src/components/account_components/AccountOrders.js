@@ -13,7 +13,7 @@ function AccountOrders() {
 
     const token = getToken();
 
-    axios.get(baseUrl + "/api/orders", {
+    axios.get(baseUrl + "/api/user/orders", {
       headers: {
         'x-access-token': token
       }
@@ -25,7 +25,7 @@ function AccountOrders() {
       setOrders(response.data);
     })
     .catch(error => {
-      if(error.response.data.message) {
+      if(error.response) {
         setError(error.response.data.message);
       } else {
         setError("Something wrong happened!");
@@ -53,6 +53,7 @@ function AccountOrders() {
 
           <div className="account_ordered_products">
             <h3>Ordered Products: </h3>
+
             <div className="ordered_products_container">
               {order.orders_details.map((product, index) =>
                 <div className="ordered_products_items" key={product.name + toString(index)}>

@@ -18,7 +18,7 @@ function AccountShippingAddress() {
   const getDetails = async () => {
     // get user details
     const token = secureGetToken();
-    await axios.get(baseUrl + '/api/users_details',
+    await axios.get(baseUrl + '/api/user/user_details',
                 {
                   headers: {'Content-Type': 'application/json; charset=UTF-8', 'x-access-token': token}
                 })
@@ -46,9 +46,9 @@ function AccountShippingAddress() {
   }
 
   const sendDetails = async (data) => {
-    // sends user details to add to update
+    // sends user details to add or update
     const token = secureGetToken();
-    await axios.post(baseUrl + '/api/users_details', JSON.stringify(data),
+    await axios.post(baseUrl + '/api/user/user_details', JSON.stringify(data),
                 {
                   headers: {'Content-Type': 'application/json; charset=UTF-8', 'x-access-token': token}
                 })
@@ -109,7 +109,7 @@ function AccountShippingAddress() {
           </div>
 
         </form>
-
+ 
         {userDetails ?
           <div id="account-user-details">
             <p><b>Full Name : </b> {userDetails.full_name}</p>

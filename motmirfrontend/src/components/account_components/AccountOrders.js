@@ -43,6 +43,7 @@ function AccountOrders() {
 
           <div className="orders_text_blocks">
             <p><b>Order Number : </b> {order.order_number}</p>
+            <p><b>Created At : </b> {order.created_at.split(".")[0]}</p>
             <p><b>Total Price : </b> {order.total_price} USD</p>
             <p><b>Total Quantity : </b> {order.total_quantity} Kg</p>
             <p><b>Shipping Cost : </b> {order.shipping_cost} USD</p>

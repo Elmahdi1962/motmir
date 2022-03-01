@@ -2,7 +2,7 @@ import '../styles/users.css';
 import { baseUrl } from '../../index.js';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { getToken } from '../common';
+import { getToken, secureGetToken } from '../common';
 import { useNavigate } from 'react-router-dom';
 
 function Users() {
@@ -47,7 +47,29 @@ function Users() {
 
 
   const handleUserDelete = (e) => {
+    e.preventDefault();
+    const token = secureGetToken();
+    if(!token) {
+      navigate('/login');
+      return;
+    }
 
+    axios.delete(baseUrl + '/api/user/delete/' + e.target.getAttribute('data-userid'),
+                {
+                  headers: {
+                    'x-access-token': token
+                  }
+                })
+    .then(response => {
+      window.location.reload();
+    })
+    .catch(error => {
+      if(error.response) {
+        setError(error.response.data.message);
+      } else {
+        setError('Something went wrong.');
+      }
+    })
   }
 
 
@@ -96,7 +118,7 @@ function Users() {
           <label htmlFor="is_admin">Is Admin</label>
           <input type="checkbox" name="is_admin"/>
 
-          <input type="submit" value="add user"/>
+          <input type="submit" value="add user" disabled={loading}/>
         </form>
 
         {error !== '' ? <p>{error}</p> : <></>}
@@ -108,7 +130,7 @@ function Users() {
             <div className="userdropdown">
               <button className="userdropbtn"><i className="fa-solid fa-caret-down"></i></button>
               <div className="userdropdown-content">
-                <button username={user.username} email={user.email} onClick={handleUserDelete}>Delete</button>
+                <button data-userid={user.id} onClick={handleUserDelete}>Delete</button>
               </div>
             </div>
 

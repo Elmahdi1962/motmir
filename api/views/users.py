@@ -13,7 +13,6 @@ from sqlalchemy.exc import IntegrityError
 classes = {'Order': Order, 'OrderDetails': OrderDetails}
 
 
-
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 @token_required
 def get_users(current_user):
@@ -44,6 +43,7 @@ def get_user_orders(current_user):
         return jsonify({'status': 404, 'message':'User Not Found'}), 404
 
     return jsonify(orders), 200
+
 
 @app_views.route('/user/user_details', methods=['GET'], strict_slashes=False)
 @token_required

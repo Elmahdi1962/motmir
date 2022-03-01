@@ -33,14 +33,19 @@ def register():
 
         hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
-        new_user = User(username=data['username'], password=hashed_password, email=data['email'])
+        if 'is_admin' in data.keys():
+            new_user = User(username=data['username'], password=hashed_password, email=data['email'], is_admin=data['is_admin'])
+        else:
+            new_user = User(username=data['username'], password=hashed_password, email=data['email'])
         new_user.save()
-        
+
         return jsonify({'message': 'new user created!'})
-    except:
+    except Exception as error:
+        print(error)
         try:
             storage.delete(new_user)
-        except:
+        except Exception as err:
+            print(err)
             return make_response(jsonify({'status': 500, 'message': 'Something went wrong. try again later!'}), 500)
         return make_response(jsonify({'status': 500, 'message': 'Something went wrong. try again later'}), 500)
 

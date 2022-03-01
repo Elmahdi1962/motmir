@@ -26,7 +26,11 @@ function AccountShippingAddress() {
                   setUserDetails(response.data.data);
                 })
                 .catch(error => {
-                  setError('getting Failed');
+                  if(error.response.status === 404) {
+                    return;
+                  } else {
+                    setError("Failed to get details");
+                  }
                 });
   }
 

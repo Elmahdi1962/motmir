@@ -54,7 +54,7 @@ function Users() {
       return;
     }
 
-    axios.delete(baseUrl + '/api/user/delete/' + e.target.getAttribute('data-userid'),
+    axios.delete(baseUrl + '/api/user/' + e.target.getAttribute('data-userid'),
                 {
                   headers: {
                     'x-access-token': token

@@ -121,80 +121,19 @@ def update_order_with_id(current_user, id=None):
         return make_response(jsonify({'error': 'order not found'}), 400)
 
 
-
-@app_views.route('/orders', methods=['POST'], strict_slashes=False)
+@app_views.route('/shipping_cost', methods=['POST'], strict_slashes=False)
 @token_required
-def add_order(current_user):
-    """
-    create a new order and store it in database for clients
-    """
-    if not request.get_json():
-        abort(400, description='Not a JSON')
+def calculate_shiiping_cost(current_user):
+    '''calculates the shipping cost depends on the client's distination'''
+    user_details = current_user.user_details
 
-    data = request.get_json()
+    # check if user has shipping details
+    if not user_details:
+        return jsonify({'status': 401, 'message': 'User has no shipping details saved.'}), 401
     
-
-    models = []
-
-    try:
-        order = Order(total_quantity=data['total_quantity'],
-                      total_price=data['total_price'],
-                      payment_method=data['payment_method'],
-                      shipping_cost=data['shipping_cost'],
-                      user_id=current_user.id)
-        models.append(order)
-
-        userdetails = UserDetails(full_name=data['full_name'],
-                                  email=data['email'],
-                                  country=data['country'],
-                                  city=data['city'],
-                                  zip_code=data['zip_code'],
-                                  state=data['state'],
-                                  full_address=data['full_address'],
-                                  phone_number=data['phone_number'],
-                                  order_id=order.id)
-        models.append(userdetails)
-        
-        current_user.user_details = userdetails
-        models.append(current_user)
-
-        t_price = 0
-        t_quantity = 0
-        for product in data['ordered_products']:
-            t_price += product['price'] * product['quantity']
-            t_quantity += product['quantity']
-            orderdetails = OrderDetails(order_id=order.id,
-                                        product_id=product['id'],
-                                        quantity=product['quantity'],
-                                        total_price=product['price'] * product['quantity'])
-            models.append(orderdetails)
-        if (t_price != data['total_price']):
-            make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                   'error': 'total_price got from client not same as counted in server'}), 400)
-        if (t_quantity != data['total_quantity']):
-            make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                   'error': 'total_quantity got from client not same as counted in server'}), 400)
-
-        for model in models:
-            model.save()
-
-    except IntegrityError as err:
-        storage._DBStorage__session.rollback()
-        for model in models:
-            q = storage._DBStorage__session.query(classes[model.__class__.__name__]).filter(classes[model.__class__.__name__].id == model.id).first()
-            if q:
-                print('deleted : ', model)
-                storage.delete(model)
-        storage.save()
-
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        print('the exception error from orders.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
-        return make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                      'error': 'exception raised when trying to place order sqlalchemy.exc..IntegrityError'}), 400)
-    except Exception as err:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        print('the exception from orders.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
-        return make_response(jsonify({'status': 'Failed to Place Order in server level',
-                                      'error': 'exception raised when trying to place order '}), 400)
-        
-    return make_response(jsonify({'orderStatus': 'Successfully Placed Order'}), 201)
+    # if he is from morocco
+    if user_details.country.lower() == 'morocco' or user_details.country.lower() == 'maroc':
+        return jsonify({'status': 200, 'shipping_cost': 6}), 200
+    # if he is not from morocco
+    else:
+        return jsonify({'status': 200, 'shipping_cost': 15}), 200

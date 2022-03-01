@@ -2,6 +2,7 @@ from api.views import app_views
 from api.utils.auth_utils import token_required
 from models.user_details import UserDetails
 from models.order import Order
+from models.user import User
 from models.order_details import OrderDetails
 from api.app import storage
 from flask import jsonify, request
@@ -155,3 +156,42 @@ def add_user_order(current_user):
                         'error': 'exception raised when trying to place order '}), 400
         
     return jsonify({'status': 'Successfully Placed Order'}), 201
+
+
+@app_views.route('/user/delete/<user_id>', methods=['DELETE'], strict_slashes=False)
+@token_required
+def delete_user(current_user, user_id=None):
+    '''deletes a user :
+    if the requester is admin then delete user with the id user_id
+    passed in the url.
+    else if just a normal client then delete current_user.
+    if an admin want to delete his user he will have to delete it
+    from the admin panel not from settings page of account
+    '''
+    if current_user.is_admin:
+        # current_user is an admin
+        if user_id is None:
+            return jsonify({'status': 400, 'message': 'No id Passed'}), 400
+
+        try:
+            user = storage._DBStorage__session.query(User).filter(User.id == user_id).first()
+            if not user:
+                return jsonify({'status': 404, 'message': 'Could not find user with that id'}), 404
+            storage.delete(user)
+            storage.save()
+            return jsonify({'status': 200, 'message': 'deleted user Successfully'})
+        except Exception as err:
+            print('error while trying to delete a user in users.py file line 173')
+            print(err)
+            return jsonify({'status': 500, 'message': 'Somethign went wrong while trying to delete the user'}), 500
+
+    else:
+        # current_user is not an admin
+        try:
+            storage.delete(current_user)
+            storage.save()
+            return jsonify({'status': 200, 'message': 'deleted user Successfully'})
+        except Exception as err:
+            print('error while trying to delete a user in users.py file line 179')
+            print(err)
+            return jsonify({'status': 500, 'message': 'Somethign went wrong while trying to delete the user'}), 500

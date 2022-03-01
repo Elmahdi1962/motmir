@@ -51,28 +51,28 @@ function Register() {
       <div className="form_field">
         <label htmlFor="username">Username</label>
         <div className="input_block">
-          <input placeholder="username" type="text" name="username" maxLength="29" minLength="4" required/>
+          <input placeholder="username" type="text" name="username" maxLength="29" minLength="4" required="required"/>
         </div>
       </div>
       
       <div className="form_field">
         <label htmlFor="email">Email</label>
         <div className="input_block">
-          <input placeholder="email" type="email" name="email" maxLength="59" required/>
+          <input placeholder="email" type="email" name="email" maxLength="59" required="required"/>
         </div>
       </div>
       
       <div className="form_field">
         <label htmlFor="password">Password</label>
         <div className="input_block">
-          <input placeholder="password" type="password" name="password" maxLength="29" minLength="8" required/>
+          <input placeholder="password" type="password" name="password" maxLength="30" minLength="8" required="required"/>
         </div>
       </div>
       
       <div className="form_field">
         <label htmlFor="confirm_password">Confirm Password</label>
         <div className="input_block">
-          <input placeholder="confirm password" type="password" name="confirm_password" maxLength="29" minLength="8" required/>
+          <input placeholder="confirm password" type="password" name="confirm_password" maxLength="30" minLength="8" required="required"/>
         </div>
       </div>
       {error && <small className="error">{error}</small>}

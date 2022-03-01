@@ -12,7 +12,7 @@ import { Route, Routes, NavLink } from 'react-router-dom';
 
 function AdminPanel() {
   return (
-    <div>
+    <div id="admin-panel">
 
       <header className="header">
         <nav className="navbar">

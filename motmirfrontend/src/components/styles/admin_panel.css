@@ -1,3 +1,10 @@
+#admin-panel {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
 .header{
     width: 100vw;
     height: 50px;
@@ -6,7 +13,7 @@
 }
 
 .maincontainer {
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     background-color: white;
     padding: 30px 30px;
@@ -62,4 +69,5 @@
 
 .active {
     background-color: #D1D5DB;
+    color: rgb(40, 40, 151);
 }

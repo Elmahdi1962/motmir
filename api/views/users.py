@@ -158,7 +158,8 @@ def add_user_order(current_user):
     return jsonify({'status': 'Successfully Placed Order'}), 201
 
 
-@app_views.route('/user/delete/<user_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/user/<user_id>', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/user', methods=['DELETE'], strict_slashes=False)
 @token_required
 def delete_user(current_user, user_id=None):
     '''deletes a user :

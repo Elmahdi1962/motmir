@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """ methods that handle all default RestFul API actions for Order """
 from api.app import storage
+from api.utils.auth_utils import token_required
 from models.order import Order
 from models.order_details import OrderDetails
 from models.user_details import UserDetails
 from api.views import app_views
-from flask import abort, jsonify, make_response, request
-from flask_login import login_user, current_user, logout_user, login_required
+from flask import jsonify, request, abort, make_response
 from sys import stderr
 import sys
 from sqlalchemy.exc import IntegrityError
@@ -123,8 +123,13 @@ def update_order_with_id(current_user, id=None):
 
 @app_views.route('/shipping_cost', methods=['POST'], strict_slashes=False)
 @token_required
-def calculate_shiiping_cost(current_user):
+def calculate_shipping_cost(current_user):
     '''calculates the shipping cost depends on the client's distination'''
+    data = request.get_json()
+    # check if data is not none and if data in right format 
+    if not data:
+        return jsonify({'status': 400, 'message': 'No Data or Not Json'}), 400
+
     user_details = current_user.user_details
 
     # check if user has shipping details
@@ -133,7 +138,7 @@ def calculate_shiiping_cost(current_user):
     
     # if he is from morocco
     if user_details.country.lower() == 'morocco' or user_details.country.lower() == 'maroc':
-        return jsonify({'status': 200, 'shipping_cost': 6}), 200
+        return jsonify({'status': 200, 'shipping_cost': 6 * data['quantity']}), 200
     # if he is not from morocco
     else:
-        return jsonify({'status': 200, 'shipping_cost': 15}), 200
+        return jsonify({'status': 200, 'shipping_cost': 15 * data['quantity']}), 200

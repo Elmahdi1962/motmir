@@ -1,22 +1,54 @@
 import './styles/order.css'
-import { secureGetToken, getToken, getUserDetails } from './common';
+import { secureGetToken, getUserDetails } from './common';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { baseUrl } from '..';
+import axios from 'axios';
 
 
 const Order = ({setShowOrder, cart, setCart, totalQuantity, totalPrice}) => {
   const [payOnDelivery, setPayOnDelivery] = useState(false);
+  const [shippingCost, setShippingCost] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
+
+  const calculateShippingCost = async () => {
+    const token = secureGetToken();
+    //check if token still available and not expired
+    if(!token) {
+      navigate("/login");
+    }
+
+    await axios.post(baseUrl + '/api/shipping_cost',
+                     {'quantity': totalQuantity},
+                     {
+                       headers: {
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        'x-access-token': token}
+                     }
+                    )
+    .then(response => {
+      setShippingCost(response.data.shipping_cost);
+    })
+    .catch(error => {
+      setError('Something went wrong while trying to calculate shipping cost.');
+      setShippingCost(null);
+    });
+  }
 
   const handlePOD = (e) => {
     e.preventDefault();
+    // add a check if user still connected
     const fullOrder = {};
     fullOrder['ordered_products'] = Object.values({...cart});
     fullOrder['total_quantity'] = totalQuantity;
     fullOrder['total_price'] = totalPrice;
     fullOrder['payment_method'] = 'on delivery';
-    fullOrder['shipping_cost'] = 100
+    if(!shippingCost) {
+      fullOrder['shipping_cost'] = 0;
+    } else {
+      fullOrder['shipping_cost'] = parseInt(shippingCost);
+    }
 
     sendOrder(fullOrder)
       .then(blob => {
@@ -32,7 +64,12 @@ const Order = ({setShowOrder, cart, setCart, totalQuantity, totalPrice}) => {
 
 
   const sendOrder = async (data) => {
-    const token = getToken();
+    const token = secureGetToken();
+    //check if token still available and not expired
+    if(!token) {
+      navigate("/login");
+    }
+
     let response = await fetch(baseUrl + '/api/user/order',
                 {
                   method: 'POST',
@@ -63,6 +100,9 @@ const Order = ({setShowOrder, cart, setCart, totalQuantity, totalPrice}) => {
       alert("Please fill your shipping address details first.")
       navigate('/account/shipping_address');
     });
+
+    calculateShippingCost();
+
   }, []);
 
   return (
@@ -70,6 +110,12 @@ const Order = ({setShowOrder, cart, setCart, totalQuantity, totalPrice}) => {
       <div id="order" onClick={(e) => e.stopPropagation()}>
 
         <h3>Payment</h3>
+
+        {error ? <h4>{error}</h4> : <></>}
+
+        <p><strong>Shipping Cost : </strong> {shippingCost ? shippingCost + " USD" : "calculating..."}</p>
+
+        {shippingCost ? <p><strong>Total Price : </strong>{shippingCost + totalPrice} USD</p> : <></>}
 
         {payOnDelivery ?
         <button onClick={handlePOD} >Pay On Delivery</button>

@@ -133,18 +133,29 @@ def add_product(current_user):
         abort(401, description='Not allowed')
 
     data = dict(request.form)
-    if not data or type(data) is not dict:
-        abort(400, description='Not a JSON')
 
-    image = request.files['image']
+    if not data or type(data) is not dict:
+        abort(400, description='No data received or Not a Form')
+
+    image = request.files['img_name']
     # check filename is not empty
     if image.filename == '':
-        make_response(jsonify({'error': 'image file name should not be empty'}), 400)
+        return make_response(jsonify({'error': 'image file name should not be empty'}), 400)
     # check if extention is allowed
     if not allowed_image(image):
-        make_response(jsonify({'error': 'image extention not allowed'}), 400)
+        return make_response(jsonify({'error': 'image extention not allowed'}), 400)
 
     filename = secure_filename(image.filename)
+    
+    # check if img file name alredy exist
+    dup_prod = storage._DBStorage__session.query(Product).filter(Product.img_name == filename).first()
+    if dup_prod:
+        return jsonify({'status': 409, 'message': 'Image file name already exist. Please rename it'}), 409
+    # check if product name alredy exist
+    dup_prod = storage._DBStorage__session.query(Product).filter(Product.name == data['name']).first()
+    if dup_prod:
+        return jsonify({'status': 409, 'message': 'Product name already exist. Please change it'}), 409
+
     organic = 0
     for k in data.keys():
         if k == 'organic':
@@ -159,17 +170,16 @@ def add_product(current_user):
                              price=data['price'],
                              organic=organic,
                              description=data['description'],
-                             img_url=filename)
+                             img_name=filename)
         # save it to db
         newproduct.save()
     # if something went wrong this will catch it so it dosen't break the server
     except Exception as err:
         exc_type, exc_obj, exc_tb = sys.exc_info()
         print('the exception from products.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
-        return make_response(jsonify({'status': 'Failed to Crate Product in server level',
-                                      'error': 'exception raised when trying to create a product '}), 400)
-    flash('Created Product Successfully', 'success')
-    return redirect(url_for('app_views.admin_get_products'))
+        return make_response(jsonify({'status': 'Failed to Create Product in server level',
+                                      'error': 'exception raised when trying to create a product '}), 500)
+    return jsonify({'status': 201, 'message': 'product created successfully'}), 201
 
 @app_views.route('/products/delete/<id>', methods=['POST'], strict_slashes=False)
 @token_required

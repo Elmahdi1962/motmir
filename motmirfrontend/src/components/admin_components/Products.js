@@ -1,16 +1,56 @@
 import '../styles/products.css';
 import { baseUrl } from '../../index.js';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { getToken } from '../common';
+import { getToken, secureGetToken } from '../common';
+import { FaBuromobelexperte } from 'react-icons/fa';
 
 
 function Products() {
   const [products, setProducts] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(null);
+  const [flash, setFlash] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
+  const handleProductAdding = (e) => {
+    e.preventDefault();
+    const token = secureGetToken();
+    // if token expired then redirect to login page
+    if(!token) {
+      navigate('/login');
+      return;
+    }
 
+    const formdata = new FormData(e.target)
+    if(formdata.get('img_name').name.length >= 59) {
+      setError('File name is too long');
+      return;
+    }
+
+    axios.post(baseUrl + '/api/products', formdata,{
+      headers: {
+        'x-access-token': token
+      }
+    })
+    .then(response => {
+      setFlash('Added Product successfully')
+      setError(null);
+      getProducts();
+    })
+    .catch(error => {
+      if(error.response) {
+        setFlash(null);
+        setError(error.response.data.message);
+      } else {
+        setFlash(null);
+        setError('Something went wrong! try again.');
+      }
+    });
+  }
+
+
+  const getProducts = () => {
     const token = getToken();
     axios.get(baseUrl + "/api/products/full",{
       headers: {
@@ -26,12 +66,20 @@ function Products() {
       console.log(error);
       setError(error.response.data.message);
     });
+  }
+
+  useEffect(() => {
+
+    getProducts();
 
   }, []);
 
   return (
     <div className="productscontainer">
-      <form className="productform">
+
+      {flash ? <p>{flash}</p> : <></>}
+
+      <form className="productform" onSubmit={handleProductAdding}>
         <label htmlFor="img_name">Choose an Image</label>
         <input type="file" name="img_name" required="required"/>
 
@@ -42,12 +90,12 @@ function Products() {
         <input type="number" name="price" required="required"/>
         
         <label htmlFor="organic">Organic</label>
-        <input type="checkbox" name="organic" required="required"/>
+        <input type="checkbox" name="organic"/>
 
         <label htmlFor="description">Description</label>
-        <textarea name="description"  maxLength="900" />
+        <textarea name="description"  maxLength="900"  required="required"/>
 
-        <input type="submit" value="add product" required="required"/>
+        <input type="submit" value="add product"/>
       </form>
 
       {error !== '' ? <p>{error}</p> : <></>}

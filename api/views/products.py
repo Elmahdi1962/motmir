@@ -72,45 +72,6 @@ def get_product_with_id(current_user, id=None):
         return make_response(jsonify({'error': 'product not found'}), 400)
 
 
-@app_views.route('/products/<id>', methods=['PUT'], strict_slashes=False)
-@token_required
-def update_product_with_id(current_user, id=None):
-    """
-    Update the product with the id
-    """
-    # check if user is admin or not
-    if not current_user.is_admin:
-        abort(401, description='Not allowed')
-
-    #get request body
-    body = request.get_json()
-
-    # if body is not json
-    if body is None:
-        return make_response(jsonify({'error': 'Data is Not JSON'}), 400)
-
-    # check if id is valid
-    if id is None or id == '' or len(id) <= 0 or type(id) is not str:
-        return make_response(jsonify({'error': 'the passed id is not of valid type'}), 400)
-
-    # run a query on Order class and compare id with the wanted one
-    product = Product.query().filter(Product.id == id).first()
-
-    # if found
-    if product:
-        # set new values
-        for key, value in body.items():
-            if key not in ['__class__', 'created_at', 'updated_at', 'id']:
-                    setattr(product, key, value)
-        storage.save()
-        # return 200 response
-        return make_response(jsonify({'status': 'product updated successfully'}), 200)
-
-    # if not found
-    else:
-        return make_response(jsonify({'error': 'product not found'}), 400)
-
-
 def allowed_image(image):
     '''checks if an image is allowed'''
     if '.' not in image.filename:
@@ -120,6 +81,65 @@ def allowed_image(image):
         return False
 
     return True
+
+
+@app_views.route('/products/<product_id>', methods=['PUT'], strict_slashes=False)
+@token_required
+def update_product_with_id(current_user, product_id=None):
+    """
+    Update the product with the id
+    """
+    # check if user is admin or not
+    if not current_user.is_admin:
+        abort(401, description='Not allowed')
+
+    data = dict(request.form)
+
+    if not data or type(data) is not dict:
+        return jsonify({'status': 400, 'message': 'No data received or Not a Form'}), 400
+
+    image = request.files['img_name']
+    # check filename is not empty
+    if image.filename == '':
+        return make_response(jsonify({'error': 'image file name should not be empty'}), 400)
+    # check if extention is allowed
+    if not allowed_image(image):
+        return make_response(jsonify({'error': 'image extention not allowed'}), 400)
+
+    filename = secure_filename(image.filename)
+    
+    product = storage.get('Product', product_id)
+    
+    if not product:
+        return jsonify({'status': 404, 'message': 'No product found with that id'}), 404
+    
+    # check if img file name alredy exist but not sam product
+    dup_prod = storage._DBStorage__session.query(Product).filter(Product.img_name == filename).first()
+    if dup_prod:
+        if product.img_name != filename:
+            return jsonify({'status': 409, 'message': 'Image file name already exist. Please rename it'}), 409
+
+    # check if product name alredy exist but not same product
+    dup_prod = storage._DBStorage__session.query(Product).filter(Product.name == data['name']).first()
+    if dup_prod:
+        if product.name != data['name']:
+            return jsonify({'status': 409, 'message': 'Product name already exist. Please change it'}), 409
+
+
+    # set new values
+    for key, value in data.items():
+        if key not in ['__class__', 'created_at', 'updated_at', 'id']:
+            if key == 'organic':
+                setattr(product, key, 1)
+            else:
+                setattr(product, key, value)
+    # this one for updating organic since it's a checkbox type of input when not checked it doesn't get sent
+    if 'organic' not in data.keys():
+        setattr(product, 'organic', 0)
+
+    product.save()
+
+    return jsonify({'status': 200, 'message': 'product updated successfully'}), 200
 
 
 @app_views.route('/products', methods=['POST'], strict_slashes=False)
@@ -181,7 +201,7 @@ def add_product(current_user):
                                       'error': 'exception raised when trying to create a product '}), 500)
     return jsonify({'status': 201, 'message': 'product created successfully'}), 201
 
-@app_views.route('/products/delete/<id>', methods=['POST'], strict_slashes=False)
+@app_views.route('/products/<id>', methods=['DELETE'], strict_slashes=False)
 @token_required
 def delete_product(current_user, id):
     """
@@ -190,11 +210,16 @@ def delete_product(current_user, id):
     # check if user is admin or not
     if not current_user.is_admin:
         abort(401, description='Not allowed')
-
-    product = storage.get('Product', id)
-    if product:
-        storage.delete(product)
-        storage.save()
-        return make_response('deleted successfuly!', 200)
-    else:
-        return abort(400, description='Product deletion failed wrong id')
+    try:
+        product = storage.get('Product', id)
+        if product:
+            storage.delete(product)
+            storage.save()
+            return make_response('deleted successfuly!', 200)
+        else:
+            return abort(400, description='Product deletion failed wrong id')
+    except Exception as err:
+        print('something wrong happened while trying to delete a product in products.py view file line 193')
+        print('error is : ')
+        print(err)
+        return jsonify({'status': 500, 'message': 'Something went wrong in Server side.'}), 500

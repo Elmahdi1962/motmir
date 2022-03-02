@@ -25,7 +25,7 @@ def get_orders(current_user):
     # check if user is admin
     if current_user.is_admin:
         # return all orders
-        all_orders = storage.all(Order).values()
+        all_orders = storage.all('Order').values()
         list_orders = []
         for order in all_orders:
             dct = order.to_dict()
@@ -34,12 +34,7 @@ def get_orders(current_user):
     
     # if not admin
     else:
-        # return only user's orders
-        orders = storage.get_user_orders(current_user.username)
-        if orders is None:
-            abort(404, description='User not found')
-
-        return jsonify(orders)
+        return jsonify({'status': 401, 'message': 'Not allowed'}), 401
 
 
 @app_views.route('/orders/<id>', methods=['GET'], strict_slashes=False)

@@ -68,4 +68,83 @@
     width: 360px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     margin: 5px 0;
+    position: relative;
+}
+
+.productdropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 0;
+    text-align: center;
+    font-size: 20px;
+    height: 25px;
+    width: 25px;
+    border: none;
+}
+
+.productdropdown {
+    position: absolute;
+}
+
+.productdropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    width: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+.productdropdown-content button {
+    color: black;
+    padding: 7px 10px;
+    display: block;
+    border: none;
+    cursor: pointer;
+}
+
+.productdropdown-content button:hover {background-color: #ddd;}
+
+.productdropdown:hover .productdropdown-content {display: block;}
+
+.productdropdown:hover .productdropbtn {background-color: #3e8e41;}
+
+.product-update-popup {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: rgba(126, 121, 121, 0.35);
+}
+
+.product-update-form {
+    width: 400px;
+    height: auto;
+    position: absolute;
+    top: calc(50% - 200px);
+    right: calc(50% - 200px);
+    background-color: rgb(225, 239, 252);
+    box-shadow: rgb(255, 255, 255) 0px 7px 29px 0px;
+    border-radius: 5px;
+    padding: 10px;
+    text-align: left;
+}
+
+.product-update-form > input {
+    display: block;
+    width: 100%;
+    padding: 5px;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.product-update-form > input[type=checkbox] {
+    width: auto;
+}
+
+.product-update-form > label {
+    display: block;
+    margin: 5px 0;
+    font-weight: bold;
 }

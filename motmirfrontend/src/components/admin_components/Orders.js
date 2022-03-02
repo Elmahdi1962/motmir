@@ -39,7 +39,7 @@ function Orders() {
       }
     });
 
-  }, []);
+  }, [navigate]);
 
   return (
       <div className="admin-orders-container">

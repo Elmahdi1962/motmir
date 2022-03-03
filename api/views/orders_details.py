@@ -5,15 +5,19 @@ from models import storage
 from models.order_details import OrderDetails
 from api.views import app_views
 from flask import jsonify
+from api.utils.auth_utils import token_required
 
 @app_views.route('/orders_details', methods=['GET'], strict_slashes=False)
-def get_orders2():
+@token_required
+def get_orders_details(current_user):
     """
-    Retrieves the list of all State objects
+    Retrieves the list of all OrderDetails objects or rows in the table
     """
+    if not current_user.is_admin:
+        return jsonify({'status': 401, 'message': 'Not Allowed'})
 
-    all_orders = storage.all(OrderDetails).values()
-    list_orders = []
-    for order in all_orders:
-        list_orders.append(order.to_dict())
-    return jsonify(list_orders)
+    all_orders_details = storage.all('OrderDetails').values()
+    list_orders_details = []
+    for order_detail in all_orders_details:
+        list_orders_details.append(order_detail.to_dict())
+    return jsonify(list_orders_details)

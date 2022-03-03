@@ -27,7 +27,7 @@ function UsersDetails() {
     })
     .then(response => {
       if(response.data.length <= 0) {
-        setError("There is no orders.");
+        setError("There is no users details.");
       }
       setUsersDetails(response.data);
     })

@@ -90,15 +90,15 @@ def update_order_with_id(current_user, id=None):
         return jsonify({'status': 401, 'message': 'Not allowed'}), 401
 
     #get request data
-    data = request.get_json()
+    data = dict(request.form)
 
-    # if data is not json
-    if data is None:
-        return make_response(jsonify({'status': 400, 'message': 'Data is Not JSON'}), 400)
+    # if data is not valid
+    if not data or type(data) is not dict:
+        return make_response(jsonify({'status': 400, 'message': 'No data received or Not a Form'}), 400)
 
     # check if id is valid
     if id is None or id == '' or len(id) <= 0 or type(id) is not str:
-        return make_response(jsonify({'status': 400, 'message': 'the passed id is not of valid type'}), 400)
+        return make_response(jsonify({'status': 400, 'message': 'the passed id is not of valid'}), 400)
 
     # get the order with the id
     order = storage.get('Order', id)
@@ -108,8 +108,12 @@ def update_order_with_id(current_user, id=None):
         if order:
             # set new values
             for key, value in data.items():
-                if key in ['order_number', 'total_quantity', 'total_price', 'shipping_cost', 'payment_method', 'payed', 'status']:
+                if key in ['payed', 'status']:
+                    if key == 'payed':
+                        setattr(order, key, 1)
+                    else:
                         setattr(order, key, value)
+
             order.save()
             # return 200 response
             return jsonify({'status': 200, 'message': 'order updated successfully'}), 200

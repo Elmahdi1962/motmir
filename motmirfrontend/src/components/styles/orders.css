@@ -1,3 +1,8 @@
+.admin-orders-section{
+    display: flex;
+    flex-direction: column;
+}
+
 .admin-orders-container {
     width: 100%;
     height: 100%;
@@ -13,7 +18,83 @@
 
 .admin-order-item {
     padding: 10px;
-    width: 360px;
+    width: 400px;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     position: relative;
+}
+
+.orderdropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 0;
+    text-align: center;
+    font-size: 20px;
+    height: 25px;
+    width: 25px;
+    border: none;
+}
+
+.orderdropdown {
+    position: absolute;
+}
+
+.orderdropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    width: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+.orderdropdown-content button {
+    color: black;
+    padding: 7px 10px;
+    display: block;
+    border: none;
+    cursor: pointer;
+}
+
+.orderdropdown-content button:hover {background-color: #ddd;}
+
+.orderdropdown:hover .orderdropdown-content {display: block;}
+
+.orderdropdown:hover .orderdropbtn {background-color: #3e8e41;}
+
+.order-update-form-container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #35e0a26b;
+}
+
+.order-update-form {
+    position: absolute;
+    top: calc(50% - 75px);
+    right: calc(50% - 150px);
+    width: auto;
+    height: 150px;
+    background-color: rgb(240, 236, 236);
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.549);
+}
+
+.order-form-update-field {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }

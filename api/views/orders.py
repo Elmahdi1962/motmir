@@ -42,6 +42,8 @@ def get_orders(current_user):
 def get_order_with_id(current_user, id=None):
     """
     Retrieves the order with the id
+    but for none admin users it will return the order only
+    if the order id is the id of one of the orders of the user
     """
     # check if id is valid
     if id is None or id == '' or len(id) <= 0 or type(id) is not str:
@@ -81,39 +83,74 @@ def get_order_with_id(current_user, id=None):
 @token_required
 def update_order_with_id(current_user, id=None):
     """
-    Update the order with the id
+    Update the order with id with the attributes passed in the request
     """
     # check if user is admin
     if not current_user.is_admin:
-        abort(401, description='Not Allowed.')
+        return jsonify({'status': 401, 'message': 'Not allowed'}), 401
 
-    #get request body
-    body = request.get_json()
+    #get request data
+    data = request.get_json()
 
-    # if body is not json
-    if body is None:
-        return make_response(jsonify({'error': 'Data is Not JSON'}), 400)
+    # if data is not json
+    if data is None:
+        return make_response(jsonify({'status': 400, 'message': 'Data is Not JSON'}), 400)
 
     # check if id is valid
     if id is None or id == '' or len(id) <= 0 or type(id) is not str:
-        return make_response(jsonify({'error': 'the passed id is not of valid type'}), 400)
+        return make_response(jsonify({'status': 400, 'message': 'the passed id is not of valid type'}), 400)
 
-    # run a query on Order class and compare id with the wanted one
-    order = Order.query().filter(Order.id == id).first()
+    # get the order with the id
+    order = storage.get('Order', id)
 
-    # if found
-    if order:
-        # set new values
-        for key, value in body.items():
-            if key not in ['__class__', 'created_at', 'updated_at', 'id']:
-                    setattr(order, key, value)
+    try:
+        # if found
+        if order:
+            # set new values
+            for key, value in data.items():
+                if key in ['order_number', 'total_quantity', 'total_price', 'shipping_cost', 'payment_method', 'payed', 'status']:
+                        setattr(order, key, value)
+            order.save()
+            # return 200 response
+            return jsonify({'status': 200, 'message': 'order updated successfully'}), 200
+
+        # if not found
+        else:
+            return jsonify({'status': 404, 'message': 'order not found'}), 404
+    except Exception as error:
+        print('womething went wrong when trying to update a order in orders.py file PUT function line 106.')
+        print(error)
+        return jsonify({'status': 500, 'message': 'Somethign went wrong on server side while trying to update an order'}), 500
+
+
+@app_views.route('/orders/<order_id>', methods=['DELETE'], strict_slashes=False)
+@token_required
+def delete_order(current_user, order_id=None):
+    '''deletes an order with the id passed in the request '''
+    
+    # if user not an admin respond with 401
+    if not current_user.is_admin:
+        return jsonify({'status': 401, 'message': 'Not Allowed'}), 401
+    
+    # check if the id is not None
+    if order_id is None:
+        return jsonify({'status': 400, 'message': 'No id received!'}), 400
+    
+    # search for an order with that id
+    order = storage.get('Order', order_id)
+    # check if not found the order
+    if order is None:
+        return jsonify({'status': 404, 'message': 'No order found with that id'}), 404
+    
+    # try delete the order and save changes
+    try:
+        storage.delete(order)
         storage.save()
-        # return 200 response
-        return make_response(jsonify({'status': 'order updated successfully'}), 200)
-
-    # if not found
-    else:
-        return make_response(jsonify({'error': 'order not found'}), 400)
+        return jsonify({'status': 200, 'message': 'Deleted order successfully.'}), 200
+    except Exception as error:
+        print('Error happened while trying to delete and order object from database. in orders.py file line 140')
+        print(error)
+        return jsonify({'status': 500, 'message': 'Something went wrong in server side while trying to delete the order'}), 500
 
 
 @app_views.route('/shipping_cost', methods=['POST'], strict_slashes=False)

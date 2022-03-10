@@ -12,6 +12,7 @@ class Order(BaseModel, Base):
 
     __tablename__ = 'orders'
     order_number = Column(String(60), unique=True, nullable=False)
+    package_number = Column(String(60), unique=True, nullable=True)
     total_quantity = Column(Integer, nullable=False)
     total_price = Column(Float, nullable=False)
     shipping_cost = Column(Float, nullable=False)
@@ -26,4 +27,7 @@ class Order(BaseModel, Base):
     def __init__(self, *args, **kwargs):
         """initializes Place"""
         super().__init__(*args, **kwargs)
-        self.order_number = str(uuid.uuid4().int)
+        if not hasattr(self, 'order_number') or self.order_number == '' or self.order_number is None:
+            print('changed order number')
+            print('its old value is :', self.order_number)
+            self.order_number = str(uuid.uuid4().int)

@@ -1,4 +1,5 @@
-import './styles/order.css'
+import './styles/order.css';
+import PayPal from './PayPal';
 import { secureGetToken, getUserDetails } from './common';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -8,6 +9,7 @@ import axios from 'axios';
 
 const Order = ({setShowOrder, cart, setCart, totalQuantity, totalPrice}) => {
   const [payOnDelivery, setPayOnDelivery] = useState(false);
+  const [checkout, setCheckout] = useState(false);
   const [shippingCost, setShippingCost] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ const Order = ({setShowOrder, cart, setCart, totalQuantity, totalPrice}) => {
   }
 
   const handlePOD = (e) => {
+    // pay on delivery handler
     e.preventDefault();
     // add a check if user still connected
     const fullOrder = {};
@@ -118,9 +121,18 @@ const Order = ({setShowOrder, cart, setCart, totalQuantity, totalPrice}) => {
         {shippingCost ? <p><strong>Total Price : </strong>{shippingCost + totalPrice} USD</p> : <></>}
 
         {payOnDelivery ?
-        <button onClick={handlePOD} >Pay On Delivery</button>
-        : <></>}
-        <button disabled={true}>Pay Using Paypal</button>
+          <button onClick={handlePOD} >Pay On Delivery</button>
+        :
+          <></>
+        }
+
+        <button onClick={() => {setCheckout(true)}}>Pay Using Paypal</button>
+
+        {checkout ?
+          <PayPal setCheckout={setCheckout} cart={cart} setCart={setCart} shippingCost={shippingCost} totalPrice={totalPrice} totalQuantity={totalQuantity} setShowOrder={setShowOrder} />
+        :
+          <></>
+        }
 
       </div>
     </div>

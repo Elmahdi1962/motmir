@@ -62,10 +62,7 @@ pyparsing==2.4.7
 pyrsistent==0.18.0
 pyserial==3.5
 pytest==7.0.0
-python-apt==2.0.0+ubuntu0.20.4.6
-python-debian==0.1.40
 python-dotenv==0.19.2
-PyYAML==5.4.1
 requests==2.26.0
 requests-unixsocket==0.2.0
 SecretStorage==3.3.1

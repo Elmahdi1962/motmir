@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 
-export const baseUrl = 'http://localhost:5000';
+export const baseUrl = 'https://motmir-api.herokuapp.com';
 
 ReactDOM.render(
   <React.StrictMode>

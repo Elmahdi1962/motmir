@@ -37,7 +37,7 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/')
 def home():
-    return 'Welcome to Motmir Api ('^')'
+    return "Welcome to Motmir Api ('^')"
 
 @app.teardown_appcontext
 def close_db(error):

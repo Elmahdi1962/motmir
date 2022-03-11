@@ -37,14 +37,7 @@ cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/')
 def home():
-    for name in ['aziza', 'bofakous', '3asian', 'majhoul', 'aziza manzou', 'lbalah', 'lahmira']:
-        product = Product(name=name,
-                        price='15',
-                        organic=0,
-                        description=f'{name} is a date originated from figuig')
-        product.save()
-
-    return 'created products Successfully'
+    return 'Welcome to Motmir Api ('^')'
 
 @app.teardown_appcontext
 def close_db(error):

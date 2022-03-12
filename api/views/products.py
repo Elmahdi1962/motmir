@@ -193,7 +193,6 @@ def add_product(current_user):
                 "folder" : "/images/",
                 "tags": ["product-image"],
                 "is_private_file": False,
-                "use_unique_file_name": True,
             }
         )
         

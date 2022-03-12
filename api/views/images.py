@@ -14,7 +14,7 @@ def get_image(imagename=''):
         abort(400, 'no filename specified')
 
     try:
-        return requests.get('https://ik.imagekit.io/motmir/images/' + imagename)
+        return requests.get('https://ik.imagekit.io/motmir/images/' + imagename).content
         # return send_from_directory(current_app.config[IMAGE_STORAGE_PATH'],
                             # imagename,
                             # as_attachment=False)

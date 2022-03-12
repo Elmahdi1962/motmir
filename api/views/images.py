@@ -3,8 +3,8 @@
 
 from shutil import ExecError
 from api.views import app_views
-from flask import abort, send_from_directory, current_app
-from requests import get, make_response
+from flask import abort, send_from_directory, current_app, make_response
+from requests import get
 
 
 @app_views.route('/images/<imagename>', methods=['GET'], strict_slashes=False)

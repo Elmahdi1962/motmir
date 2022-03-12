@@ -4,8 +4,7 @@
 from shutil import ExecError
 from api.views import app_views
 from flask import abort, send_from_directory, current_app
-
-
+import requests
 
 
 @app_views.route('/images/<imagename>', methods=['GET'], strict_slashes=False)
@@ -15,9 +14,10 @@ def get_image(imagename=''):
         abort(400, 'no filename specified')
 
     try:
-        return send_from_directory(current_app.config['IMAGE_STORAGE_PATH'],
-                            imagename,
-                            as_attachment=False)
+        return requests.get('https://ik.imagekit.io/motmir/images/' + imagename)
+        # return send_from_directory(current_app.config[IMAGE_STORAGE_PATH'],
+                            # imagename,
+                            # as_attachment=False)
     except Exception as err:
         print(err)
         abort(404, description='image not found')

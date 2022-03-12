@@ -13,6 +13,7 @@ from api.config import *
 from flask_bcrypt import Bcrypt
 from models import storage
 from models.user import User
+from imagekitio import ImageKit
 
 
 app = Flask(__name__)
@@ -33,6 +34,13 @@ app.config['ALLOWED_IMAGE_EXT'] = ['png', 'jpg', 'jpeg']
 app.register_blueprint(app_views)
 app.register_blueprint(auth_views)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
+
+
+imagekit = ImageKit(
+    private_key='private_jNliRzpQ4Q8UWtFlGWFZWq5QcCk=',
+    public_key='public_nzu98T+T43IzjgA81gfxQh5gRCg=',
+    url_endpoint = 'https://ik.imagekit.io/motmir'
+)
 
 
 @app.route('/')

@@ -28,3 +28,4 @@ urllib3==1.26.7
 webencodings==0.5.1
 Werkzeug==2.0.2
 WTForms==3.0.1
+imagekitio==2.2.8

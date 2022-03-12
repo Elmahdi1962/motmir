@@ -8,6 +8,7 @@ from flask import abort, jsonify, make_response, redirect, request, current_app,
 from werkzeug.utils import secure_filename
 from api.utils.auth_utils import token_required
 from sys import stderr
+from api.app import imagekit
 import sys, os
 
 
@@ -183,8 +184,19 @@ def add_product(current_user):
 
     try:
         # save image
-        img_path = os.path.join(current_app.config['IMAGE_STORAGE_PATH'], filename)
-        image.save(img_path)
+        # img_path = os.path.join(current_app.config['IMAGE_STORAGE_PATH'], filename)
+        # image.save(img_path)
+        imagekit.upload_file(
+            file= image, # required
+            file_name= filename, # required
+            options= {
+                "folder" : "/images/",
+                "tags": ["product-image"],
+                "is_private_file": False,
+                "use_unique_file_name": True,
+            }
+        )
+        
         # create new product
         newproduct = Product(name=data['name'],
                              price=data['price'],

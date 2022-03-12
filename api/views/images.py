@@ -3,7 +3,7 @@
 
 from shutil import ExecError
 from api.views import app_views
-from flask import abort, send_from_directory, current_app, make_response
+from flask import abort, send_from_directory, current_app, make_response, send_file
 from requests import get
 
 
@@ -17,8 +17,8 @@ def get_image(imagename=''):
         from PIL import Image
         from io import BytesIO
         r = get('https://ik.imagekit.io/motmir/images/' + imagename)
-        i = r.raw
-        return make_response(i, 200,{'Content-Type': r.headers['Content-Type']})
+        f = BytesIO(r.content)
+        return send_file(f)
         # return send_from_directory(current_app.config[IMAGE_STORAGE_PATH'],
                             # imagename,
                             # as_attachment=False)

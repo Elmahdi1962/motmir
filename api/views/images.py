@@ -18,7 +18,7 @@ def get_image(imagename=''):
         from io import BytesIO
         r = get('https://ik.imagekit.io/motmir/images/' + imagename)
         f = BytesIO(r.content)
-        return send_file(f)
+        return send_file(f, mimetype=r.headers.get('mime-type'), download_name=imagename)
         # return send_from_directory(current_app.config[IMAGE_STORAGE_PATH'],
                             # imagename,
                             # as_attachment=False)

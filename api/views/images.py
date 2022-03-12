@@ -4,7 +4,7 @@
 from shutil import ExecError
 from api.views import app_views
 from flask import abort, send_from_directory, current_app
-import requests
+from requests import get, make_response
 
 
 @app_views.route('/images/<imagename>', methods=['GET'], strict_slashes=False)
@@ -16,9 +16,9 @@ def get_image(imagename=''):
     try:
         from PIL import Image
         from io import BytesIO
-        r = requests.get('https://ik.imagekit.io/motmir/images/' + imagename)
-        i = Image.open(BytesIO(r.content))
-        return i
+        r = get('https://ik.imagekit.io/motmir/images/' + imagename)
+        i = BytesIO(r.content)
+        return make_response(i)
         # return send_from_directory(current_app.config[IMAGE_STORAGE_PATH'],
                             # imagename,
                             # as_attachment=False)

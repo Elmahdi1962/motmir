@@ -16,10 +16,10 @@ def get_image(imagename=''):
     try:
         from PIL import Image
         from io import BytesIO
-        r = get('https://ik.imagekit.io/motmir/images/' + imagename)
+        r = get(current_app.config['IMAGE_STORAGE_URL'] + imagename)
         f = BytesIO(r.content)
         return send_file(f, mimetype=r.headers.get('mime-type'), download_name=imagename)
-        # return send_from_directory(current_app.config[IMAGE_STORAGE_PATH'],
+        # return send_from_directory(current_app.config['IMAGE_STORAGE_PATH'],
                             # imagename,
                             # as_attachment=False)
     except Exception as err:

@@ -139,7 +139,7 @@ def update_product_with_id(current_user, product_id=None):
         setattr(product, 'organic', 0)
 
     # update image
-    images = imagekit.list_files()
+    images = imagekit.list_files({"path": "images"})
     product_img_id = None
     for image in images:
         if image['name'] == product.img_name:

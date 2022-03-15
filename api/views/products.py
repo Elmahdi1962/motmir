@@ -157,7 +157,7 @@ def update_product_with_id(current_user, product_id=None):
 
     if product_img_id:
         imagekit.delete_file(product_img_id)
-
+    print(image)
     imagekit.upload_file(
             file= image, # required
             file_name= filename, # required

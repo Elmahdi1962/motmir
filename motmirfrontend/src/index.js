@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 
 export const baseUrl = 'https://motmir-api.herokuapp.com';
+export const imagesUrl = 'https://ik.imagekit.io/motmir/';
 
 ReactDOM.render(
   <React.StrictMode>

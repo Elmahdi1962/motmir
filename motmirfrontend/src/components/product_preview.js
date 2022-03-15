@@ -1,6 +1,6 @@
 import './styles/product_preview.css'
 import { AiFillCloseCircle } from 'react-icons/ai'
-import { baseUrl } from '../index.js'
+import { imagesUrl } from '../index.js'
 import { useState, useEffect } from 'react'
 
 const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
@@ -37,7 +37,7 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
     <div id="productPreviewOverlay" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}>
       <div id="productPreview" onClick={(e) => e.stopPropagation()}>
         <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}/>
-        <img src={baseUrl +'/api/images/'+ product.img_name} alt={imgAlt} className="productPreviewImg" width="400"/>
+        <img src={imagesUrl +'products-images/'+ product.img_name} alt={imgAlt} className="productPreviewImg" width="500"/>
         <div className="infoHeader">
           <h2>{product.name}</h2>
           <p>{product.price} USD/KG</p>

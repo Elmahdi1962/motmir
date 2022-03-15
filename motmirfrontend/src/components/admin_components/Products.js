@@ -1,5 +1,5 @@
 import '../styles/products.css';
-import { baseUrl } from '../../index.js';
+import { baseUrl, imagesUrl } from '../../index.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -71,7 +71,7 @@ function Products() {
       return;
     }
 
-    const formdata = new FormData(e.target)
+    const formdata = new FormData(e.target);
     if(formdata.get('img_name').name.length >= 59) {
       setError('File name is too long');
       return;
@@ -194,7 +194,7 @@ function Products() {
             </div>
           </div>
 
-          <img src={baseUrl + "/api/images/" + product.img_name} alt={"picture of " + product.name} width="50px" height="50px" />
+          <img src={imagesUrl + "tr:w-100, h-100/products-images/" + product.img_name} alt={"picture of " + product.name} width="100px" height="100px" />
 
           <div className="pinfoblocks">
             <p><b>Name : </b> {product.name}</p>

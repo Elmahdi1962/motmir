@@ -36,20 +36,26 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
   return (
     <div id="productPreviewOverlay" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}>
       <div id="productPreview" onClick={(e) => e.stopPropagation()}>
+
         <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}/>
-        <img src={imagesUrl +'products-images/'+ product.img_name} alt={imgAlt} className="productPreviewImg" width="500"/>
-        <div className="infoHeader">
-          <h2>{product.name}</h2>
-          <p>{product.price} USD/KG</p>
+        <img src={imagesUrl +'tr:w-500, h-500/products-images/'+ product.img_name} alt={imgAlt} className="productPreviewImg" width="500" height="500"/>
+        <div id="product-preview-info">
+
+          <div className="infoHeader">
+            <h2>{product.name}</h2>
+            <p>{product.price} USD/KG</p>
+          </div>
+          <div className="infoBody">
+            <p><b>Organic:</b> {product.organic <= 0 ? 'No' : 'Yes'}</p>
+            <p><b>Description:</b> {product.description}</p>
+          </div>
+          <form onSubmit={handleAddToCart}>
+            <input type="number" defaultValue="1" name="quantity" min="1" max="20" required="required" onChange={() => {addToCart === 'Added Successfully' ? setAddToCart('Add More') : setAddToCart('Add to Cart')}}/>
+            <input type="submit" value={addToCart} id="addtocart"/>
+          </form>
+
         </div>
-        <div className="infoBody">
-          <p><b>Organic:</b> {product.organic <= 0 ? 'No' : 'Yes'}</p>
-          <p><b>Description:</b> {product.description}</p>
-        </div>
-        <form onSubmit={handleAddToCart}>
-          <input type="number" defaultValue="1" name="quantity" min="1" max="20" required="required" onChange={() => {addToCart === 'Added Successfully' ? setAddToCart('Add More') : setAddToCart('Add to Cart')}}/>
-          <input type="submit" value={addToCart} id="addtocart"/>
-        </form>
+
       </div>
     </div>
   )

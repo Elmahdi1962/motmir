@@ -11,6 +11,12 @@
     width: auto;
 }
 
+.productItemImg {
+    object-fit: cover;
+    height: 300px;
+    width: 300px;
+}
+
 .productItem:hover{
     cursor: pointer;
     box-shadow: rgba(255, 255, 255, 0.815) 6px 3px 8px;

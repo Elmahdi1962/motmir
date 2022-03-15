@@ -142,22 +142,20 @@ def update_product_with_id(current_user, product_id=None):
     images = imagekit.list_files({"path": "images"})
 
     product_img_id = None
-    print('images : ',images)
     
     # check if imagekit files list request failed
     if images['error'] is not None:
         return jsonify({"status": 500, 'message': images['error']}), 500
 
     images = images['response']
-    for image in images:
-        print('image ', image)
-        if image['name'] == product.img_name:
-            product_img_id = image['fileId']
+    for img in images:
+        if img['name'] == product.img_name:
+            product_img_id = img['fileId']
             break
 
     if product_img_id:
         imagekit.delete_file(product_img_id)
-    print(image)
+
     imagekit.upload_file(
             file= image, # required
             file_name= filename, # required

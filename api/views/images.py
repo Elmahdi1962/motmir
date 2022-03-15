@@ -14,7 +14,6 @@ def get_image(imagename=''):
         abort(400, 'no filename specified')
 
     try:
-        from PIL import Image
         from io import BytesIO
         r = get(current_app.config['IMAGE_STORAGE_URL'] + imagename)
         f = BytesIO(r.content)

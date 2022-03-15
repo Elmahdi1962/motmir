@@ -160,7 +160,7 @@ def update_product_with_id(current_user, product_id=None):
             file= image, # required
             file_name= filename, # required
             options= {
-                "folder" : current_app.config('PRODUCTS_IMAGES_PATH'),
+                "folder" : current_app.config['PRODUCTS_IMAGES_PATH'],
                 "tags": ["product-image"],
                 "is_private_file": False,
                 "use_unique_file_name": False,
@@ -219,7 +219,7 @@ def add_product(current_user):
             file= image, # required
             file_name= filename, # required
             options= {
-                "folder" : current_app.config('PRODUCTS_IMAGES_PATH'),
+                "folder" : current_app.config['PRODUCTS_IMAGES_PATH'],
                 "tags": ["product-image"],
                 "is_private_file": False,
                 "use_unique_file_name": False,

@@ -138,6 +138,28 @@ def update_product_with_id(current_user, product_id=None):
     if 'organic' not in data.keys():
         setattr(product, 'organic', 0)
 
+    # update image
+    images = imagekit.list_files()
+    product_img_id = None
+    for image in images:
+        if image['name'] == product.img_name:
+            product_img_id = image['fileId']
+            break
+
+    if product_img_id:
+        imagekit.delete_file(product_img_id)
+
+    imagekit.upload_file(
+            file= image, # required
+            file_name= filename, # required
+            options= {
+                "folder" : "/images/",
+                "tags": ["product-image"],
+                "is_private_file": False,
+                "use_unique_file_name": False,
+            }
+        )
+    setattr(product, 'img_name', filename)
     product.save()
 
     return jsonify({'status': 200, 'message': 'product updated successfully'}), 200

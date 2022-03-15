@@ -141,7 +141,9 @@ def update_product_with_id(current_user, product_id=None):
     # update image
     images = imagekit.list_files({"path": "images"})
     product_img_id = None
+    print('images : ',images)
     for image in images:
+        print('image ', image)
         if image['name'] == product.img_name:
             product_img_id = image['fileId']
             break

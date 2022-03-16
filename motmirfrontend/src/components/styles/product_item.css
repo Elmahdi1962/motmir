@@ -8,13 +8,13 @@
     margin-bottom: 10px;
     min-height: 250px;
     height: auto;
-    width: auto;
+    width: 300px;
 }
 
 .productItemImg {
-    object-fit: cover;
+    object-fit: contain;
     height: 300px;
-    width: 300px;
+    width: 100%;
 }
 
 .productItem:hover{

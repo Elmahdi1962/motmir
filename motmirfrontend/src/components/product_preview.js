@@ -38,7 +38,7 @@ const ProductPreview = ({ product, cart, setCart, setShowPrev}) => {
       <div id="productPreview" onClick={(e) => e.stopPropagation()}>
 
         <AiFillCloseCircle className="exitPreviewbtn" onClick={(e) => {e.stopPropagation();setShowPrev(false);}}/>
-        <img src={imagesUrl +'tr:w-500, h-500/products-images/'+ product.img_name} alt={imgAlt} className="productPreviewImg" width="500" height="500"/>
+        <img src={imagesUrl +'products-images/'+ product.img_name} alt={imgAlt} className="productPreviewImg" width="500" height="500"/>
         <div id="product-preview-info">
 
           <div className="infoHeader">

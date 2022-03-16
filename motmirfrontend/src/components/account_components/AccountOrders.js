@@ -1,6 +1,6 @@
 import "../styles/AccountOrders.css";
 import { useState, useEffect } from 'react';
-import { baseUrl } from "../..";
+import { baseUrl, imagesUrl } from "../..";
 import axios from "axios";
 import { getToken } from "../common";
 
@@ -58,7 +58,7 @@ function AccountOrders() {
             <div className="ordered_products_container">
               {order.orders_details.map((product, index) =>
                 <div className="ordered_products_items" key={product.name + toString(index)}>
-                  <img src={baseUrl + "/api/images/" + product.img_name} alt={product.img_name}  width="70px" height="70px" />
+                  <img src={imagesUrl + "tr:w-600/products-images/" + product.img_name} alt={product.img_name}  width="70px" height="70px" />
                   <p><b>Name : </b> {product.name}</p>
                   <p><b>Price : </b> {product.price}</p>
                   <p><b>Quantity : </b> {product.quantity}</p>

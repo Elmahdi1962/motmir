@@ -58,3 +58,11 @@
     background-color: rgba(248, 50, 50, 0.726);
     border: 2px solid red;
 }
+
+
+@media only screen and (max-width: 600px) {
+    .account-user-info-blocks {
+        flex-direction: column;
+        gap: 5px;
+    }
+}

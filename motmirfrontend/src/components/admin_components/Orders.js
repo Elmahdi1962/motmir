@@ -125,7 +125,7 @@ function Orders() {
               <p className="admin-order-item-text"><strong>Total Price : </strong>{order.total_price}</p>
               <p className="admin-order-item-text"><strong>Shipping Cost : </strong>{order.shipping_cost}</p>
               <p className="admin-order-item-text"><strong>Payment Method : </strong>{order.payment_method}</p>
-              <p className="admin-order-item-text"><strong>Payed : </strong>{order.payed ? 'Yes' : 'No'}</p>
+              <p className="admin-order-item-text"><strong>Paid : </strong>{order.payed ? 'Yes' : 'No'}</p>
               <p className="admin-order-item-text"><strong>Status : </strong>{order.status}</p>
             </div>
           )}
@@ -135,8 +135,8 @@ function Orders() {
           <div className="order-update-form-container" onClick={(e) => {e.stopPropagation(); setShowUpdateFrom(false)}} >
             <form className="order-update-form" onSubmit={handleOrderUpdate} onClick={(e) => {e.stopPropagation();}}>
               <div className="order-form-update-field">
-                <label htmlFor="payed">Payed</label>
-                <input type="checkbox" name="payed" />
+                <label htmlFor="paid">Paid</label>
+                <input type="checkbox" name="paid" />
               </div>
 
               <div className="order-form-update-field">

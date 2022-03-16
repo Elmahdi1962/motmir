@@ -1,7 +1,7 @@
 import "./styles/cart_item.css"
 import { MdDeleteForever } from 'react-icons/md'
 import { useState } from "react";
-import { baseUrl } from '../index.js'
+import { imagesUrl } from '../index.js'
 
 const CartItem = ({ product, cart, setCart }) => {
   const imgAlt = `img of the date ${product.name}`;
@@ -49,7 +49,7 @@ const CartItem = ({ product, cart, setCart }) => {
 
   return (
     <div className="cartItem" >
-      <img src={baseUrl +'/api/images/'+ product.img_name} alt={imgAlt} className="productItemImg" width="30" height="30"/>
+      <img src={imagesUrl +'tr:w-600, h-600/products-images/'+ product.img_name} alt={imgAlt} className="cartItemImg" width="70" height="70"/>
       <p>{product.name}</p>
       <p>{product.price} USD/KG</p>
       <input type="number" id="quantity" name="quantity" min="1" max="20" value={product.quantity} onChange={(e) => handleQuantityChange(e.target.value)} required="required"/>

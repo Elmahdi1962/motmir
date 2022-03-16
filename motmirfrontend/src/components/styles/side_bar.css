@@ -108,7 +108,7 @@
     background-color: #D1D5DB;
 }
 
-@media only screen and (max-width: 540px) {
+@media only screen and (max-width: 800px) {
     #sideBar {
         width: 100vw !important;
         height: 280px;
@@ -121,9 +121,10 @@
     }
 }
 
-@media only screen and (min-width: 541px) {
+@media only screen and (min-width: 801px) {
     #sideBar {
         height: 100vh !important;
+        width: 220px !important;
     }
 
     .logo {

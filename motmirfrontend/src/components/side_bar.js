@@ -16,7 +16,7 @@ const SideBar = () => {
     if(toggle) {
       document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-bars"></i>';
       document.getElementById("logo_text").style.display = "none";
-      if(window.innerWidth > 540) {
+      if(window.innerWidth > 800) {
 
         document.getElementById("sideBar").style.width = '60px';
         document.getElementById("sideBar").style.height = '100vh';
@@ -48,7 +48,7 @@ const SideBar = () => {
         })
       document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-xmark"></i>';
       document.getElementById("logo_text").style.display = "block";
-      if(window.innerWidth > 540) {
+      if(window.innerWidth > 800) {
         document.getElementById("sideBar").style.width = '220px';
         document.getElementById("sideBar").style.height = '100vh';
       } else {

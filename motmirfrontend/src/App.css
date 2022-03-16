@@ -9,7 +9,7 @@
   max-height: 100vh;
 }
 
-@media only screen and (max-width: 540px) {
+@media only screen and (max-width: 800px) {
     .App {
         flex-direction: column;
     }

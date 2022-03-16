@@ -119,16 +119,24 @@
         margin: 0;
         padding-top: 3px;
     }
+
+    #menu_toggle {
+        top: 10px;
+    }
 }
 
 @media only screen and (min-width: 801px) {
     #sideBar {
         height: 100vh !important;
-        width: 220px;
+        max-width: 220px;
     }
 
     .logo {
         margin-top: 20px;
         padding: 10px;
+    }
+
+    #menu_toggle {
+        top: 5px;
     }
 }

@@ -21,7 +21,6 @@
     justify-content: center;
     align-items: center;
     color: #374151;
-    padding: 0;
     margin-top: 20px;
     margin-bottom: 5px;
     border-bottom: 1px solid #D1D5DB;
@@ -107,4 +106,28 @@
 
 .active {
     background-color: #D1D5DB;
+}
+
+@media only screen and (max-width: 540px) {
+    #sideBar {
+        width: 100vw !important;
+        height: 280px;
+        justify-content: space-around;
+    }
+
+    .logo {
+        margin: 0;
+        padding-top: 3px;
+    }
+}
+
+@media only screen and (min-width: 541px) {
+    #sideBar {
+        height: 100vh !important;
+    }
+
+    .logo {
+        margin-top: 20px;
+        padding: 10px;
+    }
 }

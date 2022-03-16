@@ -16,17 +16,46 @@ const SideBar = () => {
     if(toggle) {
       document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-bars"></i>';
       document.getElementById("logo_text").style.display = "none";
-      document.getElementById("sideBar").style.width = '60px';
-      let all = document.getElementsByTagName("span");
-      Array.prototype.forEach.call(all, (elm) => {elm.style.display = "none";})
-      all = document.getElementsByClassName("sideBarIcons");
-      Array.prototype.forEach.call(all, (elm) => {elm.style.margin = "auto";})
+      if(window.innerWidth > 540) {
+
+        document.getElementById("sideBar").style.width = '60px';
+        document.getElementById("sideBar").style.height = '100vh';
+        let all = document.getElementsByTagName("span");
+        Array.prototype.forEach.call(all, (elm) => {elm.style.display = "none";})
+        all = document.getElementsByClassName("sideBarIcons");
+        Array.prototype.forEach.call(all, (elm) => {
+          elm.style.margin = "auto";
+        })
+
+        all = document.getElementsByClassName("sideBarBtns");
+        Array.prototype.forEach.call(all, (elm) => {
+          elm.style.display = 'block';
+        })
+
+      } else {
+
+        document.getElementById("sideBar").style.height = '60px';
+        let all = document.getElementsByClassName("sideBarBtns");
+        Array.prototype.forEach.call(all, (elm) => {elm.style.display = "none";})
+
+      }
+      
       setToggle(false);
     } else {
+      let all = document.getElementsByClassName("sideBarBtns");
+        Array.prototype.forEach.call(all, (elm) => {
+          elm.style.display = 'block';
+        })
       document.getElementById("menu_toggle").innerHTML = '<i class="fa-solid fa-xmark"></i>';
       document.getElementById("logo_text").style.display = "block";
-      document.getElementById("sideBar").style.width = '220px';
-      let all = document.getElementsByTagName("span");
+      if(window.innerWidth > 540) {
+        document.getElementById("sideBar").style.width = '220px';
+        document.getElementById("sideBar").style.height = '100vh';
+      } else {
+        document.getElementById("sideBar").style.height = '280px';
+        document.getElementById("sideBar").style.width = '100vw';
+      }
+      all = document.getElementsByTagName("span");
       Array.prototype.forEach.call(all, (elm) => {elm.style.display = "block";})
       all = document.getElementsByClassName("sideBarIcons");
       Array.prototype.forEach.call(all, (elm) => {elm.style.margin = "0";})

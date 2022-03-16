@@ -124,7 +124,7 @@
 @media only screen and (min-width: 801px) {
     #sideBar {
         height: 100vh !important;
-        width: 220px !important;
+        width: 220px;
     }
 
     .logo {

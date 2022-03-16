@@ -20,11 +20,12 @@ function Login(username, password) {
     setError(null);
     setLoading(true);
     const authToken = Buffer.from(`${e.target.elements.username.value}:${e.target.elements.password.value}`, 'utf8').toString('base64');
-    axios.get(baseUrl + '/user/login',{
+    axios.get(baseUrl + '/user/login', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${authToken}`
+        'Authorization': `Basic ${authToken}`,
+        'x-remember': e.target.elements.remember.checked
       }
     }).then(response => {
       setUserSession(response.data.token);

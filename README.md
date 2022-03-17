@@ -1,7 +1,10 @@
-# Motmir
+# Motmir (MVP)
 
 ## Introduction
 Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and flask(v2.0.2), and Reactjs(v17.0.2) for Front-End, and Mysql(v8.0.27) for the database.
+
+[Author Linkedin](https://www.linkedin.com/in/elmahdi-mamoun-a74a1a1bb/)
+[Live Demo](https://motmir.netlify.app/)
 
 ## Quick-start (in Ubuntu v20.04)
 

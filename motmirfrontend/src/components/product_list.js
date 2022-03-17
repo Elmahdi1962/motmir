@@ -9,6 +9,7 @@ const ProductList = ({ cart, setCart}) => {
   useEffect(() => {
     fetchProducts().catch(error => {
       console.log('there was an error when fetching products list : ', error);
+      window.location.reload();
     });
   }, []);
 

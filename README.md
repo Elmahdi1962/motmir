@@ -5,7 +5,7 @@ Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and f
 
 ## Quick-start (in Ubuntu v20.04)
 
-##### 0 - Clone the Repository an cd to it :3
+##### 0 - Clone the Repository and cd to it :3
 
 ##### 1 - Install Python >= v3.8
 

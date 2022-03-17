@@ -84,3 +84,6 @@ example:
 
 ## License
 Motmir is free and open-source software licensed under the GNU General Public License v3.0. Everything created by [Elmahdi Mamoun](https://github.com/Elmahdi1962).
+
+## Authors
+Elmahdi Mamoun <elmahdimamoun1962@gmail.com>

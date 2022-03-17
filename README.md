@@ -1,1 +1,25 @@
 # Motmir
+
+## Introduction
+Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and flask(v2.0.2), and Reactjs(v17.0.2) for Front-End, and Mysql for the database.
+
+## Installation
+
+### Important Updates
+
+In api/.env Update your Database and API host informations
+
+    MYSQL_USER=Database username
+    MYSQL_PWD=Database user's password
+    MYSQL_HOST=Database Host url or ip
+    MYSQL_DB=Database Name
+    MYSQL_ENV=prod
+    TYPE_STORAGE=db
+
+And if you are testing you can change the variable `MYSQL_ENV` value to `test` which will drop all the tables in the database on every app Start/Restart
+
+    MYSQL_ENV=test
+
+And if you created your own Storage class for another type of storage like File Storage you can use the variable `TYPE_STORAGE` To initialize the right Storage Instance that you wanted which can be done in this file
+
+    models/__init__.py

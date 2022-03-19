@@ -15,6 +15,7 @@ import Logout from './components/logout';
 import AdminPanel from './components/admin_panel';
 import NotFound from './components/not_found';
 import AdminPrivateRoute from './components/admin_private_route';
+import AccountConfirmation from './components/AccountConfirmation';
 
 
 function App() {
@@ -111,6 +112,12 @@ function App() {
                                                     <AdminPrivateRoute>
                                                       <AdminPanel />
                                                     </AdminPrivateRoute>}
+          />
+
+          <Route exact={true} path="/confirm_account/:token" element={
+                                                    <PublicRoute>
+                                                      <AccountConfirmation />
+                                                    </PublicRoute>}
           />
 
           <Route exact={true} path="/" element={<Navigate replace to="/products" />}/>

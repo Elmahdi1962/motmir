@@ -14,6 +14,7 @@ class User(BaseModel, Base, UserMixin):
     email = Column(String(60), nullable=False, unique=True)
     password = Column(String(60), nullable=False)
     is_admin = Column(Integer, nullable=True, server_default='0')
+    status = Column(String(30), nullable=True, server_default='pending')
     user_details = relationship('UserDetails',
                                 backref='user',
                                 cascade="delete, delete-orphan",

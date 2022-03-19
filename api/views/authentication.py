@@ -6,9 +6,10 @@ from api.app import storage
 from api.views import auth_views
 from api.utils.json_response import create_response
 from api.utils.gmail_utils import get_gmail_service, create_gmail_message, send_gmail_message
-from api.app import app, bcrypt
+from api.app import bcrypt
 from models.user import User
-from flask import jsonify, make_response, request, abort
+from flask import jsonify, make_response, request, abort, current_app
+from os import getenv
 import jwt
 import datetime
 
@@ -37,23 +38,39 @@ def register():
         new_user = User(username=data['username'], password=hashed_password, email=data['email'])
         new_user.save()
 
+        # creating confirmation token
+        user_dict = new_user.to_dict()
+        new_dict = {}
+        for key,value in user_dict.items():
+            if key in ['username', 'email', 'is_admin']:
+                new_dict[key] = value
+        token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)}, current_app.config['SECRET_KEY'], algorithm='HS256')
+
+        # send confirmation email
         service = get_gmail_service()
         user_id = 'me'
-
+        subject = 'Motmir Account Confirmation'
+        body = f"""\
+            Hello {new_dict['username']},
+            Please confirm your account by clicking in the link below
+            {getenv('FRONTEND_BASE_URL')}confirm_account/{token}
+        """
+        
         msg = create_gmail_message(data['email'],
-                                   'Motmir Account Confirmation',
-                                   'Confirm your account')
+                                   subject,
+                                   body)
 
         send_gmail_message(service, user_id, msg)
         
         return jsonify({'message': 'new user created!'})
+    
     except Exception as error:
         print(error)
         try:
             storage.delete(new_user)
         except Exception as err:
             print(err)
-            return make_response(jsonify({'status': 500, 'message': 'Something went wrong. try again later!'}), 500)
+            return make_response(jsonify({'status': 500, 'message': 'Something went wrong. try again later! UDF'}), 500)
         return make_response(jsonify({'status': 500, 'message': 'Something went wrong. try again later'}), 500)
 
 @auth_views.route('/login', methods=['GET'], strict_slashes=False)
@@ -72,7 +89,7 @@ def login():
         
         if user.status == 'pending':
             # user email not verified
-            return jsonify(create_response('fail', {'verification': 'Email verification is Required. An email is sent to your Email Address.'}))
+            return jsonify(create_response('fail', {'verification': 'Email verification is Required. An email is sent to your Email Address.'})), 401
 
         if bcrypt.check_password_hash(user.password, auth.password):
             user_dict = user.to_dict()
@@ -83,9 +100,9 @@ def login():
 
             remember = request.headers.get('x-remember', None)
             if remember and remember == 'true':
-                token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)}, app.config['SECRET_KEY'], algorithm='HS256')
+                token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)}, current_app.config['SECRET_KEY'], algorithm='HS256')
             else:
-                token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=120)}, app.config['SECRET_KEY'], algorithm='HS256')
+                token = jwt.encode({'user': new_dict, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=120)}, current_app.config['SECRET_KEY'], algorithm='HS256')
 
             return jsonify({'token' : token})
         # wrong password
@@ -93,3 +110,30 @@ def login():
     except Exception as e:
         print(e)
         abort(500, description='Something went wrong. try again later')
+
+@auth_views.route('/confirm_account/<token>', methods=['GET'], strict_slashes=False)
+def confirm_account(token=None):
+    '''confirms user's account by changing users status from pending to confirmed
+    if token is valid
+    '''
+    if token is None:
+        return jsonify(create_response('fail', data={'token': 'Token Required To confirm Account'})), 400
+    
+    try:
+        # check if token is valid
+        data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+
+        # check if user exist
+        current_user = storage.get_user(data['user']['username'])
+        if not current_user:
+            return jsonify(create_response('fail', data={'token': 'Token is invalid UNF'})), 400
+
+        # update user's status
+        current_user.status = 'confirmed'
+        current_user.save()
+        return jsonify(create_response('success', data={'account': 'Account Confirmed'})), 200
+
+    except Exception as e:
+        # token is invalid
+        print(e)
+        return jsonify(create_response('error', data={'token': 'Token is invalid'})), 401

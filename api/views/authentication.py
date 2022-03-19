@@ -5,6 +5,7 @@ from datetime import datetime
 from api.app import storage
 from api.views import auth_views
 from api.utils.json_response import create_response
+from api.utils.gmail_utils import get_gmail_service, create_gmail_message, send_gmail_message
 from api.app import app, bcrypt
 from models.user import User
 from flask import jsonify, make_response, request, abort
@@ -33,10 +34,7 @@ def register():
 
         hashed_password = bcrypt.generate_password_hash(data['password']).decode('utf-8')
 
-        if 'is_admin' in data.keys():
-            new_user = User(username=data['username'], password=hashed_password, email=data['email'], is_admin=data['is_admin'])
-        else:
-            new_user = User(username=data['username'], password=hashed_password, email=data['email'])
+        new_user = User(username=data['username'], password=hashed_password, email=data['email'])
         new_user.save()
 
         return jsonify({'message': 'new user created!'})

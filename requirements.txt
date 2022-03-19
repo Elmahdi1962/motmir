@@ -29,3 +29,6 @@ webencodings==0.5.1
 Werkzeug==2.0.2
 WTForms==3.0.1
 imagekitio==2.2.8
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib

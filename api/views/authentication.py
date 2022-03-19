@@ -37,6 +37,15 @@ def register():
         new_user = User(username=data['username'], password=hashed_password, email=data['email'])
         new_user.save()
 
+        service = get_gmail_service()
+        user_id = 'me'
+
+        msg = create_gmail_message(data['email'],
+                                   'Motmir Account Confirmation',
+                                   'Confirm your account')
+
+        send_gmail_message(service, user_id, msg)
+        
         return jsonify({'message': 'new user created!'})
     except Exception as error:
         print(error)

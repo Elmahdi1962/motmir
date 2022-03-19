@@ -123,17 +123,27 @@ def confirm_account(token=None):
         # check if token is valid
         data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
 
+    except Exception as e:
+        # token is invalid
+        print(e)
+        return jsonify(create_response('error', error='Token is invalid')), 401
+    
+    try:
         # check if user exist
         current_user = storage.get_user(data['user']['username'])
         if not current_user:
-            return jsonify(create_response('fail', data={'token': 'Token is invalid UNF'})), 400
-
+            return jsonify(create_response('fail', data={'token': 'Token is invalid'})), 401
+        
+    except Exception as e:
+        # failed to get user from storage
+        return jsonify(create_response('error', error='Confirmation Failed!')), 500
+        
+    try:
         # update user's status
         current_user.status = 'confirmed'
         current_user.save()
         return jsonify(create_response('success', data={'account': 'Account Confirmed'})), 200
 
     except Exception as e:
-        # token is invalid
-        print(e)
-        return jsonify(create_response('error', data={'token': 'Token is invalid'})), 401
+        # failed to save user status
+        return jsonify(create_response('error', error='Confirmation Failed!')), 500

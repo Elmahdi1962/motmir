@@ -4,7 +4,7 @@
 from datetime import datetime
 from api.app import storage
 from api.views import auth_views
-from api.utils.auth_utils import token_required
+from api.utils.json_response import create_response
 from api.app import app, bcrypt
 from models.user import User
 from flask import jsonify, make_response, request, abort
@@ -62,6 +62,10 @@ def login():
         if not user:
             # user not found
             return jsonify({'message': 'Wrong Password or Username', 'WWW-Authenticate': 'Basic realm="Login required!"'}), 401
+        
+        if user.status == 'pending':
+            # user email not verified
+            return jsonify(create_response('fail', {'verification': 'Email verification is Required. An email is sent to your Email Address.'}))
 
         if bcrypt.check_password_hash(user.password, auth.password):
             user_dict = user.to_dict()

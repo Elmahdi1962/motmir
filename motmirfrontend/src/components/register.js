@@ -31,7 +31,7 @@ function Register() {
       }
     }).then(response => {
       setLoading(false);
-      navigate('/login');
+      navigate('/login', { state: {note: 'We sent you an email to your email address. Please verify First to Login.'}});
     }).catch(error => {
       setLoading(false);
       if(error.response.data) {

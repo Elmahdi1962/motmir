@@ -2,7 +2,7 @@ import './styles/login.css';
 import { useState } from 'react';
 import { baseUrl } from '../index.js';
 import { setUserSession } from './common';
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import { RiLockPasswordFill } from 'react-icons/ri';
 import { FaUserAlt } from 'react-icons/fa';
 import axios from 'axios';
@@ -10,7 +10,9 @@ import axios from 'axios';
 var Buffer = require('buffer/').Buffer;
 
 
-function Login(username, password) {
+function Login() {
+  const { state } = useLocation();
+  const note = state?.note;
   const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -47,6 +49,15 @@ function Login(username, password) {
 
       <h2>Login</h2>
       <form onSubmit={handleLogin} className="login_form">
+
+        {note ?
+          <div style={{borderRadius:' 5px', border: '1px solid darkgreen', backgroundColor: 'lightgreen'}}>
+            {note}
+          </div>
+        :
+          <></>
+        }
+
         <div className="form_field">
           <label htmlFor="username">Username</label>
           <div className="input_block">

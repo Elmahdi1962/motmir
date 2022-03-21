@@ -1,5 +1,6 @@
 from api.views import app_views
 from api.utils.auth_utils import token_required
+from api.utils.gmail_utils import create_gmail_message, send_gmail_message, get_gmail_service
 from models.user_details import UserDetails
 from models.order import Order
 from models.user import User
@@ -158,6 +159,47 @@ def add_user_order(current_user):
         return jsonify({'status': 'Failed to Place Order in server level',
                         'error': 'exception raised when trying to place order '}), 400
         
+    # create order details in strings
+    od_text = """"""
+
+    for od in order.orders_details:
+        t = f"""\
+            -----------------------------------
+            Product Name : {od.product.name}
+                Quantity : {od.quantity}
+                Price : {od.total_price} 
+                Price Per Kg : {od.product.price}
+        
+        """
+        od_text += t
+    
+    # send email of order details
+    service = get_gmail_service()
+    user_id = 'me'
+    subject = 'Motmir Order'
+    body = f"""\
+        Hello {current_user['username']},
+        Thank you for ordering From Motmir.
+        Your Order Details:
+            {od_text}
+        
+        
+        Total Quantity : {order.total_quantity}
+        Shipping Cost : {order.shipping_cost}
+        Total Price : {order.total_price}
+        
+        Paid : {'Yes' if order.paid else 'Not Yet'}
+
+
+        Best regards Motmir Staff.
+    """
+    
+    msg = create_gmail_message(current_user['email'],
+                                subject,
+                                body)
+
+    send_gmail_message(service, user_id, msg)
+
     return jsonify({'status': 'Successfully Placed Order'}), 201
 
 

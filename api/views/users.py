@@ -112,7 +112,7 @@ def add_user_order(current_user):
                       total_price=data['total_price'],
                       payment_method=data['payment_method'],
                       shipping_cost=data['shipping_cost'],
-                      payed=data['payed'] if 'payed' in data.keys() else 0,
+                      paid=data['paid'] if 'paid' in data.keys() else 0,
                       status=data['status'] if 'status' in data.keys() else 'Pending',
                       user_id=current_user.id)
         models.append(order)
@@ -178,7 +178,7 @@ def add_user_order(current_user):
     user_id = 'me'
     subject = 'Motmir Order'
     body = f"""\
-        Hello {current_user['username']},
+        Hello {current_user.username},
         Thank you for ordering From Motmir.
         Your Order Details:
             {od_text}
@@ -186,7 +186,7 @@ def add_user_order(current_user):
         
         Total Quantity : {order.total_quantity}
         Shipping Cost : {order.shipping_cost}
-        Total Price : {order.total_price}
+        Total Price : {order.total_price + order.shipping_cost}
         
         Paid : {'Yes' if order.paid else 'Not Yet'}
 
@@ -194,7 +194,7 @@ def add_user_order(current_user):
         Best regards Motmir Staff.
     """
     
-    msg = create_gmail_message(current_user['email'],
+    msg = create_gmail_message(current_user.email,
                                 subject,
                                 body)
 

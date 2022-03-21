@@ -17,7 +17,7 @@ function PayPal({setCheckout, cart, setCart, shippingCost, totalPrice, totalQuan
     fullOrder['total_quantity'] = totalQuantity;
     fullOrder['total_price'] = totalPrice;
     fullOrder['payment_method'] = 'Paypal';
-    fullOrder['payed'] = 1;
+    fullOrder['paid'] = 1;
     fullOrder['status'] = 'Awaiting Payment';
     fullOrder['order_number'] = transaction_id.toString();
     if(!shippingCost) {
@@ -32,7 +32,7 @@ function PayPal({setCheckout, cart, setCart, shippingCost, totalPrice, totalQuan
       setCart([]);
       localStorage.removeItem("cart");
     })
-    .catch(e => {console.log(e);alert('Failed to Place Order, But Payed successfully.\n Contact Us for a refund.')});
+    .catch(e => {console.log(e);alert('Failed to Place Order, But Paid successfully.\n Contact Us for a refund.')});
 
     setCheckout(false);
     setShowOrder(false);

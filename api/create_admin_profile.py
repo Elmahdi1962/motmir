@@ -12,6 +12,7 @@ hashed_password = bcrypt.generate_password_hash('admin1962').decode('utf-8')
 admin_user = User(username="admin",
                   email="mamounelmahdi1962@gmail.com",
                   password=hashed_password,
-                  is_admin=1)
+                  is_admin=1,
+                  status='confirmed')
 admin_user.save()
 storage.save()

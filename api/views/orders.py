@@ -108,8 +108,8 @@ def update_order_with_id(current_user, id=None):
         if order:
             # set new values
             for key, value in data.items():
-                if key in ['payed', 'status']:
-                    if key == 'payed':
+                if key in ['paid', 'status']:
+                    if key == 'paid':
                         setattr(order, key, 1)
                     else:
                         setattr(order, key, value)

@@ -125,7 +125,7 @@ function Orders() {
               <p className="admin-order-item-text"><strong>Total Price : </strong>{order.total_price}</p>
               <p className="admin-order-item-text"><strong>Shipping Cost : </strong>{order.shipping_cost}</p>
               <p className="admin-order-item-text"><strong>Payment Method : </strong>{order.payment_method}</p>
-              <p className="admin-order-item-text"><strong>Paid : </strong>{order.payed ? 'Yes' : 'No'}</p>
+              <p className="admin-order-item-text"><strong>Paid : </strong>{order.paid ? 'Yes' : 'No'}</p>
               <p className="admin-order-item-text"><strong>Status : </strong>{order.status}</p>
             </div>
           )}

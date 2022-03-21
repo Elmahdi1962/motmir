@@ -17,7 +17,7 @@ class Order(BaseModel, Base):
     total_price = Column(Float, nullable=False)
     shipping_cost = Column(Float, nullable=False)
     payment_method = Column(String(30), nullable=False, server_default='on delivery')
-    payed = Column(Integer, nullable=False, server_default='0')
+    paid = Column(Integer, nullable=False, server_default='0')
     status = Column(String(30), nullable=False, server_default='pending')
     orders_details = relationship('OrderDetails',
                                   backref="order",

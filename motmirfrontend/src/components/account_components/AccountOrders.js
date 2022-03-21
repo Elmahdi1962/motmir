@@ -48,7 +48,7 @@ function AccountOrders() {
             <p><b>Total Quantity : </b> {order.total_quantity} Kg</p>
             <p><b>Shipping Cost : </b> {order.shipping_cost} USD</p>
             <p><b>Payment Method : </b> {order.payment_method}</p>
-            <p><b>Paid : </b> {order.payed ? "Yes" : "No"}</p>
+            <p><b>Paid : </b> {order.paid ? "Yes" : "No"}</p>
             <p><b>Status : </b> {order.status}</p>
           </div>
 

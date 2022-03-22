@@ -5,13 +5,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from os import environ
-from flask import Flask, render_template, make_response, jsonify
+from flask import Flask, make_response, jsonify
 from flask_cors import CORS
-from models.product import Product
 import pathlib, os
 from flask_bcrypt import Bcrypt
 from models import storage
-from models.user import User
 from imagekitio import ImageKit
 
 
@@ -29,7 +27,8 @@ from api.views import auth_views
 
 app.config['SECRET_KEY'] = 'e8d623e7c9988114bfa39f27fc4cf9c8'
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
-app.config['PRODUCTS_IMAGES_PATH'] = '/products-images/' # os.path.join(pathlib.Path(__file__).parent.resolve(), 'static/images')
+app.config['PRODUCTS_IMAGES_PATH'] = '/products-images/'
+app.config['IMAGE_STORAGE_PATH'] = os.path.join(pathlib.Path(__file__).parent.resolve(), 'static/images')
 app.config['ALLOWED_IMAGE_EXT'] = ['png', 'jpg', 'jpeg', 'webp', 'gif']
 app.register_blueprint(app_views)
 app.register_blueprint(auth_views)

@@ -9,7 +9,6 @@ from flask import Flask, render_template, make_response, jsonify
 from flask_cors import CORS
 from models.product import Product
 import pathlib, os
-from api.config import *
 from flask_bcrypt import Bcrypt
 from models import storage
 from models.user import User

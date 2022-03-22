@@ -9,7 +9,6 @@ from api.app import storage
 from flask import jsonify, request
 from sys import stderr
 import sys
-from sqlalchemy.exc import IntegrityError
 
 
 classes = {'Order': Order, 'OrderDetails': OrderDetails}
@@ -41,9 +40,10 @@ def get_users(current_user):
 def get_user_orders(current_user):
     '''returns a list of users's orders'''
     orders = storage.get_user_orders(current_user.username)
+    # if found
     if orders is None:
         return jsonify({'status': 404, 'message':'User Not Found'}), 404
-
+    # if not found
     return jsonify(orders), 200
 
 
@@ -53,8 +53,10 @@ def get_user_details(current_user):
     '''returns user details of the current user'''
     user_details = current_user.user_details
     if user_details:
+        # if found
         return jsonify({'status': 200, 'data': user_details.to_dict()}), 200
     else:
+        # if not found
         return jsonify({'status': 404, 'message': 'User has no details saved'}), 404
 
 
@@ -98,7 +100,9 @@ def add_update_user_details(current_user):
 def add_user_order(current_user):
     """
     create a new order for current user and store it in database
+    an send anemail about the order to the users email address
     """
+    # if no data recieved in the request
     if not request.get_json():
         return jsonify({'status': 400, 'message': 'Not Json'}), 400
 
@@ -107,6 +111,7 @@ def add_user_order(current_user):
     models = []
 
     try:
+        # create an order instance with the received data
         order = Order(order_number=data['order_number'] if 'order_number' in data.keys() else None,
                       total_quantity=data['total_quantity'],
                       total_price=data['total_price'],
@@ -120,6 +125,8 @@ def add_user_order(current_user):
         t_price = 0
         t_quantity = 0
         for product in data['ordered_products']:
+            # create orderDetails instaces afor each product purchased
+            # and link them to the order instance
             t_price += product['price'] * product['quantity']
             t_quantity += product['quantity']
             orderdetails = OrderDetails(order_id=order.id,
@@ -128,18 +135,23 @@ def add_user_order(current_user):
                                         total_price=product['price'] * product['quantity'])
             models.append(orderdetails)
 
+        # check if total price calculated in server is same as the one recieved from the request
         if (t_price != data['total_price']):
             jsonify({'status': 'Failed to Place Order in server level',
                      'error': 'total_price got from client not same as counted in server'}), 400
 
+        # check if total quantity calculated in server is same as the one recieved from the request
         if (t_quantity != data['total_quantity']):
             jsonify({'status': 'Failed to Place Order in server level',
                      'error': 'total_quantity got from client not same as counted in server'}), 400
 
+        # save everything
         for model in models:
             model.save()
 
-    except IntegrityError as err:
+    except Exception as err:
+        # if something went wrong, rollback and delete each intance created in case some is saved some is not
+        # to fail the order placing process safelly
         storage._DBStorage__session.rollback()
         for model in models:
             q = storage._DBStorage__session.query(classes[model.__class__.__name__]).filter(classes[model.__class__.__name__].id == model.id).first()
@@ -148,16 +160,12 @@ def add_user_order(current_user):
                 storage.delete(model)
         storage.save()
 
+        # print information about  about the error in the console
         exc_type, exc_obj, exc_tb = sys.exc_info()
         print('the exception error from orders.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
         return jsonify({'status': 'Failed to Place Order in server level',
-                        'error': 'exception raised when trying to place order sqlalchemy.exc..IntegrityError'}), 400
+                        'error': 'exception raised when trying to place order'}), 400
 
-    except Exception as err:
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        print('the exception from users.py in POST route is  : \n', err, exc_type, exc_tb.tb_lineno, file=stderr)
-        return jsonify({'status': 'Failed to Place Order in server level',
-                        'error': 'exception raised when trying to place order '}), 400
         
     # create order details in strings
     od_text = """"""
@@ -193,11 +201,11 @@ def add_user_order(current_user):
 
         Best regards Motmir Staff.
     """
-    
+    # create the message
     msg = create_gmail_message(current_user.email,
                                 subject,
                                 body)
-
+    # send the message
     send_gmail_message(service, user_id, msg)
 
     return jsonify({'status': 'Successfully Placed Order'}), 201
@@ -220,13 +228,18 @@ def delete_user(current_user, user_id=None):
             return jsonify({'status': 400, 'message': 'No id Passed'}), 400
 
         try:
+            # get the user for db
             user = storage._DBStorage__session.query(User).filter(User.id == user_id).first()
+            # if user not found response with 404
             if not user:
                 return jsonify({'status': 404, 'message': 'Could not find user with that id'}), 404
+            # if found delete it and save changes and respond with 200
             storage.delete(user)
             storage.save()
             return jsonify({'status': 200, 'message': 'deleted user Successfully'})
+
         except Exception as err:
+            # if something went wrong probably loosing connection to db
             print('error while trying to delete a user in users.py file line 173')
             print(err)
             return jsonify({'status': 500, 'message': 'Somethign went wrong while trying to delete the user'}), 500
@@ -234,10 +247,13 @@ def delete_user(current_user, user_id=None):
     else:
         # current_user is not an admin
         try:
+            # delete current user from db and save changes and respond with 200
             storage.delete(current_user)
             storage.save()
             return jsonify({'status': 200, 'message': 'deleted user Successfully'})
+
         except Exception as err:
+            # if something went wrong
             print('error while trying to delete a user in users.py file line 179')
             print(err)
             return jsonify({'status': 500, 'message': 'Somethign went wrong while trying to delete the user'}), 500

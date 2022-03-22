@@ -28,11 +28,6 @@ bcrypt = Bcrypt(app)
 from api.views import app_views
 from api.views import auth_views
 
-if app.config['ENV'] == 'production':
-    app.config.from_object(ProductionConfig)
-else:
-    app.config.from_object(DevelopmentConfig)
-
 app.config['SECRET_KEY'] = 'e8d623e7c9988114bfa39f27fc4cf9c8'
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.config['PRODUCTS_IMAGES_PATH'] = '/products-images/' # os.path.join(pathlib.Path(__file__).parent.resolve(), 'static/images')

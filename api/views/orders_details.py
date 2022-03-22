@@ -2,7 +2,6 @@
 """ methods that handle all default RestFul API actions for OrderDetails """
 
 from models import storage
-from models.order_details import OrderDetails
 from api.views import app_views
 from flask import jsonify
 from api.utils.auth_utils import token_required

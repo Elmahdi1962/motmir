@@ -2,8 +2,7 @@
 """ objects that handle all default RestFul API actions for images """
 
 from api.views import app_views
-from flask import abort, send_from_directory, current_app, make_response, send_file
-from requests import get
+from flask import abort, send_from_directory, current_app
 
 
 @app_views.route('/images/<imagename>', methods=['GET'], strict_slashes=False)

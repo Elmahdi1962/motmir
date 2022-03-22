@@ -1,7 +1,6 @@
 import jwt
 from functools import wraps
 from flask import jsonify, request
-from werkzeug.security import generate_password_hash, check_password_hash
 from api.app import storage, app
 
 def token_required(func):

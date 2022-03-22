@@ -7,9 +7,6 @@ from models.order_details import OrderDetails
 from models.user_details import UserDetails
 from api.views import app_views
 from flask import jsonify, request, abort, make_response
-from sys import stderr
-import sys
-from sqlalchemy.exc import IntegrityError
 from api.utils.auth_utils import token_required
 
 

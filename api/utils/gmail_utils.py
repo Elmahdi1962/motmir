@@ -31,8 +31,10 @@ def create_cred_and_token():
     # check if found else print that they'r not found in console. thats all i can do for now
     if not creds:
         print('GMAIL_CREDENTIALS env var not found')
+        return
     elif not token:
         print('GMAIL_TOKEN env var not found')
+        return
     # write what in the env var GMAIL_CREDENTIALS to the file credentials.json
     with open('credentials.json', 'w') as f:
         f.write(creds)

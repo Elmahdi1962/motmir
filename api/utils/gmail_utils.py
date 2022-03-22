@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 import os.path
-from os import getenv
+from os import getenv, environ
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -20,10 +20,61 @@ import mimetypes
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
+def create_cred_and_token():
+    """creates the files credentials.json and token.json from
+    the env variables GMAIL_CREDENTIALS, GMAIL_TOKEN
+    """
+    # get the env variables
+    creds = getenv('GMAIL_CREDENTIALS')
+    token = getenv('GMAIL_TOKEN')
+    
+    # check if found else print that they'r not found in console. thats all i can do for now
+    if not creds:
+        print('GMAIL_CREDENTIALS env var not found')
+    elif not token:
+        print('GMAIL_TOKEN env var not found')
+    # write what in the env var GMAIL_CREDENTIALS to the file credentials.json
+    with open('credentials.json', 'w') as f:
+        f.write(creds)
+    # write what in the env var GMAIL_TOKEN to the file token.json
+    with open('token.json', 'w') as f:
+        f.write(token)
+
+
+def update_cred_and_token():
+    """update the env variables GMAIL_CREDENTIALS, GMAIL_TOKEN
+    from the files  credentials.json and token.json in case toekn expires
+    and get renewed automatically
+    """
+    # get the env variables
+    creds = getenv('GMAIL_CREDENTIALS')
+    token = getenv('GMAIL_TOKEN')
+    
+    # check if found else print that they'r not found in console. thats all i can do for now
+    if not creds:
+        print('GMAIL_CREDENTIALS env var not found')
+    elif not token:
+        print('GMAIL_TOKEN env var not found')
+
+    # update the env var GMAIL_CREDENTIALS if it's different than credentials.json file content
+    with open('credentials.json', 'r') as f:
+        data = f.read()
+        if data != creds:
+            environ['GMAIL_CREDENTIALS'] = data
+    # update the env var GMAIL_TOKEN if it's different than token.json file content
+    with open('token.json', 'r') as f:
+        data = f.read()
+        if data != token:
+            environ['GMAIL_TOKEN'] = data
+
+
 
 def get_gmail_service():
-    """Creates a gmail api service
+    """Creates and return a gmail api service
     """
+    # create needed files from the env vars
+    create_cred_and_token()
+
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -45,6 +96,8 @@ def get_gmail_service():
     try:
         # Call the Gmail API
         service = build('gmail', 'v1', credentials=creds)
+        # update token if renewed
+        update_cred_and_token()
         return service
 
     except HttpError as error:

@@ -1,4 +1,6 @@
-*.pyc
+*.pycapi
+__pycache__
+
 api/static/images/*
 
 node_modules

@@ -6,6 +6,9 @@ Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and f
 [Author Linkedin](https://www.linkedin.com/in/elmahdi-mamoun-a74a1a1bb/) || 
 [Live Demo](https://motmir.netlify.app/)
 
+## Inspiration
+I'm from a town where dattes fruits are the main products produced by every farmer here, and my father is one of them. So i got this idea of this online shop to help extend the market for these specific fruits, especially our unique ones that don't exist anywhere else in the world.
+
 ## Quick-start (in Ubuntu v20.04)
 
 ##### 0 - Clone the Repository and cd to it :3

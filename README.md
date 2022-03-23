@@ -60,8 +60,8 @@ I'm from a town where dattes fruits are the main products produced by every farm
 
 ###### in `motmirfrontend/src/index.js` 
 
-    baseUrl   = API's URL
-    imagesUrl = Your imagekit.io URL-endpoint to fetch images from as im using imagekit's service to store my products images and create a folder called product-images in the root
+    export const baseUrl   = 'localhost:5000'; API's URL with out the / slash at the end
+    export const imagesUrl = 'https://ik.imagekit.io/motmir/'; Your imagekit.io URL-endpoint to fetch images from as im using imagekit's service to store my products images and create a folder called product-images in the root
 
 
 ##### 6 - Run the service and Create Mysql database and user

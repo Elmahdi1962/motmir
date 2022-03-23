@@ -26,7 +26,8 @@ I'm from a town where dattes fruits are the main products produced by every farm
 ##### 4 - Install Mysql 8
     sudo apt install mysql-client mysql-community-server mysql-server
 
-##### 5 - Update ENV Variables in `api/.env`
+##### 5 - Update Some Variables
+###### in `api/.env`
     # Note : Most commented variables will be added directly to the app host server envirenment variables
 
     FLASK_ENV=production  # change this to `development` if needed
@@ -56,6 +57,11 @@ I'm from a town where dattes fruits are the main products produced by every farm
     # GMAIL_TOKEN= Your gmail api token json object which will be created automatically on first login so this can be empty until you have the token
 
     FRONTEND_BASE_URL=localhost:3000/
+
+###### in `motmirfrontend/src/index.js` 
+
+    baseUrl   = API's URL
+    imagesUrl = Your imagekit.io URL-endpoint to fetch images from as im using imagekit's service to store my products images and create a folder called product-images in the root
 
 
 ##### 6 - Run the service and Create Mysql database and user

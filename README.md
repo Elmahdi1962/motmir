@@ -82,7 +82,13 @@ example:
     export const baseUrl = 'https://motmir-api.herokuapp.com'; //'http://localhost:5000'
     export const imagesUrl = 'https://ik.imagekit.io/motmir/'; // exact folder not specified in case you have different folders by default images are stored in a folder called `products-images`
 
-## License
+## Contributing
+If you would like to contribute to the project, you may create a Pull Request containing your proposed changes and we will review it as soon as we are able! Please review our [contributing guidelines](CODE_OF_CONDUCT.md) first.
+
+## Code of Conduct
+Before interacting with our community, please read our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Licensing
 Motmir is free and open-source software licensed under the GNU General Public License v3.0. Everything created by [Elmahdi Mamoun](https://github.com/Elmahdi1962).
 
 ## Authors

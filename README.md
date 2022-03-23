@@ -97,6 +97,13 @@ In api/.env Update your Database and API host informations
     API_HOST=0.0.0.0
     API_PORT=5000
 
+    # if you didn't specify these variables the app will fail on sending emails to clients which may or may not result in other problems
+    # GMAIL_SENDER_EMAIL= the senders email (required)
+    # GMAIL_CREDENTIALS= Your gmail api credentials json object (required)
+    # GMAIL_TOKEN= Your gmail api token json object which will be created automatically on first login so this can be empty until you have the token
+
+    FRONTEND_BASE_URL=localhost:3000/
+
 And if you are testing you can change the variable `MYSQL_ENV` value to `test` which will drop all the tables in the database on every app Start/Restart
 
     MYSQL_ENV=test

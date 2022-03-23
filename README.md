@@ -3,7 +3,7 @@
 ## Introduction
 Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and flask(v2.0.2), and Reactjs(v17.0.2) for Front-End, and Mysql(v8.0.27) for the database.
 
-[Author Linkedin](https://www.linkedin.com/in/elmahdi-mamoun-a74a1a1bb/)
+[Author Linkedin](https://www.linkedin.com/in/elmahdi-mamoun-a74a1a1bb/) || 
 [Live Demo](https://motmir.netlify.app/)
 
 ## Quick-start (in Ubuntu v20.04)
@@ -89,7 +89,7 @@ If you would like to contribute to the project, you may create a Pull Request co
 Before interacting with our community, please read our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Licensing
-Motmir is free and open-source software licensed under the GNU General Public License v3.0. Everything created by [Elmahdi Mamoun](https://github.com/Elmahdi1962).
+Motmir is free and open-source software licensed under the GNU General Public License v3.0. Everything created by [Elmahdi1962](https://github.com/Elmahdi1962).
 
 ## Authors
-Elmahdi Mamoun <elmahdimamoun1962@gmail.com>
+Elmahdi1962 <elmahdimamoun1962@gmail.com>

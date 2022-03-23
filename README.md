@@ -1,4 +1,4 @@
-# Motmir (MVP)
+# <svg id="SvgjsSvg1001" width="50" height="50" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs"><defs id="SvgjsDefs1002"></defs><g id="SvgjsG1008"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 570 380" width="50" height="50"><!--! Font Awesome Pro 6.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc.--><path d="M64 95.1H0c0 123.8 100.3 224 224 224v128C224 465.6 238.4 480 255.1 480S288 465.6 288 448V320C288 196.3 187.7 95.1 64 95.1zM448 32c-84.25 0-157.4 46.5-195.8 115.3c27.75 30.12 48.25 66.88 59 107.5C424 243.1 512 147.9 512 32H448z" fill="#15ab08" class="color000 svgShape"></path></svg></g></svg>Motmir (MVP)
 
 ## Introduction
 Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and flask(v2.0.2), and Reactjs(v17.0.2) for Front-End, and Mysql(v8.0.27) for the database.
@@ -10,7 +10,7 @@ Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and f
 
 ##### 0 - Clone the Repository and cd to it :3
 
-##### 1 - Install Python >= v3.8
+##### 1 - Install Python >= v3.8 and pip3
 
 ##### 2 - Install required packages in `requirements.txt`
     pip3 install -r requirements.txt
@@ -23,23 +23,57 @@ Motmir is a Full E-Commerce Web App with an API Powered by Python(v3.8.10) and f
 ##### 4 - Install Mysql 8
     sudo apt install mysql-client mysql-community-server mysql-server
 
-##### 5 - Create Mysql database and user
+##### 5 - Update ENV Variables in `api/.env`
+    # Note : Most commented variables will be added directly to the app host server envirenment variables
+
+    FLASK_ENV=production  # change this to `development` if needed
+    FLASK_APP=app         # default
+
+    # production db
+    # MYSQL_USER= db user name
+    # MYSQL_PWD= db password
+    # MYSQL_HOST= db host domain or ip
+    # MYSQL_DB= db name
+
+    # test db
+    MYSQL_USER=motmir_dev  # default
+    MYSQL_PWD=motmir_pwd   # default
+    MYSQL_HOST=localhost   # default
+    MYSQL_DB=motmir_db     # default
+
+    TYPE_STORAGE=db  # default
+    MYSQL_ENV=prod   # change this to `test` if you want the databases tables to be dropped on every api app restart
+
+    API_HOST=0.0.0.0 # default
+    API_PORT=5000    # default
+
+    # if you didn't specify these variables the app will fail on sending emails to clients which may or may not result in other problems
+    # GMAIL_SENDER_EMAIL= the senders email (required)
+    # GMAIL_CREDENTIALS= Your gmail api credentials json object (required)
+    # GMAIL_TOKEN= Your gmail api token json object which will be created automatically on first login so this can be empty until you have the token
+
+    FRONTEND_BASE_URL=localhost:3000/
+
+
+##### 6 - Run the service and Create Mysql database and user
     # You can update the file setup_mysql_dev.sql
     # with the names and previliges you want
     # but you will need to update the envirenement
     # variables. check Configuration section for that.
 
+    sudo service mysql start
     sudo mysql -p < setup_mysql_dev.sql
 
-##### 6 - Create admin Account (You can skip this)
+
+##### 7 - Create admin Account (You can skip this)
     python3 -m api.create_admin_profile
     # You can access admin panel in localhost:3000/admin after you start the app
 
 
-##### 7 - Run API
+##### 8 - Run API
     python3 -m api.app
 
-##### 8 - Run React App
+##### 9 - Run React App
     cd motmirfrontend
     npm run start
 

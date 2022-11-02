@@ -3,6 +3,7 @@ from functools import wraps
 from flask import jsonify, request
 from api.app import storage, app
 
+# Custom Decorator Function to require authentication before use of other functions
 def token_required(func):
     @wraps(func)
     def decorated(*args, **kwargs):

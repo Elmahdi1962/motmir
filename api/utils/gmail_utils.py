@@ -20,6 +20,7 @@ import mimetypes
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
+# create new gmail creds and token
 def create_cred_and_token():
     """creates the files credentials.json and token.json from
     the env variables GMAIL_CREDENTIALS, GMAIL_TOKEN
@@ -42,7 +43,7 @@ def create_cred_and_token():
     with open('token.json', 'w') as f:
         f.write(token)
 
-
+# update gmail creds and token
 def update_cred_and_token():
     """update the env variables GMAIL_CREDENTIALS, GMAIL_TOKEN
     from the files  credentials.json and token.json in case toekn expires
